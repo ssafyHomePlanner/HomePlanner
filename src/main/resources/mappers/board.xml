@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.BoardMapper">
+
+    <resultMap type="boardDto" id="boardDto">
+        <result column="member_id" property="memberId"/>
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="like_cnt" property="likeCnt"/>
+        <result column="write_date" property="writeDate"/>
+    </resultMap>
+
+    <resultMap type="boardCommentDto" id="boardCommentDto">
+        <result column="member_id" property="memberId"/>
+        <result column="write_date" property="writeDate"/>
+    </resultMap>
+
+    <!-- 전체 게시판 목록 -->
+    <select id="listBoard" resultMap="boardDto">
+        select id,
+               member_id,
+               title,
+               content,
+               view_cnt,
+               like_cnt,
+               write_date
+
+        from board
+        order by id desc
+            limit #{start},
+                 #{cnt}
+    </select>
+
+    <!-- 게시글 총 개수 -->
+    <select id="selectTotalCount" resultType="int">
+        select count(*)
+        from board;
+    </select>
+
+    <!-- 게시판 글쓰기 -->
+    <insert id="writeBoard" parameterType="boardDto">
+        insert into board(member_id, title, content, view_cnt, like_cnt, write_date)
+        values (#{memberId}, #{title}, #{content}, 0, 0, NOW())
+    </insert>
+
+    <!-- 게시판 글 세부내용 보기 -->
+    <select id="readBoard" parameterType="int"
+            resultMap="boardDto">
+        select id,
+               member_id,
+               title,
+               content,
+               view_cnt,
+               like_cnt,
+               write_date
+        from board
+        where id = #{boardId}
+    </select>
+
+    <!-- 게시판 글 수정 -->
+    <update id="updateBoard">
+        update board
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            write_date = NOW(),
+        </trim>
+        where id=#{id}
+    </update>
+
+    <!-- 게시판 글 삭제 -->
+    <delete id="deleteBoard" parameterType="int">
+        delete
+        from board
+        where id
+                  = #{boardId}
+    </delete>
+
+    <!-- 게시판 댓글 목록 -->
+    <select id="listBoardComment" parameterType="int" resultMap="boardCommentDto">
+        select id, board_id, member_id, content, write_date
+        from board_comment
+        where board_id = #{boardId}
+    </select>
+
+    <!-- 게시판 댓글 쓰기 -->
+    <insert id="writeBoardComment" parameterType="boardCommentDto">
+        insert into board_comment(board_id, member_id,
+                                  content, write_date)
+        values (#{boardId}, #{memberId}, #{content}, NOW())
+    </insert>
+
+    <!-- 게시판 댓글 수정 -->
+    <update id="updateBoardComment" parameterType="boardCommentDto">
+        update board_comment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="content != null">content=#{content},</if>
+            write_date = NOW(),
+        </trim>
+        where id=#{id}
+    </update>
+
+    <!-- 게시판 댓글 삭제 -->
+    <delete id="deleteBoardComment" parameterType="int">
+        delete
+        from board_comment
+        where id = #{boardCommentId}
+    </delete>
+
+
+</mapper>

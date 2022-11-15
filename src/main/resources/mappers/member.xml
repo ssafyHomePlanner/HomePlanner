@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.MemberMapper">
+
+	<resultMap type="memberDto" id="memberDto">
+		<result column="join_date" property="joinDate" />
+	</resultMap>
+
+	<!-- 아이디 중복 여부 확인 -->
+	<select id="idCheck" parameterType="String" resultType="int">
+		select
+		count(id)
+		from member
+		where id = #{memberId}
+	</select>
+
+	<!-- 회원가입 -->
+	<insert id="join" parameterType="memberDto">
+		insert into member(
+		id, pw, name,
+		email, age, phone, gender, join_date, salt)
+		values(
+		#{id},
+		#{pw},
+		#{name}, #{email}, #{age}, #{phone}, #{gender},
+		NOW(), ${salt})
+	</insert>
+
+	<!-- 로그인 -->
+	<select id="login" resultMap="memberDto">
+		select id, pw, name, email, age,
+		phone, gender, join_date, salt
+		from member
+		where id = #{memberId} and pw
+		= #{memberPw}
+	</select>
+
+	<!-- 회원 상세 정보 -->
+	<select id="detail" resultMap="memberDto">
+		select id, pw, name, email, age,
+		phone, gender, join_date, salt
+		from member
+		where id = #{memberId}
+	</select>
+
+	<!-- 회원 정보 수정 -->
+	<update id="update">
+		update member
+		<trim prefix="set" suffixOverrides=",">
+			<if test="pw != null">pw = #{pw},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="age != null">age = #{age},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="gender != null">gender = #{gender},</if>
+			<if test="salt != null">salt = #{salt},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<!-- 회원 탈퇴 -->
+	<delete id="delete" parameterType="String">
+		delete from member
+		where id =
+		#{memberId}
+	</delete>
+
+	<!-- 아이디 찾기 -->
+	<select id="findId" resultType="String">
+		select id
+		from member
+		where name =
+		#{memberName} and
+		phone =#{memberPhone}
+	</select>
+
+	<!-- 비밀번호 찾기 -->
+	<select id="findPw" resultType="String">
+		select pw
+		from member
+		where id =
+		#{memberId} and phone
+		= #{memberPhone}
+	</select>
+
+	<!-- 관심 상품 목록 보기 -->
+
+	<!-- 관심 경로 목록 보기 -->
+</mapper>
