@@ -32,6 +32,20 @@ export default new Vuex.Store({
         commit("SEARCH_BOARD_LIST", data.boardList);
       });
     },
+    writeBoard(context, payload) {
+      console.log("writeBoard 호출", context.state.member.id);
+      http
+        .post(`/board/write`, {
+          memberId: context.state.member.id,
+          title: payload.title,
+          content: payload.content,
+        })
+        .then(({ data }) => {
+          if (data === "success") {
+            console.log("게시글 등록 성공");
+          }
+        });
+    },
   },
   modules: {},
   // plugins: [
