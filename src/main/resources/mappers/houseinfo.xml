@@ -2,16 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.homepjt.model.mapper.HouseInfoMapper">
 
-    <!--    <resultMap type="AptSearchRequestDto" id="searchReqDto">-->
-    <!--        <result column="sido_name" property="sidoName"/>-->
-    <!--        <result column="gugun_name" property="gugunName"/>-->
-    <!--        <result column="dong_name" property="dongName"/>-->
-    <!--        <result column="apartment_name" property="aptName"/>-->
-    <!--    </resultMap>-->
+    <resultMap type="HouseInfoDto" id="HouseInfoAll">
+        <result column="apt_code" property="aptCode"/>
+        <result column="build_year" property="buildYear"/>
+        <result column="road_name" property="roadName"/>
+        <result column="road_name_bonbun" property="roadNameBonbun"/>
+        <result column="road_name_bubun" property="roadNameBubun"/>
+        <result column="road_name_seq" property="roadNameSeq"/>
+        <result column="road_name_basement_code" property="roadNameBasementCode"/>
+        <result column="road_name_code" property="roadNameCode"/>
+        <result column="dong" property="dong"/>
+        <result column="bonbun" property="bonbun"/>
+        <result column="bubun" property="bubun"/>
+        <result column="sigungu_code" property="sigunguCode"/>
+        <result column="eubmyundong_code" property="eubmyundongCode"/>
+        <result column="dong_code" property="dongCode"/>
+        <result column="land_code" property="landCode"/>
+        <result column="apartment_name" property="apartmentName"/>
+        <result column="jibun" property="jibun"/>
+        <result column="lon" property="lon"/>
+        <result column="lat" property="lat"/>
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="like_cnt" property="likeCnt"/>
+    </resultMap>
 
-    <select id="selectHouseInfo" resultType="HouseInfoDto">
-        select h.apt_code, h.build_year, h.road_name, h.road_name_bonbun, h.road_name_seq, h.road_name_basement_code,
-               h.road_name_code, h.dong, h.bubun, h.sigungu_code, h.eubmyundong_code, h.dong_code, h.land_code, h.apartment_name, h.jibun,
+    <select id="selectHouseInfo" resultMap="HouseInfoAll">
+        select h.apt_code, h.build_year, h.road_name, h.road_name_bonbun, h.road_name_bubun, h.road_name_seq, h.road_name_basement_code,
+               h.road_name_code, h.dong, h.bonbun, h.bubun, h.sigungu_code, h.eubmyundong_code, h.dong_code, h.land_code, h.apartment_name, h.jibun,
                h.lon, h.lat, h.view_cnt, h.like_cnt
         from houseinfo h
                  join dongcode d on h.dong_code = d.dong_code
