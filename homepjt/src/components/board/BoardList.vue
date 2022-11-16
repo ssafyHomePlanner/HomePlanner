@@ -11,7 +11,8 @@
           <v-data-table
             :headers="headers"
             :items="boardList"
-            :items-per-page="5"
+            :items-per-page="10"
+            @click:row="clickRow"
             hide-default-footer
             class="elevation-1"
           >
@@ -62,7 +63,14 @@ export default {
     this.searchBoardList(this.page);
   },
   methods: {
-    ...mapActions(["searchBoardList"]),
+    clickRow(value) {
+      this.updateBoardDetail(value);
+      this.moveBoardDetail();
+    },
+    moveBoardDetail() {
+      this.$router.push({ name: "boardDetail" });
+    },
+    ...mapActions(["searchBoardList", "updateBoardDetail"]),
   },
 };
 </script>

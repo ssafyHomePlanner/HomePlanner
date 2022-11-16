@@ -1,23 +1,36 @@
 <template>
-  <v-row class="mb-1">
-    <v-col style="text-align: left">
-      <v-form ref="form" lazy-validation>
-        <v-text-field
-          v-model="article.title"
-          :rules="titleRules"
-          label="제목을 입력하세요."
-          required
-        ></v-text-field>
-        <v-textarea
-          v-model="article.content"
-          :rules="contentRules"
-          label="내용을 입력하세요."
-          required
-        ></v-textarea>
-      </v-form>
-      <v-btn @click="registArticle" color="primary" elevation="2">글작성</v-btn>
-    </v-col>
-  </v-row>
+  <v-sheet
+    rounded="xl"
+    color="white"
+    elevation="5"
+    height="350"
+    width="800"
+    class="ma-8"
+  >
+    <v-container class="pa-6">
+      <v-row class="mb-1">
+        <v-col style="text-align: left">
+          <v-form ref="form" lazy-validation>
+            <v-text-field
+              v-model="article.title"
+              :rules="titleRules"
+              label="제목을 입력하세요."
+              required
+            ></v-text-field>
+            <v-textarea
+              v-model="article.content"
+              :rules="contentRules"
+              label="내용을 입력하세요."
+              required
+            ></v-textarea>
+          </v-form>
+          <v-btn @click="registArticle" color="primary" elevation="2"
+            >글작성</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-sheet>
 </template>
 
 <script>

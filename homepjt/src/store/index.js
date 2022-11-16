@@ -25,8 +25,14 @@ export default new Vuex.Store({
     SEARCH_BOARD_LIST(state, payload) {
       state.boardList = payload;
     },
+    UPDATE_BOARD_DETAIL(state, payload) {
+      state.board = payload;
+    },
   },
   actions: {
+    updateBoardDetail({ commit }, payload) {
+      commit("UPDATE_BOARD_DETAIL", payload);
+    },
     searchBoardList({ commit }, payload) {
       http.get(`/board/${payload}`).then(({ data }) => {
         commit("SEARCH_BOARD_LIST", data.boardList);
