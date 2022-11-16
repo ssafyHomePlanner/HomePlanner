@@ -17,9 +17,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    searchBoardList({ commit }) {
-      http.get(`/board`).then(({ data }) => {
-        commit("SEARCH_BOARD_LIST", data);
+    searchBoardList({ commit }, payload) {
+      http.get(`/board/${payload}`).then(({ data }) => {
+        commit("SEARCH_BOARD_LIST", data.boardList);
       });
     },
   },

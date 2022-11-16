@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="boardList" :items-per-page="5" class="elevation-1"> </v-data-table>
+    <v-data-table
+      :headers="headers"
+      :items="boardList"
+      :items-per-page="5"
+      class="elevation-1"
+    >
+    </v-data-table>
     <div class="text-center">
       <v-pagination v-model="page" :length="6"></v-pagination>
     </div>
@@ -15,17 +21,16 @@ export default {
       page: 1,
       headers: [
         {
-          text: "articleno",
-          value: "articleno",
-          // sortable: true,
+          text: "id",
+          value: "id",
         },
         {
-          text: "userid",
-          value: "userid",
+          text: "memberId",
+          value: "memberId",
         },
         {
-          text: "subject",
-          value: "subject",
+          text: "title",
+          value: "title",
         },
         {
           text: "content",
@@ -39,7 +44,7 @@ export default {
   },
   created: {},
   mounted() {
-    this.searchBoardList();
+    this.searchBoardList(this.page);
   },
   methods: {
     ...mapActions(["searchBoardList"]),
