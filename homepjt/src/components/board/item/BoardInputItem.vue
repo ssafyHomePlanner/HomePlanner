@@ -3,7 +3,7 @@
     rounded="xl"
     color="white"
     elevation="5"
-    height="350"
+    height="400"
     width="800"
     class="ma-8"
   >
@@ -24,6 +24,11 @@
               required
             ></v-textarea>
           </v-form>
+
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col style="text-align: right">
           <v-btn @click="registArticle" color="primary" elevation="2"
             >글작성</v-btn
           >
