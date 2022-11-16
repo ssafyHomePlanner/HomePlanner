@@ -1,9 +1,15 @@
 <template>
   <v-app>
     <v-main>
-      <header-nav></header-nav>
-      <router-view />
-      <footer-nav></footer-nav>
+      <div id='wrapper'>
+  <div>
+    <header-nav></header-nav>
+    <router-view />
+  </div>
+</div>
+<footer>
+  <footer-nav></footer-nav>
+</footer>
     </v-main>
   </v-app>
 </template>
@@ -26,6 +32,18 @@ export default {
 </script>
 
 <style>
+#wrapper{
+  height: auto;
+  min-height: 100%;
+  padding-bottom: (64px);
+}
+
+footer{
+  height: (64px);
+  position : relative;
+  transform : translateY(-100%);
+}
+
 body {
   background-size: cover;
 }
