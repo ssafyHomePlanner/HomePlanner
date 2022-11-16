@@ -28,6 +28,9 @@ export default new Vuex.Store({
     UPDATE_BOARD_DETAIL(state, payload) {
       state.board = payload;
     },
+    DELETE_BOARD(state) {
+      state.board = null;
+    },
   },
   actions: {
     updateBoardDetail({ commit }, payload) {
@@ -39,7 +42,6 @@ export default new Vuex.Store({
       });
     },
     writeBoard(context, payload) {
-      console.log("writeBoard 호출", context.state.member.id);
       http
         .post(`/board/write`, {
           memberId: context.state.member.id,
@@ -51,6 +53,14 @@ export default new Vuex.Store({
             console.log("게시글 등록 성공");
           }
         });
+    },
+    deleteBoard({ commit }, payload) {
+      http.delete(`/board/delete/${payload}`).then(({ data }) => {
+        if (data === "success") {
+          console.log("게시글 삭제 성공");
+          commit("DELETE_BOARD");
+        }
+      });
     },
   },
   modules: {},

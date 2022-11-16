@@ -7,7 +7,10 @@
         </div>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="auto"> 수정 | 삭제 </v-col>
+      <v-col cols="auto">
+        <span>수정</span> |
+        <span @click="clickDeleteBoard">삭제</span>
+      </v-col>
     </v-row>
     <v-row justify="start">
       <v-col cols="col-2">
@@ -56,10 +59,20 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   computed: {
     ...mapState(["board"]),
+  },
+  methods: {
+    clickDeleteBoard() {
+      this.deleteBoard(this.board.id);
+      this.moveList();
+    },
+    moveList() {
+      this.$router.push({ name: "boardList" });
+    },
+    ...mapActions(["deleteBoard"]),
   },
 };
 </script>
