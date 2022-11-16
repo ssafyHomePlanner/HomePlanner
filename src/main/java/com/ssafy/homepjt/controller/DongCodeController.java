@@ -31,7 +31,7 @@ public class DongCodeController {
 
     // 시도 이름 출력
     @ApiOperation(value = "시도 이름 출력")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> selectSidoName() {
         logger.info("dongcode sidoName controller");
         Map<String, Object> resultMap = new HashMap<>();
