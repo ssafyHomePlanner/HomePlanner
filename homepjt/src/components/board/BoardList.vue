@@ -3,7 +3,7 @@
     <v-container class="bv-example-row mt-3">
       <v-row class="mb-1">
         <v-col class="text-right">
-          <v-btn color="primary">글쓰기</v-btn>
+          <router-link :to="{ name: 'boardWrite' }">글쓰기</router-link>
         </v-col>
       </v-row>
       <v-row>

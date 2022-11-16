@@ -1,9 +1,18 @@
 <template>
-  <div>boardWrite</div>
+  <v-container>
+    <board-input-item />
+  </v-container>
 </template>
 
 <script>
-export default {};
+import BoardInputItem from "@/components/board/item/BoardInputItem";
+
+export default {
+  name: "BoardWrite",
+  components: {
+    BoardInputItem,
+  },
+};
 </script>
 
 <style></style>
