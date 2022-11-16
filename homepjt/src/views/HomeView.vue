@@ -16,7 +16,7 @@
             <v-container fill-height fluid>
               <v-row align="center" justify="center">
                 <v-col cols="3">
-                  <v-select label="시도 선택" ></v-select>
+                  <v-select :items="sidoList" label="시도 선택" ></v-select>
                 </v-col>
                 <v-col cols="3">
                   <v-select label="시군구 선택"></v-select>
@@ -34,8 +34,27 @@
 </template>
 
 <script>
+
+import {mapState, mapActions} from "vuex";
+
 export default {
   name: "HomeView",
+
+  // data(){
+
+  // },
+
+  computed:{
+    ...mapState(["sidoList"]),    
+  },
+  mounted() {
+    this.searchSidoList();    
+  },
+  methods: {
+    
+    ...mapActions(["searchSidoList"]),
+  },
+
 };
 </script>
 
