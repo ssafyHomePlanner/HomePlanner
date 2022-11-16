@@ -14,14 +14,13 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-2">
-        <div class="board-detail-member">
-          작성자: {{ board.memberId }}
-        </div>
+        <div class="board-detail-member">작성자: {{ board.memberId }}</div>
       </v-col>
     </v-row>
     <v-row justify="start">
       <v-col cols="col-4">
-        <v-icon large color="#999999"> mdi-message-text </v-icon> {{boardComment.length}} 건
+        <v-icon large color="#999999"> mdi-message-text </v-icon>
+        {{ boardComment.length }} 건
         <v-icon large color="#999999"> mdi-eye </v-icon>
         {{ board.viewCnt }}회 작성 날짜:
         {{ board.writeDate }}
@@ -52,10 +51,29 @@
       </v-col>
     </v-row>
     <v-row justify="start">
-      <v-col cols="col-2">댓글 {{boardComment.length}}</v-col>
+      <v-col cols="col-2">댓글 {{ boardComment.length }}</v-col>
     </v-row>
     <v-divider></v-divider>
-    <board-comment-item v-for="(comment, index) in boardComment" :key="index" :comment="comment" />
+    <board-comment-item
+      v-for="(comment, index) in boardComment"
+      :key="index"
+      :comment="comment"
+    />
+    <v-divider></v-divider>
+    <v-row>
+      <v-col cols="col-8">
+        <v-text-field
+          v-model="newComment"
+          counter="25"
+          hint="댓글을 작성하세요"
+          label="댓글"
+          solo
+        ></v-text-field>
+      </v-col>
+      <v-col cols="col-4">
+        <v-btn color="primary" elevation="3" large>등록</v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -65,6 +83,11 @@ import { mapState, mapActions } from "vuex";
 import BoardCommentItem from "./item/BoardCommentItem.vue";
 
 export default {
+  data() {
+    return {
+      newComment: "",
+    };
+  },
   created() {
     this.searchBoardComment(this.$store.state.board.id);
   },
@@ -72,8 +95,8 @@ export default {
     ...mapState(["board", "boardComment"]),
   },
   components: {
-    BoardCommentItem
-  } ,
+    BoardCommentItem,
+  },
   methods: {
     clickDeleteBoard() {
       this.deleteBoard(this.board.id);
