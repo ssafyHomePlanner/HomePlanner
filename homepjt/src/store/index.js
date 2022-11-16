@@ -19,6 +19,7 @@ export default new Vuex.Store({
     },
     boardList: [],
     board: null,
+    boardComment: [],
   },
   getters: {},
   mutations: {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     DELETE_BOARD(state) {
       state.board = null;
     },
+    SEARCH_BOARD_COMMENT(state, payload){
+      state.boardComment = payload;
+    }
   },
   actions: {
     updateBoardDetail({ commit }, payload) {
@@ -41,13 +45,18 @@ export default new Vuex.Store({
         commit("SEARCH_BOARD_LIST", data.boardList);
       });
     },
+    searchBoardComment({ commit }, payload) {
+      http.get(`/board/comment/${payload}`).then(({ data }) => {
+        commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
+      });
+    },
     updateBoard(context, payload) {
       http
         .put("/board/update", {
           memberId: context.state.member.id,
           title: payload.title,
           content: payload.content,
-          id : payload.id
+          id: payload.id,
         })
         .then(({ data }) => {
           if (data === "success") {

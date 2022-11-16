@@ -15,13 +15,13 @@
     <v-row justify="start">
       <v-col cols="col-2">
         <div class="board-detail-member">
-          {{ board.memberId }}
+          작성자: {{ board.memberId }}
         </div>
       </v-col>
     </v-row>
     <v-row justify="start">
       <v-col cols="col-4">
-        <v-icon large color="#999999"> mdi-message-text </v-icon> 건
+        <v-icon large color="#999999"> mdi-message-text </v-icon> {{boardComment.length}} 건
         <v-icon large color="#999999"> mdi-eye </v-icon>
         {{ board.viewCnt }}회 작성 날짜:
         {{ board.writeDate }}
@@ -52,7 +52,7 @@
       </v-col>
     </v-row>
     <v-row justify="start">
-      <v-col cols="col-2">댓글</v-col>
+      <v-col cols="col-2">댓글 {{boardComment.length}}</v-col>
     </v-row>
     <v-divider></v-divider>
   </v-container>
@@ -61,8 +61,11 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
+  created() {
+    this.searchBoardComment(this.$store.state.board.id);
+  },
   computed: {
-    ...mapState(["board"]),
+    ...mapState(["board", "boardComment"]),
   },
   methods: {
     clickDeleteBoard() {
@@ -75,7 +78,7 @@ export default {
     moveUpdate() {
       this.$router.push({ name: "boardUpdate" });
     },
-    ...mapActions(["deleteBoard"]),
+    ...mapActions(["deleteBoard", "searchBoardComment"]),
   },
 };
 </script>
