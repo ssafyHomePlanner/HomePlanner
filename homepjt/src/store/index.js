@@ -7,6 +7,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    member: {
+      id: "ssafy",
+      pw: "1234",
+      name: "싸피",
+      email: "'ssafy@gmail.com'",
+      age: "27",
+      phone: "010",
+      gender: "m",
+      joinDate: "2022-11-16 09:44:18",
+    },
     boardList: [],
     board: null,
   },
