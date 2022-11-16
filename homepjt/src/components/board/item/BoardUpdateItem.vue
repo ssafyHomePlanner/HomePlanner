@@ -39,12 +39,14 @@ import { mapActions } from "vuex";
 export default {
   name: "BoardUpdateItem",
   mounted() {
+    this.article.id = this.$store.state.board.id;
     this.article.title = this.$store.state.board.title;
     this.article.content = this.$store.state.board.content;
   },
   data() {
     return {
       article: {
+        id : "",
         title: "",
         content: "",
       },
