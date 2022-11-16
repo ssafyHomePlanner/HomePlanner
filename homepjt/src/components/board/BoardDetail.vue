@@ -55,11 +55,15 @@
       <v-col cols="col-2">댓글 {{boardComment.length}}</v-col>
     </v-row>
     <v-divider></v-divider>
+    <board-comment-item v-for="(comment, index) in boardComment" :key="index" :comment="comment" />
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+
+import BoardCommentItem from "./item/BoardCommentItem.vue";
+
 export default {
   created() {
     this.searchBoardComment(this.$store.state.board.id);
@@ -67,6 +71,9 @@ export default {
   computed: {
     ...mapState(["board", "boardComment"]),
   },
+  components: {
+    BoardCommentItem
+  } ,
   methods: {
     clickDeleteBoard() {
       this.deleteBoard(this.board.id);
