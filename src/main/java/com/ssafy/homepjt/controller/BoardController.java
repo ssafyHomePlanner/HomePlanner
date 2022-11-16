@@ -12,13 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.homepjt.model.dto.BoardCommentDto;
 import com.ssafy.homepjt.model.dto.BoardDto;
@@ -79,7 +73,7 @@ public class BoardController {
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 글쓰기 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
             @ApiResponse(code = 500, message = "서버에러!!")})
     @PostMapping("/write")
-    public ResponseEntity<Map<String, Object>> writeBoard(BoardDto boardDto) {
+    public ResponseEntity<Map<String, Object>> writeBoard(@RequestBody BoardDto boardDto) {
         logger.info("board write controller");
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -157,7 +151,7 @@ public class BoardController {
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
             @ApiResponse(code = 500, message = "서버에러!!")})
     @PutMapping("/update")
-    public ResponseEntity<Map<String, Object>> updateBoard(BoardDto boardDto) {
+    public ResponseEntity<Map<String, Object>> updateBoard(@RequestBody BoardDto boardDto) {
         logger.info("board update controller");
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -222,7 +216,7 @@ public class BoardController {
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 쓰기 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @PostMapping("/comment/write")
-    public ResponseEntity<Map<String, Object>> writeBoardComment(BoardCommentDto boardCommentDto) {
+    public ResponseEntity<Map<String, Object>> writeBoardComment(@RequestBody BoardCommentDto boardCommentDto) {
         logger.info("board comment write controller");
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -243,7 +237,7 @@ public class BoardController {
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 수정 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @PutMapping("/comment/update")
-    public ResponseEntity<Map<String, Object>> updateBoardComment(BoardCommentDto boardCommentDto) {
+    public ResponseEntity<Map<String, Object>> updateBoardComment(@RequestBody BoardCommentDto boardCommentDto) {
         logger.info("board comment update controller");
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
