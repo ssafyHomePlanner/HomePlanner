@@ -1,9 +1,74 @@
 <template>
-  <div>boardDetail</div>
+  <v-container fill-height>
+    <v-row align="end" justify="center">
+      <v-col cols="auto">
+        <div class="board-detail-title">
+          {{ board.title }}
+        </div>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="auto"> 수정 | 삭제 </v-col>
+    </v-row>
+    <v-row justify="start">
+      <v-col cols="col-2">
+        <div class="board-detail-member">
+          {{ board.memberId }}
+        </div>
+      </v-col>
+    </v-row>
+    <v-row justify="start">
+      <v-col cols="col-4">
+        <v-icon large color="#999999"> mdi-message-text </v-icon> 건,
+        <v-icon large color="#999999"> mdi-eye </v-icon>
+        {{ board.viewCnt }}회 작성 날짜
+        {{ board.writeDate }}
+      </v-col>
+    </v-row>
+    <v-row justify="start">
+      <v-col cols="col-5">{{ board.content }}</v-col>
+    </v-row>
+    <v-row justify="start">
+      <v-col cols="col-2">
+        <v-sheet
+          rounded="pill"
+          color="white"
+          elevation="3"
+          height="50"
+          width="80"
+          class="ma-8"
+        >
+          <v-row align="center" justify="center">
+            <v-icon large color="red darken-2"> mdi-heart </v-icon>
+            {{ board.likeCnt }}
+          </v-row>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row justify="start">
+      <v-col cols="col-2">댓글</v-col>
+    </v-row>
+    <v-divider></v-divider>
+  </v-container>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState(["board"]),
+  },
+};
 </script>
 
-<style></style>
+<style>
+.board-detail-title {
+  font-size: 41px;
+  font-weight: bold;
+  color: black;
+}
+.board-detail-member {
+  font-size: 18px;
+  font-weight: normal;
+  color: #8e8585;
+}
+</style>
