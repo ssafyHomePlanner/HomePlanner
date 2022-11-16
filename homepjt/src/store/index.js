@@ -47,6 +47,7 @@ export default new Vuex.Store({
           memberId: context.state.member.id,
           title: payload.title,
           content: payload.content,
+          id : payload.id
         })
         .then(({ data }) => {
           if (data === "success") {
