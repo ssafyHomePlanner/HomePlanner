@@ -58,7 +58,6 @@ export default {
   computed: {
     ...mapState(["boardList"]),
   },
-  created: {},
   mounted() {
     this.searchBoardList(this.page);
   },
