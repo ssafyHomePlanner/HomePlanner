@@ -21,3 +21,9 @@ export default {
   }),
 };
 </script>
+
+<style>
+body {
+  background-size: cover;
+}
+</style>
