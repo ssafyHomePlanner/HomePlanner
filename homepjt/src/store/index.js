@@ -20,6 +20,11 @@ export default new Vuex.Store({
     boardList: [],
     board: null,
     boardComment: [],
+
+    // 시도, 시군구, 동
+    sidoList: [],
+    gunguList: [],
+    dongList:[],
   },
   getters: {},
   mutations: {
@@ -34,7 +39,19 @@ export default new Vuex.Store({
     },
     SEARCH_BOARD_COMMENT(state, payload){
       state.boardComment = payload;
+    },
+
+    // 시도, 시군구, 동
+    SEARCH_SIDO_LIST(state, payload) {
+      state.sidoList = payload;
+    },
+    SEARCH_GUNGU_LIST(state, payload) {
+      state.gunguList = payload;
+    },
+    SEARCH_DONG_LIST(state, payload) {
+      state.dongList = payload;
     }
+
   },
   actions: {
     updateBoardDetail({ commit }, payload) {
@@ -83,6 +100,13 @@ export default new Vuex.Store({
           console.log("게시글 삭제 성공");
           commit("DELETE_BOARD");
         }
+      });
+    },
+
+    // 시도, 시군구, 동
+    searchSidoList({ commit }) {
+      http.get(`/dongcode`).then(({ data }) => {                
+        commit("SEARCH_SIDO_LIST", data.sidoNameList);                        
       });
     },
   },
