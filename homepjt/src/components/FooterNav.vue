@@ -1,6 +1,6 @@
 <template>
-  <v-footer dark padless>
-    <v-card class="flex" flat tile>
+  <v-footer dark>
+    <v-card class="flex" tile>
       <v-card-text class="py-2 white--text text-center">
         <strong>@2020 made by 최규림, 최정온</strong>
 

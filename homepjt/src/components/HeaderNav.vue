@@ -1,29 +1,38 @@
 <template>
   <div>
     <v-toolbar>
-      <v-container>
-        <v-row justify="center">
-          <v-img src="@/assets/logo.png" max-width="60" max-height="60" @click="moveToHome()"></v-img>
-
-          <v-col cols="auto">
-            <!-- <router-link :to="{ name: 'boardView' }" class="link">아파트 계획 세우기</router-link> -->
-            <v-btn flat to="/board">아파트 계획 세우기</v-btn>
-            <!-- <router-link :to="{ name: 'boardView' }" class="link"> 아파트 경로 찾기</router-link> -->
-            <v-btn flat to="/">아파트 경로 찾기</v-btn>
-            <!-- <router-link :to="{ name: 'boardView' }" class="link"> 아파트 커뮤니티</router-link> -->
-            <v-btn flat to="/board">아파트 커뮤니티</v-btn>
-          </v-col>
-
-          <v-spacer></v-spacer>
-
-          <v-col cols="auto">
-            <!-- <router-link :to="{ name: 'boardView' }" class="link"> 회원가입</router-link> -->
-            <v-btn flat to="/">회원가입</v-btn>
-            <!-- <router-link :to="{ name: 'boardView' }" class="link"> 로그인</router-link> -->
-            <v-btn flat to="/board">로그인</v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-row>
+        <v-toolbar-title class="ml-4" @click="moveToHome()"
+          >Home Planner</v-toolbar-title
+        >
+        <v-col cols="col-8">
+          <v-container>
+            <v-row justify="space-around">
+              <router-link :to="{ name: 'boardView' }" class="link"
+                >아파트 계획 세우기</router-link
+              >
+              <router-link :to="{ name: 'boardView' }" class="link">
+                아파트 경로 찾기</router-link
+              >
+              <router-link :to="{ name: 'boardView' }" class="link">
+                아파트 커뮤니티</router-link
+              >
+            </v-row>
+          </v-container>
+        </v-col>
+        <v-col cols="col-2">
+          <v-container class="mr-4">
+            <v-row justify="end">
+              <router-link :to="{ name: 'boardView' }" class="link mr-4">
+                회원가입</router-link
+              >
+              <router-link :to="{ name: 'boardView' }" class="link">
+                로그인</router-link
+              >
+            </v-row>
+          </v-container>
+        </v-col>
+      </v-row>
     </v-toolbar>
   </div>
 </template>
@@ -35,7 +44,7 @@ export default {
   },
   methods: {
     moveToHome() {
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "home" }).catch(()=>{});
     },
   },
 };
@@ -49,9 +58,5 @@ v-toolbar {
 
 .link {
   text-decoration: none;
-}
-
-v-img {
-  display: inline;
 }
 </style>
