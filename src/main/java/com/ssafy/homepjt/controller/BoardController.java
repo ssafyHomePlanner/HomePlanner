@@ -1,9 +1,12 @@
 package com.ssafy.homepjt.controller;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,232 +24,259 @@ import com.ssafy.homepjt.model.dto.BoardCommentDto;
 import com.ssafy.homepjt.model.dto.BoardDto;
 import com.ssafy.homepjt.model.service.BoardService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 @RestController
 @RequestMapping("/board")
 @Api("게시판 컨트롤러 API V1")
 public class BoardController {
 
-	public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	private static final String SUCCESS = "success";
-	private static final String FAIL = "fail";
+    public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
 
-	@Autowired
-	private BoardService boardService;
+    @Autowired
+    private BoardService boardService;
 
-	// 전체 게시판 목록
-	@ApiOperation(value = "전체 게시판 목록 확인")
-	@ApiResponses({ @ApiResponse(code = 200, message = "전체 게시판 목록 확인 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/{page}")
-	public ResponseEntity<Map<String, Object>> listBoard(@PathVariable("page") int page) {
-		logger.info("board list controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 전체 게시판 목록
+    @ApiOperation(value = "전체 게시판 목록 확인")
+    @ApiResponses({@ApiResponse(code = 200, message = "전체 게시판 목록 확인 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping({"{page}", "/"})
+    public ResponseEntity<Map<String, Object>> listBoard(@PathVariable("page") Optional<Integer> page) {
 
-		try {
-			Map<String, Object> result = boardService.listBoard(page);
-			int startPage = (int) result.get("startPage");
-			int endPage = (int) result.get("endPage");
-			int currPage = (int) result.get("currPage");
-			int totalPage = (int) result.get("totalPage");
-			List<BoardDto> boardList = (List<BoardDto>) result.get("boardList");
+        if(!page.isPresent()){
+            page = Optional.of(1);
+        }
 
-			resultMap.put("startPage", startPage);
-			resultMap.put("endPage", endPage);
-			resultMap.put("currPage", currPage);
-			resultMap.put("totalPage", totalPage);
-			resultMap.put("boardList", boardList);
+        logger.info("board list controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-			logger.debug("게시판 목록 조회 성공 : {}", boardList.toString());
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 목록 조회 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try {
+            Map<String, Object> result = boardService.listBoard(page.get().intValue());
+            int startPage = (int) result.get("startPage");
+            int endPage = (int) result.get("endPage");
+            int currPage = (int) result.get("currPage");
+            int totalPage = (int) result.get("totalPage");
+            List<BoardDto> boardList = (List<BoardDto>) result.get("boardList");
 
-	// 게시판 글쓰기
-	@ApiOperation(value = "게시판 글쓰기")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 글쓰기 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@PostMapping("/write")
-	public ResponseEntity<Map<String, Object>> writeBoard(BoardDto boardDto) {
-		logger.info("board write controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("startPage", startPage);
+            resultMap.put("endPage", endPage);
+            resultMap.put("currPage", currPage);
+            resultMap.put("totalPage", totalPage);
+            resultMap.put("boardList", boardList);
 
-		try {
-			boardService.writeBoard(boardDto);
-			logger.debug("게시판 글쓰기 성공 : {}", boardDto.toString());
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 글쓰기 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+            logger.debug("게시판 목록 조회 성공 : {}", boardList.toString());
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 목록 조회 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 게시판 글 세부내용 보기
-	@ApiOperation(value = "게시판 글 세부내용 확인")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 글 세부내용 확인 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/detail/{boardId}")
-	public ResponseEntity<Map<String, Object>> readBoard(@PathVariable("boardId") int boardId) {
-		logger.info("board detail controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 게시판 글쓰기
+    @ApiOperation(value = "게시판 글쓰기")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글쓰기 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @PostMapping("/write")
+    public ResponseEntity<Map<String, Object>> writeBoard(BoardDto boardDto) {
+        logger.info("board write controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			BoardDto boardDto = boardService.readBoard(boardId);
-			if (boardDto != null) {
-				logger.debug("게시판 글 세부내용 확인 성공 : {}", boardDto);
-				resultMap.put("message", SUCCESS);
-				resultMap.put("board", boardDto);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			} else {
-				logger.debug("게시판 글 세부내용 확인 실패 : ");
-				resultMap.put("message", FAIL);
-				resultMap.put("board", null);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			}
+        try {
+            boardService.writeBoard(boardDto);
+            logger.debug("게시판 글쓰기 성공 : {}", boardDto.toString());
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 글쓰기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-		} catch (Exception e) {
-			logger.error("게시판 글 세부내용 확인 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    // 게시판 글 세부내용 보기
+    @ApiOperation(value = "게시판 글 세부내용 확인")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 세부내용 확인 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/detail/{boardId}/{flag}")
+    public ResponseEntity<Map<String, Object>> readBoard(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
+        logger.info("board detail controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-	// 게시판 글 수정
-	@ApiOperation(value = "게시판 글 수정")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 글 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@PutMapping("/update")
-	public ResponseEntity<Map<String, Object>> updateBoard(BoardDto boardDto) {
-		logger.info("board update controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            BoardDto boardDto = boardService.readBoard(boardId);
 
-		try {
-			boardService.updateBoard(boardDto);
-			BoardDto updatedBoard = boardService.readBoard(boardDto.getId());
-			logger.debug("게시판 수정 성공 : {}", updatedBoard.toString());
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 수정 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+            // 작성자가 아니라면 조회수 증가
+            if(flag == 1){
+                boardService.updateReadCount(boardId);
+            }
 
-	// 게시판 글 삭제
-	@ApiOperation(value = "게시판 글 삭제")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 글 삭제 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@DeleteMapping("/delete/{boardId}")
-	public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable("boardId") int boardId) {
-		logger.info("board delete controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+            if (boardDto != null) {
+                logger.debug("게시판 글 세부내용 확인 성공 : {}", boardDto);
+                resultMap.put("message", SUCCESS);
+                resultMap.put("board", boardDto);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            } else {
+                logger.debug("게시판 글 세부내용 확인 실패 : ");
+                resultMap.put("message", FAIL);
+                resultMap.put("board", null);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
 
-		try {
-			boardService.deleteBoard(boardId);
-			logger.debug("게시판 삭제 성공 ");
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 삭제 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        } catch (Exception e) {
+            logger.error("게시판 글 세부내용 확인 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 게시판 댓글 목록
-	@ApiOperation(value = "게시판 댓글 목록")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 댓글 목록 조회 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/comment/{boardId}")
-	public ResponseEntity<Map<String, Object>> listBoardComment(@PathVariable("boardId") int boardId) {
-		logger.info("board comment list controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 좋아요 수 증가
+    @ApiOperation(value = "게시판 글 좋아요 수 갱신")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 좋아요 수 갱신 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/update/{boardId}/{flag}")
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag){
+        logger.info("board update like count controller");
+        Map<String, Object> resultMap = new HashMap<>();
 
-		try {
-			List<BoardCommentDto> boardCommentList = boardService.listBoardComment(boardId);
-			logger.debug("게시판 댓글 목록 조회 성공 : {}", boardCommentList.toString());
-			resultMap.put("message", SUCCESS);
-			resultMap.put("boardCommentList", boardCommentList);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 댓글 목록 조회 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try{
+            boardService.updateLikeCount(boardId, flag);
+            logger.debug("좋아요 수 갱신 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("좋아요 수 갱신 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 게시판 댓글 쓰기
-	@ApiOperation(value = "게시판 댓글 쓰기")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 댓글 쓰기 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@PostMapping("/comment/write")
-	public ResponseEntity<Map<String, Object>> writeBoardComment(BoardCommentDto boardCommentDto) {
-		logger.info("board comment write controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 게시판 글 수정
+    @ApiOperation(value = "게시판 글 수정")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, Object>> updateBoard(BoardDto boardDto) {
+        logger.info("board update controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			boardService.writeBoardComment(boardCommentDto);
-			logger.debug("게시판 댓글 쓰기 성공 : {}", boardCommentDto.toString());
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 댓글 쓰기 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try {
+            boardService.updateBoard(boardDto);
+            BoardDto updatedBoard = boardService.readBoard(boardDto.getId());
+            logger.debug("게시판 수정 성공 : {}", updatedBoard.toString());
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 수정 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 게시판 댓글 수정
-	@ApiOperation(value = "게시판 댓글 수정")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 댓글 수정 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@PutMapping("/comment/update")
-	public ResponseEntity<Map<String, Object>> updateBoardComment(BoardCommentDto boardCommentDto) {
-		logger.info("board comment update controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 게시판 글 삭제
+    @ApiOperation(value = "게시판 글 삭제")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 삭제 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable("boardId") int boardId) {
+        logger.info("board delete controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			boardService.updateBoardComment(boardCommentDto);
-			logger.debug("게시판 댓글 수정 성공 ");
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 댓글 수정 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try {
+            boardService.deleteBoard(boardId);
+            logger.debug("게시판 삭제 성공 ");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 삭제 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 게시판 댓글 삭제
-	@ApiOperation(value = "게시판 댓글 삭제")
-	@ApiResponses({ @ApiResponse(code = 200, message = "게시판 댓글 삭제 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@DeleteMapping("/comment/delete/{boardCommentId}")
-	public ResponseEntity<Map<String, Object>> deleteBoardComment(@PathVariable("boardCommentId") int boardCommentId) {
-		logger.info("board comment delete controller");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 게시판 댓글 목록
+    @ApiOperation(value = "게시판 댓글 목록")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 목록 조회 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/comment/{boardId}")
+    public ResponseEntity<Map<String, Object>> listBoardComment(@PathVariable("boardId") int boardId) {
+        logger.info("board comment list controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			boardService.deleteBoardCommentDto(boardCommentId);
-			logger.debug("게시판 댓글 삭제 성공 ");
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("게시판 댓글 삭제 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try {
+            List<BoardCommentDto> boardCommentList = boardService.listBoardComment(boardId);
+            logger.debug("게시판 댓글 목록 조회 성공 : {}", boardCommentList.toString());
+            resultMap.put("message", SUCCESS);
+            resultMap.put("boardCommentList", boardCommentList);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 댓글 목록 조회 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 게시판 댓글 쓰기
+    @ApiOperation(value = "게시판 댓글 쓰기")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 쓰기 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @PostMapping("/comment/write")
+    public ResponseEntity<Map<String, Object>> writeBoardComment(BoardCommentDto boardCommentDto) {
+        logger.info("board comment write controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try {
+            boardService.writeBoardComment(boardCommentDto);
+            logger.debug("게시판 댓글 쓰기 성공 : {}", boardCommentDto.toString());
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 댓글 쓰기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 게시판 댓글 수정
+    @ApiOperation(value = "게시판 댓글 수정")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 수정 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @PutMapping("/comment/update")
+    public ResponseEntity<Map<String, Object>> updateBoardComment(BoardCommentDto boardCommentDto) {
+        logger.info("board comment update controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try {
+            boardService.updateBoardComment(boardCommentDto);
+            logger.debug("게시판 댓글 수정 성공 ");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 댓글 수정 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 게시판 댓글 삭제
+    @ApiOperation(value = "게시판 댓글 삭제")
+    @ApiResponses({@ApiResponse(code = 200, message = "게시판 댓글 삭제 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @DeleteMapping("/comment/delete/{boardCommentId}")
+    public ResponseEntity<Map<String, Object>> deleteBoardComment(@PathVariable("boardCommentId") int boardCommentId) {
+        logger.info("board comment delete controller");
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try {
+            boardService.deleteBoardCommentDto(boardCommentId);
+            logger.debug("게시판 댓글 삭제 성공 ");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("게시판 댓글 삭제 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

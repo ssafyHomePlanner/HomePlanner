@@ -14,6 +14,10 @@ public interface BoardService {
 
 	public BoardDto readBoard(int boardId) throws SQLException; // 게시판 글 세부내용 보기
 
+	public void updateReadCount(int boardId) throws SQLException; // 조회수 수정
+
+	public void updateLikeCount(int boardId, int flag) throws SQLException; // 좋아요 수 수정
+
 	public void updateBoard(BoardDto boardDto) throws SQLException; // 게시판 글 수정
 
 	public void deleteBoard(int boardId) throws SQLException; // 게시판 글 삭제

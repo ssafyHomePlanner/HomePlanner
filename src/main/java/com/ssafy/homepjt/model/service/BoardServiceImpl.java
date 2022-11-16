@@ -57,6 +57,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void updateReadCount(int boardId) throws SQLException {
+        boardMapper.updateReadCount(boardId);
+    }
+
+    @Override
+    public void updateLikeCount(int boardId, int flag) throws SQLException {
+        boardMapper.updateLikeCount(boardId, flag);
+    }
+
+    @Override
     public void updateBoard(BoardDto boardDto) throws SQLException {
         boardMapper.updateBoard(boardDto);
     }

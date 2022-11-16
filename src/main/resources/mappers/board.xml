@@ -56,6 +56,23 @@
         where id = #{boardId}
     </select>
 
+    <!-- 조회수 수정 -->
+    <update id="updateReadCount" parameterType="int">
+        update board
+        set view_cnt = view_cnt + 1
+        where id=#{boardId}
+    </update>
+
+    <!-- 좋아요수 수정 -->
+    <update id="updateLikeCount" parameterType="int">
+        update board
+        <trim prefix="set" suffixOverrides=",">
+            <if test="flag == 1">like_cnt = like_cnt + 1,</if>
+            <if test="flag == 0">like_cnt = like_cnt - 1,</if>
+        </trim>
+        where id=#{boardId}
+    </update>
+
     <!-- 게시판 글 수정 -->
     <update id="updateBoard">
         update board
