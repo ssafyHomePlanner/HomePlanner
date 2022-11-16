@@ -19,11 +19,14 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-4">
+
         <v-icon large color="#999999"> mdi-message-text </v-icon>
         {{ boardComment.length }} 건
         <v-icon large color="#999999"> mdi-eye </v-icon>
-        {{ board.viewCnt }}회 작성 날짜:
-        {{ board.writeDate }}
+        {{ board.viewCnt }}회 | 
+        <span class="board-detail-member">
+          {{ board.writeDate }}
+        </span>
       </v-col>
     </v-row>
     <v-row justify="start">
@@ -53,27 +56,31 @@
     <v-row justify="start">
       <v-col cols="col-2">댓글 {{ boardComment.length }}</v-col>
     </v-row>
-    <v-divider></v-divider>
+    <div>
+      <v-divider></v-divider>
+    </div>
     <board-comment-item
       v-for="(comment, index) in boardComment"
       :key="index"
       :comment="comment"
     />
     <v-divider></v-divider>
-    <v-row>
-      <v-col cols="col-8">
-        <v-text-field
-          v-model="newComment"
-          counter="25"
-          hint="댓글을 작성하세요"
-          label="댓글"
-          solo
-        ></v-text-field>
-      </v-col>
-      <v-col cols="col-4">
-        <v-btn color="primary" elevation="3" large>등록</v-btn>
-      </v-col>
-    </v-row>
+    <v-container>
+      <v-row>
+        <v-col cols="col-8">
+          <v-text-field
+            v-model="newComment"
+            counter="25"
+            hint="댓글을 작성하세요"
+            label="댓글"
+            solo
+          ></v-text-field>
+        </v-col>
+        <v-col cols="col-4">
+          <v-btn color="primary" elevation="3" large>등록</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-container>
 </template>
 
