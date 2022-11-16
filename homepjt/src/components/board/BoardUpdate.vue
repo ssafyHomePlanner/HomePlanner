@@ -1,9 +1,18 @@
 <template>
-  <div>boardUpdate</div>
+  <v-container>
+    <board-update-item />
+  </v-container>
 </template>
 
 <script>
-export default {};
+import BoardUpdateItem from "@/components/board/item/BoardUpdateItem";
+
+export default {
+  name: "BoardUpdate",
+  components: {
+    BoardUpdateItem,
+  },
+};
 </script>
 
 <style></style>

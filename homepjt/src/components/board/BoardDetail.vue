@@ -8,7 +8,7 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="auto">
-        <span>수정</span> |
+        <span @click="moveUpdate">수정</span> |
         <span @click="clickDeleteBoard">삭제</span>
       </v-col>
     </v-row>
@@ -71,6 +71,9 @@ export default {
     },
     moveList() {
       this.$router.push({ name: "boardList" });
+    },
+    moveUpdate() {
+      this.$router.push({ name: "boardUpdate" });
     },
     ...mapActions(["deleteBoard"]),
   },

@@ -41,6 +41,19 @@ export default new Vuex.Store({
         commit("SEARCH_BOARD_LIST", data.boardList);
       });
     },
+    updateBoard(context, payload) {
+      http
+        .put("/board/update", {
+          memberId: context.state.member.id,
+          title: payload.title,
+          content: payload.content,
+        })
+        .then(({ data }) => {
+          if (data === "success") {
+            console.log("게시글 수정 성공");
+          }
+        });
+    },
     writeBoard(context, payload) {
       http
         .post(`/board/write`, {
