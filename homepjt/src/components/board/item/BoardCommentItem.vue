@@ -9,7 +9,7 @@
         </v-container>
     </v-col>
     <v-col cols="col-8">
-            {{comment.writeDate}}
+            작성 일자: {{comment.writeDate}}
     </v-col>
   </v-row>
 </template>
