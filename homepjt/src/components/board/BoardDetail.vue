@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height class="mt-6">
     <v-row align="end" justify="center">
       <v-col cols="auto">
         <div class="board-detail-title">
