@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.HouseInfoMapper">
+
+    <!--    <resultMap type="AptSearchRequestDto" id="searchReqDto">-->
+    <!--        <result column="sido_name" property="sidoName"/>-->
+    <!--        <result column="gugun_name" property="gugunName"/>-->
+    <!--        <result column="dong_name" property="dongName"/>-->
+    <!--        <result column="apartment_name" property="aptName"/>-->
+    <!--    </resultMap>-->
+
+    <select id="selectHouseInfo" resultType="HouseInfoDto">
+        select h.apt_code, h.build_year, h.road_name, h.road_name_bonbun, h.road_name_seq, h.road_name_basement_code,
+               h.road_name_code, h.dong, h.bubun, h.sigungu_code, h.eubmyundong_code, h.dong_code, h.land_code, h.apartment_name, h.jibun,
+               h.lon, h.lat, h.view_cnt, h.like_cnt
+        from houseinfo h
+                 join dongcode d on h.dong_code = d.dong_code
+        where d.sido_name like concat('%', #{sidoName}, '%')
+          and d.gugun_name like concat('%', #{gugunName}, '%')
+          and d.dong_name like concat('%', #{dongName}, '%')
+          and h.apartment_name like concat('%', #{aptName}, '%');
+    </select>
+
+    <select id="selectHouseInfoAuto" parameterType="String">
+        select *
+        from houseinfo
+        where apartment_name like concat('%', #{aptName}, '%')
+    </select>
+
+</mapper>
