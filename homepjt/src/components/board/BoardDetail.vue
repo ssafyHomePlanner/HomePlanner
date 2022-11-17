@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="mt-6">
+  <v-container fill-height class="mt-6 mb-8">
     <v-row align="end" justify="center">
       <v-col cols="auto">
         <div class="board-detail-title">
@@ -68,7 +68,7 @@
       <v-row>
         <v-col cols="col-8">
           <v-text-field
-            v-model="newComment"
+            v-model="comment.content"
             counter="25"
             hint="댓글을 작성하세요"
             label="댓글"
@@ -76,7 +76,9 @@
           ></v-text-field>
         </v-col>
         <v-col cols="col-4">
-          <v-btn color="primary" elevation="3" large>등록</v-btn>
+          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large
+            >등록</v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -93,11 +95,12 @@ const boardStore = "boardStore";
 export default {
   data() {
     return {
-      newComment: "",
+      comment: {
+        memberId: "",
+        content: "",
+        boardId: "",
+      },
     };
-  },
-  created() {
-    this.searchBoardComment(this.$store.state.board.id);
   },
   computed: {
     ...mapState(boardStore, ["board", "boardComment"]),
@@ -106,6 +109,13 @@ export default {
     BoardCommentItem,
   },
   methods: {
+    clickEnrollComment() {
+      this.comment.boardId = this.board.id;
+      (this.comment.memberId = this.$store.state.member.id),
+        this.writeBoardComment(this.comment).then(() => {
+          this.searchBoardComment(this.board.id);
+        });
+    },
     clickDeleteBoard() {
       this.deleteBoard(this.board.id);
       this.moveList();
@@ -116,7 +126,11 @@ export default {
     moveUpdate() {
       this.$router.push({ name: "boardUpdate" });
     },
-    ...mapActions(boardStore, ["deleteBoard", "searchBoardComment"]),
+    ...mapActions(boardStore, [
+      "deleteBoard",
+      "searchBoardComment",
+      "writeBoardComment",
+    ]),
   },
 };
 </script>

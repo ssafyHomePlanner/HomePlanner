@@ -29,6 +29,13 @@ function getArticleCommentList(boardId, success, fail) {
   api.get(`/board/comment/${boardId}`).then(success).catch(fail);
 }
 
+function writeArticleComment(comment, success, fail) {
+  api
+    .post(`board/comment/write`, JSON.stringify(comment))
+    .then(success)
+    .catch(fail);
+}
+
 export {
   listArticle,
   writeArticle,
@@ -36,4 +43,5 @@ export {
   modifyArticle,
   deleteArticle,
   getArticleCommentList,
+  writeArticleComment,
 };

@@ -67,13 +67,19 @@ export default {
   },
   methods: {
     clickRow(value) {
-      this.insertBoardOne(value);
+      this.insertBoardOne(value).then(() => {
+        this.searchBoardComment(value.id);
+      });
       this.moveBoardDetail();
     },
     moveBoardDetail() {
       this.$router.push({ name: "boardDetail" });
     },
-    ...mapActions(boardStore, ["searchBoardList", "insertBoardOne"]),
+    ...mapActions(boardStore, [
+      "searchBoardList",
+      "insertBoardOne",
+      "searchBoardComment",
+    ]),
   },
 };
 </script>

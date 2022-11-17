@@ -4,6 +4,7 @@ import {
   modifyArticle,
   deleteArticle,
   getArticleCommentList,
+  writeArticleComment,
 } from "@/api/board.js";
 
 const boardStore = {
@@ -44,6 +45,7 @@ const boardStore = {
       );
     },
     searchBoardComment({ commit }, payload) {
+      console.log("searchBoardComment");
       getArticleCommentList(
         payload,
         ({ data }) => {
@@ -60,6 +62,25 @@ const boardStore = {
         ({ data }) => {
           if (data === "success") {
             console.log("게시글 수정 성공");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    writeBoardComment(context, payload) {
+      let comment = {
+        memberId: payload.memberId,
+        content: payload.content,
+        boardId: payload.boardId,
+      };
+
+      writeArticleComment(
+        comment,
+        ({ data }) => {
+          if (data === "success") {
+            console.log("댓글 등록 성공");
           }
         },
         (error) => {
