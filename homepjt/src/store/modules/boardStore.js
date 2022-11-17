@@ -44,18 +44,6 @@ const boardStore = {
         }
       );
     },
-    searchBoardComment({ commit }, payload) {
-      console.log("searchBoardComment");
-      getArticleCommentList(
-        payload,
-        ({ data }) => {
-          commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
     updateBoard(context, payload) {
       modifyArticle(
         payload,
@@ -63,6 +51,47 @@ const boardStore = {
           if (data === "success") {
             console.log("게시글 수정 성공");
           }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    writeBoard(context, payload) {
+      let article = {
+        memberId: context.state.member.id,
+        title: payload.title,
+        content: payload.content,
+      };
+      writeArticle(
+        article,
+        ({ data }) => {
+          if (data === "success") {
+            console.log("게시글 등록 성공");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    deleteBoard({ commit }, payload) {
+      deleteArticle(
+        payload,
+        () => {
+          commit("DELETE_BOARD");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    searchBoardComment({ commit }, payload) {
+      console.log("searchBoardComment");
+      getArticleCommentList(
+        payload,
+        ({ data }) => {
+          commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
         },
         (error) => {
           console.log(error);
@@ -97,36 +126,6 @@ const boardStore = {
           }
         );
       });
-    },
-    writeBoard(context, payload) {
-      let article = {
-        memberId: context.state.member.id,
-        title: payload.title,
-        content: payload.content,
-      };
-
-      writeArticle(
-        article,
-        ({ data }) => {
-          if (data === "success") {
-            console.log("게시글 등록 성공");
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    deleteBoard({ commit }, payload) {
-      deleteArticle(
-        payload,
-        () => {
-          commit("DELETE_BOARD");
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
     },
   },
 };
