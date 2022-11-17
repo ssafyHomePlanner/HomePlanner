@@ -111,10 +111,8 @@ export default {
   methods: {
     clickEnrollComment() {
       this.comment.boardId = this.board.id;
-      (this.comment.memberId = this.$store.state.member.id),
-        this.writeBoardComment(this.comment).then(() => {
-          this.searchBoardComment(this.board.id);
-        });
+      this.comment.memberId = this.$store.state.member.id;
+      this.writeBoardComment(this.comment);
     },
     clickDeleteBoard() {
       this.deleteBoard(this.board.id);

@@ -30,7 +30,7 @@ function getArticleCommentList(boardId, success, fail) {
 }
 
 function writeArticleComment(comment, success, fail) {
-  api
+  return api
     .post(`board/comment/write`, JSON.stringify(comment))
     .then(success)
     .catch(fail);

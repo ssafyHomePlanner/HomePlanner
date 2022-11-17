@@ -11,7 +11,7 @@ const boardStore = {
   namespaced: true,
   state: {
     boardList: [],
-    board: null,
+    board: {},
     boardComment: [],
   },
   getters: {},
@@ -69,7 +69,7 @@ const boardStore = {
         }
       );
     },
-    writeBoardComment(context, payload) {
+    writeBoardComment({ commit }, payload) {
       let comment = {
         memberId: payload.memberId,
         content: payload.content,
@@ -86,7 +86,17 @@ const boardStore = {
         (error) => {
           console.log(error);
         }
-      );
+      ).then(() => {
+        getArticleCommentList(
+          comment.boardId,
+          ({ data }) => {
+            commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      });
     },
     writeBoard(context, payload) {
       let article = {
