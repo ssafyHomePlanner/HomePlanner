@@ -28,6 +28,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+
+const boardStore = "boardStore";
+
 export default {
   data() {
     return {
@@ -57,7 +60,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["boardList"]),
+    ...mapState(boardStore, ["boardList"]),
   },
   mounted() {
     this.searchBoardList(this.page);
@@ -70,7 +73,7 @@ export default {
     moveBoardDetail() {
       this.$router.push({ name: "boardDetail" });
     },
-    ...mapActions(["searchBoardList", "updateBoardDetail"]),
+    ...mapActions(boardStore, ["searchBoardList", "updateBoardDetail"]),
   },
 };
 </script>
