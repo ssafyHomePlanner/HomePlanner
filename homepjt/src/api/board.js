@@ -12,7 +12,7 @@ function writeArticle(article, success, fail) {
 
 function getArticle(param, success, fail) {
   api
-    .get(`/board/detail/${param.boardId}/${pram.flag}`)
+    .get(`/board/detail/${param.boardId}/${param.flag}`)
     .then(success)
     .catch(fail);
 }

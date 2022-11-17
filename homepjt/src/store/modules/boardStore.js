@@ -1,3 +1,12 @@
+import {
+  listArticle,
+  writeArticle,
+  //   getArticle,
+  modifyArticle,
+  deleteArticle,
+  getArticleCommentList,
+} from "@/api/board.js";
+
 const boardStore = {
   namespaced: true,
   state: {
@@ -25,49 +34,76 @@ const boardStore = {
       commit("UPDATE_BOARD_DETAIL", payload);
     },
     searchBoardList({ commit }, payload) {
-      http.get(`/board/${payload}`).then(({ data }) => {
-        commit("SEARCH_BOARD_LIST", data.boardList);
-      });
+      listArticle(
+        payload,
+        ({ data }) => {
+          commit("SEARCH_BOARD_LIST", data.boardList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     searchBoardComment({ commit }, payload) {
-      http.get(`/board/comment/${payload}`).then(({ data }) => {
-        commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
-      });
+      getArticleCommentList(
+        payload,
+        ({ data }) => {
+          commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     updateBoard(context, payload) {
-      http
-        .put("/board/update", {
-          memberId: context.state.member.id,
-          title: payload.title,
-          content: payload.content,
-          id: payload.id,
-        })
-        .then(({ data }) => {
+      let article = {
+        memberId: context.state.member.id,
+        title: payload.title,
+        content: payload.content,
+        id: payload.id,
+      };
+
+      modifyArticle(
+        article,
+        ({ data }) => {
           if (data === "success") {
             console.log("게시글 수정 성공");
           }
-        });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     writeBoard(context, payload) {
-      http
-        .post(`/board/write`, {
-          memberId: context.state.member.id,
-          title: payload.title,
-          content: payload.content,
-        })
-        .then(({ data }) => {
+      let article = {
+        memberId: context.state.member.id,
+        title: payload.title,
+        content: payload.content,
+      };
+
+      writeArticle(
+        article,
+        ({ data }) => {
           if (data === "success") {
             console.log("게시글 등록 성공");
           }
-        });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     deleteBoard({ commit }, payload) {
-      http.delete(`/board/delete/${payload}`).then(({ data }) => {
-        if (data === "success") {
-          console.log("게시글 삭제 성공");
+      deleteArticle(
+        payload,
+        () => {
           commit("DELETE_BOARD");
+        },
+        (error) => {
+          console.log(error);
         }
-      });
+      );
     },
   },
 };
