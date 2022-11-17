@@ -36,13 +36,13 @@ export default new Vuex.Store({
       state.dongList = payload;
     },
     CLEAR_SIDO_LIST(state) {
-      state.sidoList = null;
+      state.sidoList = [];
     },
     CLEAR_GUGUN_LIST(state) {
-      state.gunguList = null;
+      state.gunguList = [];
     },
     CLEAR_DONG_LIST(state) {
-      state.dongList = null;
+      state.dongList = [];
     },
   },
   actions: {
