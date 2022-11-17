@@ -113,6 +113,7 @@ export default {
       this.comment.boardId = this.board.id;
       this.comment.memberId = this.$store.state.member.id;
       this.writeBoardComment(this.comment);
+      this.comment = {};
     },
     clickDeleteBoard() {
       this.deleteBoard(this.board.id);
