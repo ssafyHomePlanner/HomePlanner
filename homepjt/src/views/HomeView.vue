@@ -5,8 +5,14 @@
       <div class="item-header-subtext">내 집 마련, 언제까지 생각만 할껀가요?</div>
       <v-container>
         <v-row align="center" justify="center">
-          <v-sheet rounded="xl" class="item-header-card" color="white" elevation="8" height="155" width="825">
+          <v-sheet rounded="xl" class="item-header-card" color="white" elevation="8" height="185" width="825">
             <v-container fill-height fluid>
+              <v-text-field
+              class="mt-5 ml-2 mr-2"
+                v-model="aptName"
+                solo
+                label="아파트를 검색해보세요."
+              ></v-text-field>
               <v-row align="center" justify="center">
                 <v-col cols="3">
                   <v-select v-model="sidoName" :items="sidoList" label="시도 선택" @change="makeGugunList"></v-select>
