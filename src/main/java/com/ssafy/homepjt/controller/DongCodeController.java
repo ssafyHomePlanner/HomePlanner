@@ -54,11 +54,12 @@ public class DongCodeController {
     @GetMapping("/gugun/{sidoName}")
     public ResponseEntity<Map<String, Object>> selectGugunName(@PathVariable("sidoName") String sidoName){
         logger.info("dongcode gugunName controller");
+        logger.info("sidoName : {}", sidoName);
         Map<String, Object> resultMap = new HashMap<>();
 
         try{
             List<String> gugunNameList = dongCodeService.selectGugunName(sidoName);
-            logger.debug("시구군 이름 리스트 검색 확인 : {}", gugunNameList);
+            logger.info("시구군 이름 리스트 검색 확인 : {}", gugunNameList);
             resultMap.put("gugunNameList", gugunNameList);
             resultMap.put("message", SUCCESS);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);

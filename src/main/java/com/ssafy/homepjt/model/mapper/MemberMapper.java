@@ -1,7 +1,9 @@
 package com.ssafy.homepjt.model.mapper;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import com.ssafy.homepjt.model.dto.RecentDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,6 +28,17 @@ public interface MemberMapper {
 
 	public String findPw(@Param("memberId") String memberId, @Param("memberPhone") String memberPhone); // 비밀번호 찾기
 
+	// 회원 최근 검색 등록
+	public void insertRecentData(String memberId, String data) throws SQLException;
+
+	// 회원 최근 검색
+	public List<RecentDto> searchRecentData(String memberId) throws SQLException;
+
+	// 회원 최근 검색 삭제
+	public void deleteRecentData(@Param("memberId") String memberId, @Param("recentId") String recentId) throws SQLException;
+
+	// 회원 최근 검색 전체 삭제
+	public void deleteRecentDataAll(String memberId) throws SQLException;
 	// 관심 상품 목록 보기
 	// 관심 경로 목록 보기
 }

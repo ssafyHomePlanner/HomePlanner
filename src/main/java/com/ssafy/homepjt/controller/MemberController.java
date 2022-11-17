@@ -1,8 +1,10 @@
 package com.ssafy.homepjt.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.ssafy.homepjt.model.dto.RecentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,232 +34,309 @@ import io.swagger.annotations.ApiResponses;
 @Api("사용자 컨트롤러 API V1")
 public class MemberController {
 
-	public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	private static final String SUCCESS = "success";
-	private static final String FAIL = "fail";
+    public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
 
-	@Autowired
-	private MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
-	// 아이디 중복 확인(회원가입 진행 중, 비동기로 확인)
-	@ApiOperation(value = "아이디 중복 확인")
-	@ApiResponses({ @ApiResponse(code = 200, message = "아이디 중복 확인 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/idCheck/{memberId}")
-	public ResponseEntity<Map<String, Object>> idCheck(@PathVariable("memberId") String memberId) {
-		logger.info("member idCheck controller, memberId : {}", memberId);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+    // 아이디 중복 확인(회원가입 진행 중, 비동기로 확인)
+    @ApiOperation(value = "아이디 중복 확인")
+    @ApiResponses({@ApiResponse(code = 200, message = "아이디 중복 확인 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/idCheck/{memberId}")
+    public ResponseEntity<Map<String, Object>> idCheck(@PathVariable("memberId") String memberId) {
+        logger.info("member idCheck controller, memberId : {}", memberId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			if (memberService.idCheck(memberId) != 0) {
-				logger.debug("중복 아이디 확인!!");
-				resultMap.put("message", FAIL);
-			} else {
-				logger.debug("중복 아이디 존재하지 않음!!");
-				resultMap.put("message", SUCCESS);
-			}
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			logger.error("중복 아이디 검색 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        try {
+            if (memberService.idCheck(memberId) != 0) {
+                logger.debug("중복 아이디 확인!!");
+                resultMap.put("message", FAIL);
+            } else {
+                logger.debug("중복 아이디 존재하지 않음!!");
+                resultMap.put("message", SUCCESS);
+            }
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("중복 아이디 검색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 회원가입 + 아이디 중복 확인
-	@ApiOperation(value = "회원가입")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원가입 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@PostMapping("/join")
-	public ResponseEntity<Map<String, Object>> join(MemberDto memberDto) {
-		logger.info("member join controller, memberDto info : {}", memberDto);
+    // 회원가입 + 아이디 중복 확인
+    @ApiOperation(value = "회원가입")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원가입 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @PostMapping("/join")
+    public ResponseEntity<Map<String, Object>> join(MemberDto memberDto) {
+        logger.info("member join controller, memberDto info : {}", memberDto);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		try {
-			if (memberService.idCheck(memberDto.getId()) != 0) {
-				logger.debug("중복 아이디 확인!!!");
-				resultMap.put("message", FAIL);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			} else {
-				memberService.join(memberDto);
-				resultMap.put("message", SUCCESS);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			}
+        try {
+            if (memberService.idCheck(memberDto.getId()) != 0) {
+                logger.debug("중복 아이디 확인!!!");
+                resultMap.put("message", FAIL);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            } else {
+                memberService.join(memberDto);
+                resultMap.put("message", SUCCESS);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            }
 
-		} catch (Exception e) {
-			logger.error("회원가입 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        } catch (Exception e) {
+            logger.error("회원가입 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 로그인
-	@ApiOperation(value = "로그인")
-	@ApiResponses({ @ApiResponse(code = 200, message = "로그인 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@PostMapping("/login")
-	public ResponseEntity<Map<String, Object>> login(
-			@ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) MemberDto memberDto) {
-		logger.info("member login controller, memberDto info : {}", memberDto);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			MemberDto loginMember = memberService.login(memberDto.getId(), memberDto.getPw());
-			if (loginMember != null) {
-				logger.debug("로그인 성공 : {}", memberDto);
-				resultMap.put("message", SUCCESS);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			} else {
-				logger.debug("로그인 실패 : 아이디 혹은 비밀번호 불일치");
-				resultMap.put("message", FAIL);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			}
+    // 로그인
+    @ApiOperation(value = "로그인")
+    @ApiResponses({@ApiResponse(code = 200, message = "로그인 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(
+            @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) MemberDto memberDto) {
+        logger.info("member login controller, memberDto info : {}", memberDto);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            MemberDto loginMember = memberService.login(memberDto.getId(), memberDto.getPw());
+            if (loginMember != null) {
+                logger.debug("로그인 성공 : {}", memberDto);
+                resultMap.put("message", SUCCESS);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            } else {
+                logger.debug("로그인 실패 : 아이디 혹은 비밀번호 불일치");
+                resultMap.put("message", FAIL);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
 
-		} catch (Exception e) {
-			logger.error("로그인 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+        } catch (Exception e) {
+            logger.error("로그인 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-	}
-	
-	// 로그아웃
-	
+    }
 
-	// 회원 상세 정보
-	@ApiOperation(value = "회원상세 정보 보기")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원상세 정보 보기 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/detail/{memberId}")
-	public ResponseEntity<Map<String, Object>> detail(@PathVariable("memberId") String memberId) {
-		logger.debug("member detail controller, memberId : {}", memberId);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			MemberDto memberDto = memberService.detail(memberId);
-			if (memberDto != null) {
-				logger.debug("회원조회 성공 : {}", memberDto);
-				resultMap.put("message", SUCCESS);
-				resultMap.put("memberDto", memberDto);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			} else {
-				logger.debug("회원조회 실패 : {}");
-				resultMap.put("message", FAIL);
-				resultMap.put("memberDto", null);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			}
-		} catch (Exception e) {
-			logger.error("회원정보 조회 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    // 로그아웃
 
-	// 회원 정보 수정
-	@ApiOperation(value = "회원 정보 수정")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원 정보 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@PutMapping("/update")
-	public ResponseEntity<Map<String, Object>> update(MemberDto memberDto) {
-		logger.debug("member update controller, memberDto : {}", memberDto);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			memberService.update(memberDto);
-			MemberDto updatedMemberDto = memberService.detail(memberDto.getId());
-			logger.debug("회원정보 수정 성공 : {}", updatedMemberDto);
-			resultMap.put("message", SUCCESS);
-			resultMap.put("memberDto", updatedMemberDto);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
-		} catch (Exception e) {
-			logger.error("회원정보 수정 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    // 회원 상세 정보
+    @ApiOperation(value = "회원상세 정보 보기")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원상세 정보 보기 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/detail/{memberId}")
+    public ResponseEntity<Map<String, Object>> detail(@PathVariable("memberId") String memberId) {
+        logger.debug("member detail controller, memberId : {}", memberId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            MemberDto memberDto = memberService.detail(memberId);
+            if (memberDto != null) {
+                logger.debug("회원조회 성공 : {}", memberDto);
+                resultMap.put("message", SUCCESS);
+                resultMap.put("memberDto", memberDto);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            } else {
+                logger.debug("회원조회 실패 : {}");
+                resultMap.put("message", FAIL);
+                resultMap.put("memberDto", null);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            logger.error("회원정보 조회 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 회원 삭제
-	@ApiOperation(value = "회원 삭제")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원 삭제 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-			@ApiResponse(code = 500, message = "서버에러!!") })
-	@DeleteMapping("/delete/{memberId}")
-	public ResponseEntity<Map<String, Object>> delete(@PathVariable("memberId") String memberId) {
-		logger.debug("member delete controller, memberId : {}", memberId);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			memberService.delete(memberId);
-			logger.debug("회원 삭제 성공 : {}", memberId);
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    // 회원 정보 수정
+    @ApiOperation(value = "회원 정보 수정")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원 정보 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, Object>> update(MemberDto memberDto) {
+        logger.debug("member update controller, memberDto : {}", memberDto);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            memberService.update(memberDto);
+            MemberDto updatedMemberDto = memberService.detail(memberDto.getId());
+            logger.debug("회원정보 수정 성공 : {}", updatedMemberDto);
+            resultMap.put("message", SUCCESS);
+            resultMap.put("memberDto", updatedMemberDto);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
-		} catch (Exception e) {
-			logger.error("회원 삭제 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        } catch (Exception e) {
+            logger.error("회원정보 수정 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	// 아이디 찾기
-	@ApiOperation(value = "회원 아이디 찾기")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원 아이디 찾기 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/findId/{memberName}/{memberPhone}")
-	public ResponseEntity<Map<String, Object>> findId(@PathVariable("memberName") String memberName,
-			@PathVariable("memberPhone") String memberPhone) {
-		logger.debug("member findId controller, memberName, memberPhone : {}", memberName, memberPhone);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
+    // 회원 삭제
+    @ApiOperation(value = "회원 삭제")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원 삭제 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
+            @ApiResponse(code = 500, message = "서버에러!!")})
+    @DeleteMapping("/delete/{memberId}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable("memberId") String memberId) {
+        logger.debug("member delete controller, memberId : {}", memberId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            memberService.delete(memberId);
+            logger.debug("회원 삭제 성공 : {}", memberId);
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
-			String findMemberId = memberService.findId(memberName, memberPhone);
-			if (findMemberId != null) {
-				logger.debug("회원 아이디 찾기 성공 : {}", findMemberId);
-				resultMap.put("message", SUCCESS);
-				resultMap.put("memberId", findMemberId);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			} else {
-				logger.debug("회원 아이디 찾기 실패 : 이름, 번호를 확인해주세요");
-				resultMap.put("message", FAIL);
-				resultMap.put("memberId", null);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			}
+        } catch (Exception e) {
+            logger.error("회원 삭제 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-		} catch (Exception e) {
-			logger.error("회원 아이디 찾기 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    // 아이디 찾기
+    @ApiOperation(value = "회원 아이디 찾기")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원 아이디 찾기 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/findId/{memberName}/{memberPhone}")
+    public ResponseEntity<Map<String, Object>> findId(@PathVariable("memberName") String memberName,
+                                                      @PathVariable("memberPhone") String memberPhone) {
+        logger.debug("member findId controller, memberName, memberPhone : {}", memberName, memberPhone);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
 
-	// 비밀번호 찾기
-	@ApiOperation(value = "회원 비밀번호 찾기")
-	@ApiResponses({ @ApiResponse(code = 200, message = "회원 비밀번호 찾기 성공!!"),
-			@ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping("/findPw/{memberId}/{memberPhone}")
-	public ResponseEntity<Map<String, Object>> findPw(@PathVariable("memberId") String memberId,
-			@PathVariable("memberPhone") String memberPhone) {
-		logger.debug("member findPwcontroller, memberId, memberPhone : {}", memberId, memberPhone);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
+            String findMemberId = memberService.findId(memberName, memberPhone);
+            if (findMemberId != null) {
+                logger.debug("회원 아이디 찾기 성공 : {}", findMemberId);
+                resultMap.put("message", SUCCESS);
+                resultMap.put("memberId", findMemberId);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            } else {
+                logger.debug("회원 아이디 찾기 실패 : 이름, 번호를 확인해주세요");
+                resultMap.put("message", FAIL);
+                resultMap.put("memberId", null);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
 
-			String findMemberPw = memberService.findPw(memberId, memberPhone);
-			if (findMemberPw != null) {
-				logger.debug("회원 비밀번호 찾기 성공 : {}", findMemberPw);
-				resultMap.put("message", SUCCESS);
-				resultMap.put("memberId", findMemberPw);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-			} else {
-				logger.debug("회원 비밀번호 찾기 실패 : 아이디, 번호를 확인해주세요");
-				resultMap.put("message", FAIL);
-				resultMap.put("memberPw", null);
-				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-			}
+        } catch (Exception e) {
+            logger.error("회원 아이디 찾기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-		} catch (Exception e) {
-			logger.error("회원 비밀번호 찾기 실패 : {}", e.getMessage());
-			resultMap.put("message", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	// 관심 상품 목록 보기
+    // 비밀번호 찾기
+    @ApiOperation(value = "회원 비밀번호 찾기")
+    @ApiResponses({@ApiResponse(code = 200, message = "회원 비밀번호 찾기 성공!!"),
+            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+    @GetMapping("/findPw/{memberId}/{memberPhone}")
+    public ResponseEntity<Map<String, Object>> findPw(@PathVariable("memberId") String memberId,
+                                                      @PathVariable("memberPhone") String memberPhone) {
+        logger.debug("member findPwcontroller, memberId, memberPhone : {}", memberId, memberPhone);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
 
-	// 관심 경로 목록 보기
+            String findMemberPw = memberService.findPw(memberId, memberPhone);
+            if (findMemberPw != null) {
+                logger.debug("회원 비밀번호 찾기 성공 : {}", findMemberPw);
+                resultMap.put("message", SUCCESS);
+                resultMap.put("memberId", findMemberPw);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            } else {
+                logger.debug("회원 비밀번호 찾기 실패 : 아이디, 번호를 확인해주세요");
+                resultMap.put("message", FAIL);
+                resultMap.put("memberPw", null);
+                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (Exception e) {
+            logger.error("회원 비밀번호 찾기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 회원 최근 검색 등록
+    @ApiOperation(value = "회원 최근 검색 등록")
+    @PostMapping("/recent/{memberId}/{data}")
+    public ResponseEntity<Map<String, Object>> insertRecentData(@PathVariable("memberId") String memberId, @PathVariable("data") String data) {
+        logger.debug("member insert recent data controller, memberId : {}, data : {}", memberId, data);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try {
+            memberService.insertRecentData(memberId, data);
+            logger.debug("최근 검색 등록 성공 ");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("최근 검색 등록 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    // 회원 최근 검색
+    @ApiOperation(value = "회원 최근 검색")
+    @GetMapping("/recent/{memberId}")
+    public ResponseEntity<Map<String, Object>> searchRecentData(@PathVariable("memberId") String memberId) {
+        logger.debug("member search recent data controller, memberId : {}", memberId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            List<RecentDto> recentDataList = memberService.searchRecentData(memberId);
+            logger.debug("최근 검색 찾기 성공 : {}", recentDataList);
+            resultMap.put("resultDataList", recentDataList);
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+
+        } catch (Exception e) {
+            logger.error("최근 검색 찾기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 회원 최근 검색 삭제
+    @ApiOperation(value = "회원 최근 검색 삭제")
+    @DeleteMapping("/recent/{memberId}/{recentId}")
+    public ResponseEntity<Map<String, Object>> deleteRecentData(@PathVariable("memberId") String memberId, @PathVariable("recentId") String recentId) {
+        logger.debug("member delete recent data controller, memberId : {}, recentId : {}", memberId, recentId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            memberService.deleteRecentData(memberId, recentId);
+            logger.debug("최근 검색 삭제 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("최근 검색 삭제 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 회원 최근 검색 전체 삭제
+    @ApiOperation(value = "회원 최근 검색 전체 삭제")
+    @DeleteMapping("/recent/{memberId}")
+    public ResponseEntity<Map<String, Object>> deleteRecentDataAll(@PathVariable("memberId") String memberId) {
+        logger.debug("member delete recent data All controller, memberId : {}, recentId : {}", memberId);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            memberService.deleteRecentDataAll(memberId);
+            logger.debug("최근 검색 전체 삭제 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("최근 검색 전체 삭제 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 관심 상품 목록 보기
+
+    // 관심 경로 목록 보기
 }
