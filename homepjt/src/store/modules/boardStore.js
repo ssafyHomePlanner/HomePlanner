@@ -1,7 +1,6 @@
 import {
   listArticle,
   writeArticle,
-  //   getArticle,
   modifyArticle,
   deleteArticle,
   getArticleCommentList,
@@ -19,7 +18,7 @@ const boardStore = {
     SEARCH_BOARD_LIST(state, payload) {
       state.boardList = payload;
     },
-    UPDATE_BOARD_DETAIL(state, payload) {
+    INSERT_BOARD_ONE(state, payload) {
       state.board = payload;
     },
     DELETE_BOARD(state) {
@@ -30,8 +29,8 @@ const boardStore = {
     },
   },
   actions: {
-    updateBoardDetail({ commit }, payload) {
-      commit("UPDATE_BOARD_DETAIL", payload);
+    insertBoardOne({ commit }, payload) {
+      commit("INSERT_BOARD_ONE", payload);
     },
     searchBoardList({ commit }, payload) {
       listArticle(
