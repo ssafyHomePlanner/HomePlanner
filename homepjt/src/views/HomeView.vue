@@ -94,7 +94,7 @@ export default {
 .item-header-text {
   position: relative;
   top: 104px;
-  font-size: 72px;
+  font-size: 80px;
   font-weight: bold;
   text-align: center;
   text-shadow: 0px 2px 9px rgba(0, 0, 0, 0.8);
@@ -106,7 +106,7 @@ export default {
   top: 108px;
   text-align: center;
   color: white;
-  font-size: 20px;
+  font-size: 25px;
   text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.85);
 }
 .item-header-card {
