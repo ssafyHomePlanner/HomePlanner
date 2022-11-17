@@ -43,18 +43,18 @@
     </insert>
 
     <!-- 게시판 글 세부내용 보기 -->
-    <select id="readBoard" parameterType="int"
-            resultMap="boardDto">
-        select id,
-               member_id,
-               title,
-               content,
-               view_cnt,
-               like_cnt,
-               write_date
-        from board
-        where id = #{boardId}
-    </select>
+<!--    <select id="readBoard" parameterType="int"-->
+<!--            resultMap="boardDto">-->
+<!--        select id,-->
+<!--               member_id,-->
+<!--               title,-->
+<!--               content,-->
+<!--               view_cnt,-->
+<!--               like_cnt,-->
+<!--               write_date-->
+<!--        from board-->
+<!--        where id = #{boardId}-->
+<!--    </select>-->
 
     <!-- 조회수 수정 -->
     <update id="updateReadCount" parameterType="int">

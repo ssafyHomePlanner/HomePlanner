@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.homepjt.model.mapper.HouseInfoMapper">
 
-    <resultMap type="HouseInfoDto" id="HouseInfoAll">
+    <resultMap id="HouseInfoAll" type="HouseInfoDto">
         <result column="apt_code" property="aptCode"/>
         <result column="build_year" property="buildYear"/>
         <result column="road_name" property="roadName"/>
@@ -11,37 +11,86 @@
         <result column="road_name_seq" property="roadNameSeq"/>
         <result column="road_name_basement_code" property="roadNameBasementCode"/>
         <result column="road_name_code" property="roadNameCode"/>
-        <result column="dong" property="dong"/>
-        <result column="bonbun" property="bonbun"/>
-        <result column="bubun" property="bubun"/>
+<!--        <result column="dong" property="dong"/>-->
+<!--        <result column="bonbun" property="bonbun"/>-->
+<!--        <result column="bubun" property="bubun"/>-->
         <result column="sigungu_code" property="sigunguCode"/>
         <result column="eubmyundong_code" property="eubmyundongCode"/>
         <result column="dong_code" property="dongCode"/>
         <result column="land_code" property="landCode"/>
         <result column="apartment_name" property="apartmentName"/>
-        <result column="jibun" property="jibun"/>
-        <result column="lon" property="lon"/>
-        <result column="lat" property="lat"/>
+<!--        <result column="jibun" property="jibun"/>-->
+<!--        <result column="lon" property="lon"/>-->
+<!--        <result column="lat" property="lat"/>-->
         <result column="view_cnt" property="viewCnt"/>
         <result column="like_cnt" property="likeCnt"/>
     </resultMap>
 
-    <select id="selectHouseInfo" resultMap="HouseInfoAll">
-        select h.apt_code, h.build_year, h.road_name, h.road_name_bonbun, h.road_name_bubun, h.road_name_seq, h.road_name_basement_code,
-               h.road_name_code, h.dong, h.bonbun, h.bubun, h.sigungu_code, h.eubmyundong_code, h.dong_code, h.land_code, h.apartment_name, h.jibun,
-               h.lon, h.lat, h.view_cnt, h.like_cnt
+    <resultMap id="HouseDealAll" type="HouseDealDto">
+        <result column="deal_amount" property="dealAmount"/>
+        <result column="deal_year" property="dealYear"/>
+        <result column="deal_month" property="dealMonth"/>
+        <result column="deal_day" property="dealDay"/>
+        <result column="cancel_deal_type" property="cancelDealType"/>
+        <result column="apt_code" property="aptCode"/>
+    </resultMap>
+
+    <sql id="houseInfoColumns">
+        ${alias}.apt_code, ${alias}.build_year, ${alias}.road_name, ${alias}.road_name_bonbun, ${alias}.road_name_bubun, ${alias}.road_name_seq, ${alias}.road_name_basement_code,
+        ${alias}.road_name_code, ${alias}.dong, ${alias}.bonbun, ${alias}.bubun, ${alias}.sigungu_code, ${alias}.eubmyundong_code, ${alias}.dong_code, ${alias}.land_code, ${alias}.apartment_name, ${alias}.jibun,
+        ${alias}.lon, ${alias}.lat, ${alias}.view_cnt, ${alias}.like_cnt
+    </sql>
+
+    <sql id="houseDealColumns">
+        id, deal_amount, deal_year, deal_month, deal_day, area, floor, cancel_deal_type, apt_code
+    </sql>
+
+    <!-- 검색된 아파트 개수 -->
+    <select id="selectTotalCount" resultType="int">
+        select count(*)
         from houseinfo h
                  join dongcode d on h.dong_code = d.dong_code
         where d.sido_name like concat('%', #{sidoName}, '%')
           and d.gugun_name like concat('%', #{gugunName}, '%')
           and d.dong_name like concat('%', #{dongName}, '%')
-          and h.apartment_name like concat('%', #{aptName}, '%');
+          and h.apartment_name like concat('%', #{aptName}, '%')
     </select>
 
-    <select id="selectHouseInfoAuto" parameterType="String">
-        select *
-        from houseinfo
+    <!-- 아파트 검색 -->
+    <select id="selectHouseInfo" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns">
+            <property name="alias" value="h"/>
+        </include>
+        from houseinfo h
+        join dongcode d on h.dong_code = d.dong_code
+        where d.sido_name like concat('%', #{sidoName}, '%')
+        and d.gugun_name like concat('%', #{gugunName}, '%')
+        and d.dong_name like concat('%', #{dongName}, '%')
+        and h.apartment_name like concat('%', #{aptName}, '%')
+        limit #{start}, #{cnt}
+    </select>
+
+    <!-- 아파트 조회수 증가 -->
+    <update id="updateReadCount" parameterType="String">
+        update houseinfo
+        set view_cnt = view_cnt + 1
+        where apt_code = #{aptCode}
+    </update>
+
+    <!-- 아파트 검색 자동완성 -->
+    <select id="selectHouseInfoAuto" parameterType="String" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns"><property name="alias" value="h"/></include>
+        from houseinfo h
         where apartment_name like concat('%', #{aptName}, '%')
     </select>
 
+    <!-- 아파트 상세 검색(거래내역) -->
+    <select id="selectHouseDeal" parameterType="String" resultMap="HouseDealAll">
+        select
+        <include refid="houseDealColumns"/>
+        from housedeal
+        where apt_code = #{aptCode}
+    </select>
 </mapper>

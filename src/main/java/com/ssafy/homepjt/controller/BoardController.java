@@ -37,7 +37,7 @@ public class BoardController {
     @GetMapping({"{page}", "/"})
     public ResponseEntity<Map<String, Object>> listBoard(@PathVariable("page") Optional<Integer> page) {
 
-        if(!page.isPresent()){
+        if (!page.isPresent()) {
             page = Optional.of(1);
         }
 
@@ -90,38 +90,56 @@ public class BoardController {
     }
 
     // 게시판 글 세부내용 보기
-    @ApiOperation(value = "게시판 글 세부내용 확인")
-    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 세부내용 확인 성공!!"),
-            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
-    @GetMapping("/detail/{boardId}/{flag}")
-    public ResponseEntity<Map<String, Object>> readBoard(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
-        logger.info("board detail controller");
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+//    @ApiOperation(value = "게시판 글 세부내용 확인")
+//    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 세부내용 확인 성공!!"),
+//            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
+//    @GetMapping("/detail/{boardId}/{flag}")
+//    public ResponseEntity<Map<String, Object>> readBoard(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
+//        logger.info("board detail controller");
+//        Map<String, Object> resultMap = new HashMap<String, Object>();
+//
+//        try {
+//            BoardDto boardDto = boardService.readBoard(boardId);
+//
+//            // 작성자가 아니라면 조회수 증가
+//            if(flag == 1){
+//                boardService.updateReadCount(boardId);
+//            }
+//
+//            if (boardDto != null) {
+//                logger.debug("게시판 글 세부내용 확인 성공 : {}", boardDto);
+//                resultMap.put("message", SUCCESS);
+//                resultMap.put("board", boardDto);
+//                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+//            } else {
+//                logger.debug("게시판 글 세부내용 확인 실패 : ");
+//                resultMap.put("message", FAIL);
+//                resultMap.put("board", null);
+//                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+//            }
+//
+//        } catch (Exception e) {
+//            logger.error("게시판 글 세부내용 확인 실패 : {}", e.getMessage());
+//            resultMap.put("message", e.getMessage());
+//            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+    // 게시글 조회수 증가
+    @ApiOperation(value = "게시글 조회수 증가")
+    @PutMapping("/update/view/{boardId}")
+    public ResponseEntity<Map<String, Object>> updateReadCount(@PathVariable("boardId") int boardId) {
+        logger.info("board update view count controller, boardId : {}", boardId);
+        Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            BoardDto boardDto = boardService.readBoard(boardId);
-
-            // 작성자가 아니라면 조회수 증가
-            if(flag == 1){
-                boardService.updateReadCount(boardId);
-            }
-
-            if (boardDto != null) {
-                logger.debug("게시판 글 세부내용 확인 성공 : {}", boardDto);
-                resultMap.put("message", SUCCESS);
-                resultMap.put("board", boardDto);
-                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-            } else {
-                logger.debug("게시판 글 세부내용 확인 실패 : ");
-                resultMap.put("message", FAIL);
-                resultMap.put("board", null);
-                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-            }
-
+            boardService.updateReadCount(boardId);
+            logger.debug("조회수 증가 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            logger.error("게시판 글 세부내용 확인 실패 : {}", e.getMessage());
+            logger.error("게시글 조회수 증가 실패");
             resultMap.put("message", e.getMessage());
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -129,12 +147,12 @@ public class BoardController {
     @ApiOperation(value = "게시판 글 좋아요 수 갱신")
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 좋아요 수 갱신 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
-    @GetMapping("/update/{boardId}/{flag}")
-    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag){
+    @PutMapping("/update/{boardId}/{flag}")
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
         logger.info("board update like count controller");
         Map<String, Object> resultMap = new HashMap<>();
 
-        try{
+        try {
             boardService.updateLikeCount(boardId, flag);
             logger.debug("좋아요 수 갱신 성공");
             resultMap.put("message", SUCCESS);
@@ -157,8 +175,6 @@ public class BoardController {
 
         try {
             boardService.updateBoard(boardDto);
-            BoardDto updatedBoard = boardService.readBoard(boardDto.getId());
-            logger.debug("게시판 수정 성공 : {}", updatedBoard.toString());
             resultMap.put("message", SUCCESS);
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {

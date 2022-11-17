@@ -12,7 +12,7 @@ public interface BoardService {
 
 	public void writeBoard(BoardDto boardDto) throws SQLException; // 게시판 글쓰기
 
-	public BoardDto readBoard(int boardId) throws SQLException; // 게시판 글 세부내용 보기
+//	public BoardDto readBoard(int boardId) throws SQLException; // 게시판 글 세부내용 보기
 
 	public void updateReadCount(int boardId) throws SQLException; // 조회수 수정
 

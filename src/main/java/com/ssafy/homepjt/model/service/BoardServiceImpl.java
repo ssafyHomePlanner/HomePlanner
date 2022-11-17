@@ -51,10 +51,10 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.writeBoard(boardDto);
     }
 
-    @Override
-    public BoardDto readBoard(int boardId) throws SQLException {
-        return boardMapper.readBoard(boardId);
-    }
+//    @Override
+//    public BoardDto readBoard(int boardId) throws SQLException {
+//        return boardMapper.readBoard(boardId);
+//    }
 
     @Override
     public void updateReadCount(int boardId) throws SQLException {
