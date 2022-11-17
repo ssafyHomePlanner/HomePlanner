@@ -8,8 +8,8 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="auto">
-        <span @click="moveUpdate">수정</span> |
-        <span @click="clickDeleteBoard">삭제</span>
+        <v-btn text @click="moveUpdate"> 수정 </v-btn>
+        <v-btn text @click="clickDeleteBoard"> 삭제 </v-btn>
       </v-col>
     </v-row>
     <v-row justify="start">
