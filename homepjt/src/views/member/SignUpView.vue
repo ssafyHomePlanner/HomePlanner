@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="max-width: 1100px">
+  <v-container fluid style="max-width: 700px">
     <v-row justify="center" class="mt-3">
       <v-col lg="10" md="10" sm="12" class="text-center">
         <h2>회원가입</h2>
