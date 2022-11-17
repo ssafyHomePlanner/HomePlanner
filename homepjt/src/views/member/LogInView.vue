@@ -17,7 +17,7 @@
         </v-col>
         <v-col lg="6" md="6" sm="8">
           <v-row class="text-right" justify="end">
-            <v-checkbox v-model="saveId" label="`아이디저장`"></v-checkbox>
+            <v-checkbox v-model="saveId" label="아이디저장"></v-checkbox>
           </v-row>
           <v-form class="mb-5" ref="form" v-model="valid" lazy-validation>
             <v-text-field
