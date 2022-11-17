@@ -24,7 +24,7 @@ const boardStore = {
       state.board = payload;
     },
     DELETE_BOARD(state) {
-      state.board = null;
+      state.board = [];
     },
     SEARCH_BOARD_COMMENT(state, payload) {
       state.boardComment = payload;
@@ -132,7 +132,7 @@ const boardStore = {
 
     deleteBoardComment({ commit }, payload) {
       deleteArticleComment(
-        payload,
+        payload.id,
         ({ data }) => {
           if (data === "success") {
             console.log("댓글 삭제 성공");

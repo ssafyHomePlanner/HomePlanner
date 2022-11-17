@@ -30,6 +30,9 @@ export default {
     comment: Object,
   },
   methods: {
+    deleteComment() {
+      this.deleteBoardComment(this.comment);
+    },
     ...mapActions(boardStore, ["deleteBoardComment"]),
   },
 };
