@@ -5,24 +5,22 @@
       <div class="item-header-subtext">내 집 마련, 언제까지 생각만 할껀가요?</div>
       <v-container>
         <v-row align="center" justify="center">
-          <v-sheet
-            rounded="xl"
-            class="item-header-card"
-            color="white"
-            elevation="8"
-            height="155"
-            width="825"
-          >
+          <v-sheet rounded="xl" class="item-header-card" color="white" elevation="8" height="155" width="825">
             <v-container fill-height fluid>
               <v-row align="center" justify="center">
                 <v-col cols="3">
-                  <v-select :items="sidoList" label="시도 선택" ></v-select>
+                  <v-select v-model="sidoName" :items="sidoList" label="시도 선택" @change="makeGugunList"></v-select>
                 </v-col>
                 <v-col cols="3">
-                  <v-select label="시군구 선택"></v-select>
+                  <v-select
+                    v-model="gugunName"
+                    :items="gugunList"
+                    label="시군구 선택"
+                    @change="makeDongList"
+                  ></v-select>
                 </v-col>
                 <v-col cols="3">
-                  <v-select label="읍면동 선택"></v-select>
+                  <v-select v-model="dongName" :items="dongList" label="읍면동 선택"></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -34,27 +32,48 @@
 </template>
 
 <script>
-
-import {mapState, mapActions} from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "HomeView",
 
-  // data(){
+  data() {
+    return {
+      sidoName: "",
+      gugunName: "",
+      dongName: "",
+    };
+  },
 
-  // },
-
-  computed:{
-    ...mapState(["sidoList"]),    
+  create() {
+    this.CLEAR_SIDO_LIST();
+    this.CLEAR_GUGUN_LIST();
+    this.CLEAR_DONG_LIST();
+    // this.searchSidoList();
+  },
+  computed: {
+    ...mapState(["sidoList", "gugunList", "dongList"]),
   },
   mounted() {
-    this.searchSidoList();    
+    this.searchSidoList();
   },
   methods: {
-    
-    ...mapActions(["searchSidoList"]),
-  },
+    ...mapActions(["searchSidoList", "searchGugunList", "searchDongList"]),
+    ...mapMutations(["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST"]),
 
+    makeGugunList() {
+      this.CLEAR_GUGUN_LIST();
+      this.gugunName = "";
+      if (this.sidoName) this.searchGugunList(this.sidoName);
+    },
+    makeDongList() {
+      this.CLEAR_DONG_LIST();
+      this.dongName = "";
+      if (this.gugunName != "") this.searchDongList(this.gugunName);
+      console.log("sidoName : ", this.sidoName);
+      console.log("gugunName : ", this.gugunName);
+    },
+  },
 };
 </script>
 

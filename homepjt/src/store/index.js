@@ -23,8 +23,8 @@ export default new Vuex.Store({
 
     // 시도, 시군구, 동
     sidoList: [],
-    gunguList: [],
-    dongList:[],
+    gugunList: [],
+    dongList: [],
   },
   getters: {},
   mutations: {
@@ -37,7 +37,7 @@ export default new Vuex.Store({
     DELETE_BOARD(state) {
       state.board = null;
     },
-    SEARCH_BOARD_COMMENT(state, payload){
+    SEARCH_BOARD_COMMENT(state, payload) {
       state.boardComment = payload;
     },
 
@@ -45,13 +45,21 @@ export default new Vuex.Store({
     SEARCH_SIDO_LIST(state, payload) {
       state.sidoList = payload;
     },
-    SEARCH_GUNGU_LIST(state, payload) {
-      state.gunguList = payload;
+    SEARCH_GUGUN_LIST(state, payload) {
+      state.gugunList = payload;
     },
     SEARCH_DONG_LIST(state, payload) {
       state.dongList = payload;
-    }
-
+    },
+    CLEAR_SIDO_LIST(state) {
+      state.sidoList = null;
+    },
+    CLEAR_GUGUN_LIST(state) {
+      state.gunguList = null;
+    },
+    CLEAR_DONG_LIST(state) {
+      state.dongList = null;
+    },
   },
   actions: {
     updateBoardDetail({ commit }, payload) {
@@ -105,8 +113,18 @@ export default new Vuex.Store({
 
     // 시도, 시군구, 동
     searchSidoList({ commit }) {
-      http.get(`/dongcode`).then(({ data }) => {                
-        commit("SEARCH_SIDO_LIST", data.sidoNameList);                        
+      http.get(`/dongcode`).then(({ data }) => {
+        commit("SEARCH_SIDO_LIST", data.sidoNameList);
+      });
+    },
+    searchGugunList({ commit }, payload) {
+      http.get(`/dongcode/gugun/${payload}`).then(({ data }) => {
+        commit("SEARCH_GUGUN_LIST", data.gugunNameList);
+      });
+    },
+    searchDongList({ commit }, payload) {
+      http.get(`/dongcode/dong/${payload}`).then(({ data }) => {
+        commit("SEARCH_DONG_LIST", data.dongNameList);
       });
     },
   },
