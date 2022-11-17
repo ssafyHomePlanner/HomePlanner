@@ -12,13 +12,13 @@
         <v-col style="text-align: left">
           <v-form ref="form" lazy-validation>
             <v-text-field
-              v-model="article.title"
+              v-model="board.title"
               :rules="titleRules"
               label="제목을 입력하세요."
               required
             ></v-text-field>
             <v-textarea
-              v-model="article.content"
+              v-model="board.content"
               :rules="contentRules"
               label="내용을 입력하세요."
               required
@@ -34,31 +34,25 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const boardStore = "boardStore";
 
 export default {
   name: "BoardUpdateItem",
-  mounted() {
-    this.article.id = this.$store.state.board.id;
-    this.article.title = this.$store.state.board.title;
-    this.article.content = this.$store.state.board.content;
+
+  computed: {
+    ...mapState(boardStore, ["board"]),
   },
   data() {
     return {
-      article: {
-        id: "",
-        title: "",
-        content: "",
-      },
       titleRules: [(v) => !!v || "제목을 입력해주세요"],
       contentRules: [(v) => !!v || "내용을 입력해주세요"],
     };
   },
   methods: {
     updateArticle() {
-      this.updateBoard(this.article);
+      this.updateBoard(this.board);
       this.moveList();
     },
     moveList() {

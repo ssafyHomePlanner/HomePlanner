@@ -55,15 +55,8 @@ const boardStore = {
       );
     },
     updateBoard(context, payload) {
-      let article = {
-        memberId: context.state.member.id,
-        title: payload.title,
-        content: payload.content,
-        id: payload.id,
-      };
-
       modifyArticle(
-        article,
+        payload,
         ({ data }) => {
           if (data === "success") {
             console.log("게시글 수정 성공");
