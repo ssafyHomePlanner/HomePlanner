@@ -3,7 +3,7 @@
     <v-toolbar>
       <v-row>
         <v-toolbar-title class="ml-4" @click="moveToHome()">
-          <v-btn text> Home Planner </v-btn></v-toolbar-title
+          <v-btn text style="font-size: 20px;"> Home Planner </v-btn></v-toolbar-title
         >
         <v-col cols="col-8">
           <v-container>
