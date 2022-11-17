@@ -30,6 +30,7 @@
               v-model="memberPassword"
               :rules="memberPasswordRules"
               label="비밀번호"
+              type="password"
               required
             ></v-text-field>
             <v-btn block elevation="2" color="success">확인</v-btn>
