@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.PlannerMapper">
+
+    <resultMap id="plannerAll" type="PlannerDto">
+        <result column="member_id" property="memberId"/>
+        <result column="apt_code" property="aptCode"/>
+        <result column="apt_name" property="aptName"/>
+        <result column="apt_amount" property="aptAmount"/>
+        <result column="hoped_date" property="hopedDate"/>
+        <result column="expected_date" property="expectedDate"/>
+        <result column="saving_per_month" property="savingPerMonth"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="write_date" property="writeDate"/>
+    </resultMap>
+
+    <sql id="plannerColumns">
+        id
+        , member_id, apt_code, apt_name, apt_amount, hoped_date, expected_date, budget, saving_per_month, loan_amount, write_date
+    </sql>
+
+    <!-- 플래너 생성 -->
+    <insert id="writePlanner" parameterType="plannerDto">
+        insert into planner(member_id, apt_code, apt_name, apt_amount, hoped_date, expected_date, budget,
+                            saving_per_month, loan_amount, write_date)
+        values (#{memberId}, #{aptCode}, #{aptName}, #{aptAmount}, #{hopedDate}, #{expectedDate}, #{budget},
+                #{savingPerMonth}, #{loanAmount}, NOW())
+    </insert>
+
+    <!-- 플래너 조회 -->
+    <select id="readPlanner" parameterType="String" resultMap="plannerAll">
+        select
+        <include refid="plannerColumns"/>
+        from planner
+        where member_id = #{memberId}
+    </select>
+
+    <!-- 플래너 수정 -->
+    <update id="updatePlanner">
+        update planner
+        <trim prefix="set" suffixOverrides=",">
+            <if test="aptCode != null"> apt_code = #{aptCode},</if>
+            <if test="aptName != null"> apt_name = #{aptName},</if>
+            <if test="aptAmount != null"> apt_amount = #{aptAmount},</if>
+            <if test="hopedDate != null"> hoped_date = #{hopedDate},</if>
+            <if test="expectedDate != null"> expected_date = #{expectedDate},</if>
+            <if test="budget != null"> budget = #{budget},</if>
+            <if test="savingPerMonth != null"> saving_per_month = #{savingPerMonth},</if>
+            <if test="loanAmount != null"> loan_amount = #{loanAmount},</if>
+            write_date = NOW(),
+        </trim>
+        where id=#{id}
+    </update>
+
+
+    <!-- 플래너 삭제 -->
+    <delete id="deletePlanner">
+        delete
+        from planner
+        where id = #{plannerId}
+    </delete>
+
+</mapper>
