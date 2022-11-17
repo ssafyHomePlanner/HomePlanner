@@ -25,6 +25,10 @@ function deleteArticle(boardId, success, fail) {
   api.delete(`/board/delete/${boardId}`).then(success).catch(fail);
 }
 
+function addArticleView(boardId, success, fail) {
+  api.put(`/board/update/view/${boardId}`).then(success).catch(fail);
+}
+
 function getArticleCommentList(boardId, success, fail) {
   api.get(`/board/comment/${boardId}`).then(success).catch(fail);
 }
@@ -49,6 +53,7 @@ export {
   getArticle,
   modifyArticle,
   deleteArticle,
+  addArticleView,
   getArticleCommentList,
   writeArticleComment,
   deleteArticleComment,

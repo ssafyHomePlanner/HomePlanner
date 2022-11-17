@@ -6,6 +6,7 @@ import {
   getArticleCommentList,
   writeArticleComment,
   deleteArticleComment,
+  addArticleView,
 } from "@/api/board.js";
 
 const boardStore = {
@@ -29,6 +30,9 @@ const boardStore = {
     SEARCH_BOARD_COMMENT(state, payload) {
       state.boardComment = payload;
       console.log(state.boardComment);
+    },
+    ADD_BOARD_VIEW(state) {
+      state.board.viewCnt += 1;
     },
   },
   actions: {
@@ -82,6 +86,17 @@ const boardStore = {
         payload,
         () => {
           commit("DELETE_BOARD");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    addBoardView({ commit }, payload) {
+      addArticleView(
+        payload,
+        () => {
+          commit("ADD_BOARD_VIEW");
         },
         (error) => {
           console.log(error);
