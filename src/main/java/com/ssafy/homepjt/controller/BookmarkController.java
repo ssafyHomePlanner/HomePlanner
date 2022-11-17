@@ -85,5 +85,44 @@ public class BookmarkController {
         }
     }
 
+    // 게시글 좋아요 회원 등록
+    @ApiOperation(value = "게시글 좋아요 회원 등록")
+    @PostMapping("/board/{boardId}/{memberId}")
+    public ResponseEntity<Map<String, Object>> insertBookmarkMember(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId){
+        logger.debug("bookmark insert board member controller, boardId : {}, memberId : {}", boardId, memberId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            bookmarkService.insertBookmarkMember(boardId, memberId);
+            logger.debug("게시글 좋아요 회원 등록 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("게시글 좋아요 회원 등록 실패");
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 게시글 좋아요 클릭 여부 확인
+    @ApiOperation(value = "게시글 좋아요 클릭 여부 확인")
+    @GetMapping("/board/check/{boardId}/{memberId}")
+    public ResponseEntity<Map<String, Object>> checkBoardMemberLike(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId){
+        logger.debug("bookmark check board member controller, boardId : {}, memberId : {}", boardId, memberId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            int clickCount = bookmarkService.checkBoardMemberLike(boardId, memberId);
+            logger.debug("게시글 좋아요 클릭 여부 확인 성공");
+            resultMap.put("message", SUCCESS);
+            resultMap.put("clickCount", clickCount);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("게시글 좋아요 클릭 여부 확인 실패");
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // 관심 경로 목록 보기
 }

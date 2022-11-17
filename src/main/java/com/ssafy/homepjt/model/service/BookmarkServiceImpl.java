@@ -29,4 +29,14 @@ public class BookmarkServiceImpl implements BookmarkService{
         bookmarkMapper.deleteBookmarkApt(bookmarkAptId);
     }
 
+    @Override
+    public void insertBookmarkMember(int boardId, String memberId) {
+        bookmarkMapper.insertBookmarkMember(boardId, memberId);
+    }
+
+    @Override
+    public int checkBoardMemberLike(int boardId, String memberId) {
+        return bookmarkMapper.checkBoardMemberLike(boardId, memberId);
+    }
+
 }

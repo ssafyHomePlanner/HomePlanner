@@ -55,5 +55,17 @@
         where id = #{bookmarkAptId}
     </delete>
 
+    <!-- 게시글 좋아요 회원 등록 -->
+    <insert id="insertBookmarkMember">
+        insert into bookmark_board(board_id, member_id)
+        values (#{boardId}, #{memberId})
+    </insert>
+
+    <!-- 게시글 좋아요 클릭 여부 확인 -->
+    <select id="checkBoardMemberLike" resultType="int">
+        select count(*)
+        from bookmark_board
+        where member_id = #{memberId} and board_id = #{boardId}
+    </select>
     <!-- 관심 경로 목록 보기 -->
 </mapper>
