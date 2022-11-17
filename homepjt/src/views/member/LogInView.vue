@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="center">
+      <v-row justify="center" class="mt-3">
         <v-col lg="10" md="10" sm="12" class="text-right">
           아직 회원이 아니신가요?
           <router-link :to="{ name: 'signUpView' }" class="link">
@@ -35,8 +35,13 @@
             <v-btn block elevation="2" color="success">확인</v-btn>
           </v-form>
           <v-col lg="10" md="10" sm="12" class="text-right">
-            <a href="#">아이디 찾기</a> |
-            <a href="#">비밀번호 찾기</a>
+            <router-link :to="{ name: 'idSearchView' }" class="link">
+              아이디 찾기</router-link
+          > | 
+            <router-link :to="{ name: 'passwordSearchView' }" class="link">
+              비밀번호 찾기</router-link
+          >
+
           </v-col>
         </v-col>
       </v-row>

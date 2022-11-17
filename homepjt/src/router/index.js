@@ -11,6 +11,8 @@ import LogInView from "../views/member/LogInView";
 import SignUpView from "../views/member/SignUpView";
 import PathView from "../views/path/PathView";
 import PlannerView from '../views/planner/PlannerView';
+import IdSearchView from '../views/member/IdSearchView';
+import PasswordSearchView from '../views/member/PasswordSearchView';
 
 Vue.use(VueRouter);
 
@@ -62,6 +64,16 @@ const routes = [
     path: "/signup",
     name: "signUpView",
     component: SignUpView,
+  },
+  {
+    path: "/search/id",
+    name: "idSearchView",
+    component: IdSearchView,
+  },
+  {
+    path: "/search/password",
+    name: "passwordSearchView",
+    component: PasswordSearchView,
   },
   {
     path: "/path",
