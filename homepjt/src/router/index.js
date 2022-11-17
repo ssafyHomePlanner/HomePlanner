@@ -6,6 +6,11 @@ import BoardDetail from "../components/board/BoardDetail";
 import BoardWrite from "../components/board/BoardWrite";
 import BoardUpdate from "../components/board/BoardUpdate";
 import BoardList from "../components/board/BoardList";
+import AptListView from "../views/apt/AptListView";
+import LogInView from "../views/member/LogInView";
+import SignUpView from "../views/member/SignUpView";
+import PathView from "../views/path/PathView";
+import PlannerView from '../views/planner/PlannerView';
 
 Vue.use(VueRouter);
 
@@ -42,6 +47,31 @@ const routes = [
         component: BoardUpdate,
       },
     ],
+  },
+  {
+    path: "/apt/list",
+    name: "aptListView",
+    component: AptListView,
+  },
+  {
+    path: "/login",
+    name: "logInView",
+    component: LogInView,
+  },
+  {
+    path: "/signup",
+    name: "signUpView",
+    component: SignUpView,
+  },
+  {
+    path: "/path",
+    name: "pathView",
+    component: PathView,
+  },
+  {
+    path: "/planner",
+    name: "plannerView",
+    component: PlannerView,
   },
 ];
 
