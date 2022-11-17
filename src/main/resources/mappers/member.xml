@@ -12,6 +12,11 @@
         <result column="searched_date" property="searchedDate"/>
     </resultMap>
 
+    <sql id="memberColumns">
+        id
+        ,pw,name,email,age,phone,gender,join_date,salt
+    </sql>
+
     <!-- 아이디 중복 여부 확인 -->
     <select id="idCheck" parameterType="String" resultType="int">
         select count(id)
@@ -31,15 +36,7 @@
 
     <!-- 로그인 -->
     <select id="login" resultMap="memberDto">
-        select id,
-               pw,
-               name,
-               email,
-               age,
-               phone,
-               gender,
-               join_date,
-               salt
+        select <include refid="memberColumns"/>
         from member
         where id = #{memberId}
           and pw
@@ -48,15 +45,7 @@
 
     <!-- 회원 상세 정보 -->
     <select id="detail" resultMap="memberDto">
-        select id,
-               pw,
-               name,
-               email,
-               age,
-               phone,
-               gender,
-               join_date,
-               salt
+        select <include refid="memberColumns"/>
         from member
         where id = #{memberId}
     </select>
@@ -132,7 +121,4 @@
         where member_id = #{memberId}
     </delete>
 
-    <!-- 관심 상품 목록 보기 -->
-
-    <!-- 관심 경로 목록 보기 -->
 </mapper>

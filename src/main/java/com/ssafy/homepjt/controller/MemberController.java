@@ -335,8 +335,4 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    // 관심 상품 목록 보기
-
-    // 관심 경로 목록 보기
 }

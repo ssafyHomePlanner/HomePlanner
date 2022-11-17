@@ -39,6 +39,5 @@ public interface MemberMapper {
 
 	// 회원 최근 검색 전체 삭제
 	public void deleteRecentDataAll(String memberId) throws SQLException;
-	// 관심 상품 목록 보기
-	// 관심 경로 목록 보기
+
 }
