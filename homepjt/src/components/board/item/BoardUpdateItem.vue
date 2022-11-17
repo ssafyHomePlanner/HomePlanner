@@ -36,6 +36,8 @@
 <script>
 import { mapActions } from "vuex";
 
+const boardStore = "boardStore";
+
 export default {
   name: "BoardUpdateItem",
   mounted() {
@@ -46,7 +48,7 @@ export default {
   data() {
     return {
       article: {
-        id : "",
+        id: "",
         title: "",
         content: "",
       },
@@ -62,7 +64,7 @@ export default {
     moveList() {
       this.$router.push({ name: "boardList" });
     },
-    ...mapActions(["updateBoard"]),
+    ...mapActions(boardStore, ["updateBoard"]),
   },
 };
 </script>

@@ -24,7 +24,6 @@
               required
             ></v-textarea>
           </v-form>
-
         </v-col>
       </v-row>
       <v-row>
@@ -40,6 +39,8 @@
 
 <script>
 import { mapActions } from "vuex";
+
+const boardStore = "boardStore";
 
 export default {
   name: "BoardInputItem",
@@ -61,7 +62,7 @@ export default {
     moveList() {
       this.$router.push({ name: "boardList" });
     },
-    ...mapActions(["writeBoard"]),
+    ...mapActions(boardStore, ["writeBoard"]),
   },
 };
 </script>

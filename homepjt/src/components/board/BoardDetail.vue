@@ -19,11 +19,10 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-4">
-
         <v-icon large color="#999999"> mdi-message-text </v-icon>
         {{ boardComment.length }} 건
         <v-icon large color="#999999"> mdi-eye </v-icon>
-        {{ board.viewCnt }}회 | 
+        {{ board.viewCnt }}회 |
         <span class="board-detail-member">
           {{ board.writeDate }}
         </span>
@@ -89,6 +88,8 @@ import { mapState, mapActions } from "vuex";
 
 import BoardCommentItem from "./item/BoardCommentItem.vue";
 
+const boardStore = "boardStore";
+
 export default {
   data() {
     return {
@@ -99,7 +100,7 @@ export default {
     this.searchBoardComment(this.$store.state.board.id);
   },
   computed: {
-    ...mapState(["board", "boardComment"]),
+    ...mapState(boardStore, ["board", "boardComment"]),
   },
   components: {
     BoardCommentItem,
@@ -115,7 +116,7 @@ export default {
     moveUpdate() {
       this.$router.push({ name: "boardUpdate" });
     },
-    ...mapActions(["deleteBoard", "searchBoardComment"]),
+    ...mapActions(boardStore, ["deleteBoard", "searchBoardComment"]),
   },
 };
 </script>
