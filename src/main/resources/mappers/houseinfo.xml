@@ -35,6 +35,12 @@
         <result column="apt_code" property="aptCode"/>
     </resultMap>
 
+    <resultMap id="HouseCommentAll" type="HouseCommentDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="member_id" property="memberId"/>
+        <result column="write_date" property="writeDate"/>
+    </resultMap>
+
     <sql id="houseInfoColumns">
         ${alias}.apt_code, ${alias}.build_year, ${alias}.road_name, ${alias}.road_name_bonbun, ${alias}.road_name_bubun, ${alias}.road_name_seq, ${alias}.road_name_basement_code,
         ${alias}.road_name_code, ${alias}.dong, ${alias}.bonbun, ${alias}.bubun, ${alias}.sigungu_code, ${alias}.eubmyundong_code, ${alias}.dong_code, ${alias}.land_code, ${alias}.apartment_name, ${alias}.jibun,
@@ -43,6 +49,10 @@
 
     <sql id="houseDealColumns">
         id, deal_amount, deal_year, deal_month, deal_day, area, floor, cancel_deal_type, apt_code
+    </sql>
+
+    <sql id="houseCommentColumns">
+        id, apt_code, member_id, content, write_date
     </sql>
 
     <!-- 검색된 아파트 개수 -->
@@ -72,7 +82,7 @@
     </select>
 
     <!-- 아파트 조회수 증가 -->
-    <update id="updateReadCount" parameterType="String">
+    <update id="updateReadCount" parameterType="long">
         update houseinfo
         set view_cnt = view_cnt + 1
         where apt_code = #{aptCode}
@@ -87,10 +97,42 @@
     </select>
 
     <!-- 아파트 상세 검색(거래내역) -->
-    <select id="selectHouseDeal" parameterType="String" resultMap="HouseDealAll">
+    <select id="selectHouseDeal" parameterType="long" resultMap="HouseDealAll">
         select
         <include refid="houseDealColumns"/>
         from housedeal
         where apt_code = #{aptCode}
     </select>
+
+    <!-- 아파트 댓글 조회 -->
+    <select id="selectHouseComment" parameterType="long" resultMap="HouseCommentAll">
+        select <include refid="houseCommentColumns"/>
+        from house_comment
+        where apt_code = #{aptCode}
+        order by write_date
+    </select>
+
+    <!-- 아파트 댓글 쓰기 -->
+    <insert id="writeHouseComment" parameterType="houseCommentDto">
+        insert into house_comment(apt_code, member_id, content, write_date)
+        values (#{aptCode}, #{memberId}, #{content}, NOW())
+    </insert>
+
+    <!-- 아파트 댓글 수정 -->
+    <update id="updateHouseComment" parameterType="houseCommentDto">
+        update house_comment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="content != null">content = #{content},</if>
+            write_date = NOW(),
+        </trim>
+        where id=#{id}
+    </update>
+
+    <!-- 아파트 댓글 삭제 -->
+    <delete id="deleteHouseComment" parameterType="int">
+        delete
+        from house_comment
+        where id = #{houseCommentId}
+    </delete>
+
 </mapper>

@@ -15,7 +15,7 @@ public class BookmarkServiceImpl implements BookmarkService{
     private BookmarkMapper bookmarkMapper;
 
     @Override
-    public void insertBookmarkApt(String memberId, String aptCode) {
+    public void insertBookmarkApt(String memberId, long aptCode) {
         bookmarkMapper.insertBookmarkApt(memberId, aptCode);
     }
 

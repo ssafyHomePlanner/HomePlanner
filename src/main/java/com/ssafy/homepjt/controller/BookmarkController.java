@@ -30,7 +30,7 @@ public class BookmarkController {
     // 관심 상품 등록
     @ApiOperation(value = "관심 상품 등록")
     @PostMapping("/{memberId}/{aptCode}")
-    public ResponseEntity<Map<String, Object>> insertBookmarkApt(@PathVariable("memberId") String memberId, @PathVariable("aptCode") String aptCode) {
+    public ResponseEntity<Map<String, Object>> insertBookmarkApt(@PathVariable("memberId") String memberId, @PathVariable("aptCode") long aptCode) {
         logger.debug("bookmark insert apt controller, memberId : {}, aptCode : {}", memberId, aptCode);
         Map<String, Object> resultMap = new HashMap<>();
 

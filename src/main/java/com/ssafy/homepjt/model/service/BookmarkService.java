@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookmarkService {
     // 관심 상품 등록
-    public void insertBookmarkApt(@Param("memberId") String memberId, @Param("aptCode") String aptCode);
+    public void insertBookmarkApt(@Param("memberId") String memberId, @Param("aptCode") long aptCode);
 
     // 관심 상품 목록 보기
     public List<HouseInfoDto> selectBookmarkApt(String memberId) throws SQLException;

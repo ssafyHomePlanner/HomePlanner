@@ -1,5 +1,6 @@
 package com.ssafy.homepjt.controller;
 
+import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
 import com.ssafy.homepjt.model.request.AptSearchRequestDto;
@@ -70,7 +71,7 @@ public class HouseInfoController {
     // 아파트 조회수 증가
     @ApiOperation(value = "아파트 조회수 증가")
     @PutMapping("/update/view/{aptCode}")
-    public ResponseEntity<Map<String, Object>> updateReadCount(@PathVariable("aptCode") String aptCode) {
+    public ResponseEntity<Map<String, Object>> updateReadCount(@PathVariable("aptCode") long aptCode) {
         logger.info("house info update view count controller, aptCode : {}", aptCode);
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -109,7 +110,7 @@ public class HouseInfoController {
     // 아파트 상세 검색(거래내역)
     @ApiOperation(value = "아파트 상세 검색(거래내역)")
     @GetMapping("/deal/{aptCode}")
-    public ResponseEntity<Map<String, Object>> selectHouseDeal(@PathVariable("aptCode") String aptCode) {
+    public ResponseEntity<Map<String, Object>> selectHouseDeal(@PathVariable("aptCode") long aptCode) {
         logger.info("house deal controller, aptCode: {}", aptCode);
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -121,6 +122,83 @@ public class HouseInfoController {
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.error("아파트 상세 검색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 아파트 댓글 조회
+    @ApiOperation(value = "아파트 댓글 조회")
+    @GetMapping("/comment/{aptCode}")
+    public ResponseEntity<Map<String, Object>> selectHouseComment(@PathVariable("aptCode") long aptCode) {
+        logger.info("house comment select controller : {}", aptCode);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            List<HouseCommentDto> houseCommentDtoList = houseInfoService.selectHouseComment(aptCode);
+            logger.debug("아파트 댓글 조회 성공");
+            resultMap.put("message", SUCCESS);
+            resultMap.put("houseCommentList", houseCommentDtoList);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("아파트 댓글 조회 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 아파트 댓글 쓰기
+    @ApiOperation(value = "아파트 댓글 쓰기")
+    @PostMapping("/comment")
+    public ResponseEntity<Map<String, Object>> writeHouseComment(@RequestBody HouseCommentDto houseCommentDto) {
+        logger.info("house comment write controller : {}", houseCommentDto);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            houseInfoService.writeHouseComment(houseCommentDto);
+            logger.debug("아파트 댓글 쓰기 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("아파트 댓글 쓰기 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 아파트 댓글 수정
+    @ApiOperation(value = "아파트 댓글 수정")
+    @PutMapping("/comment")
+    public ResponseEntity<Map<String, Object>> updateHouseComment(@RequestBody HouseCommentDto houseCommentDto) {
+        logger.info("house comment update controller : {}", houseCommentDto);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            houseInfoService.updateHouseComment(houseCommentDto);
+            logger.debug("아파트 댓글 수정 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("아파트 댓글 수정 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 아파트 댓글 삭제
+    @ApiOperation(value = "아파트 댓글 삭제")
+    @DeleteMapping("/comment/{houseCommentId}")
+    public ResponseEntity<Map<String, Object>> deleteHouseComment(@PathVariable("houseCommentId") int houseCommentId) {
+        logger.info("house comment delete controller : {}", houseCommentId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            houseInfoService.deleteHouseComment(houseCommentId);
+            logger.debug("아파트 댓글 삭제 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("아파트 댓글 삭제 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }

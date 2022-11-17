@@ -1,5 +1,6 @@
 package com.ssafy.homepjt.model.service;
 
+import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
 import com.ssafy.homepjt.model.mapper.HouseInfoMapper;
@@ -52,17 +53,37 @@ public class HouseInfoServiceImpl implements HouseInfoService {
     }
 
     @Override
-    public void updateReadCount(String aptCode) throws SQLException {
+    public void updateReadCount(long aptCode) throws SQLException {
         houseInfoMapper.updateReadCount(aptCode);
     }
 
     @Override
-    public List<HouseInfoDto> selectHouseInfoAuto(String aptName) {
+    public List<HouseInfoDto> selectHouseInfoAuto(String aptName) throws SQLException{
         return houseInfoMapper.selectHouseInfoAuto(aptName);
     }
 
     @Override
-    public List<HouseDealDto> selectHouseDeal(String aptCode) {
+    public List<HouseDealDto> selectHouseDeal(long aptCode) throws SQLException{
         return houseInfoMapper.selectHouseDeal(aptCode);
+    }
+
+    @Override
+    public List<HouseCommentDto> selectHouseComment(long aptCode) throws SQLException {
+        return houseInfoMapper.selectHouseComment(aptCode);
+    }
+
+    @Override
+    public void writeHouseComment(HouseCommentDto houseCommentDto) throws SQLException{
+        houseInfoMapper.writeHouseComment(houseCommentDto);
+    }
+
+    @Override
+    public void updateHouseComment(HouseCommentDto houseCommentDto) throws SQLException {
+        houseInfoMapper.updateHouseComment(houseCommentDto);
+    }
+
+    @Override
+    public void deleteHouseComment(int houseCommentId) throws SQLException {
+        houseInfoMapper.deleteHouseComment(houseCommentId);
     }
 }
