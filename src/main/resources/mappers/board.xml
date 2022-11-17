@@ -11,6 +11,7 @@
 
     <resultMap type="boardCommentDto" id="boardCommentDto">
         <result column="member_id" property="memberId"/>
+        <result column="board_id" property="boardId"/>
         <result column="write_date" property="writeDate"/>
     </resultMap>
 
