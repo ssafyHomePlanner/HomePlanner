@@ -5,6 +5,7 @@ import {
   deleteArticle,
   getArticleCommentList,
   writeArticleComment,
+  deleteArticleComment,
 } from "@/api/board.js";
 
 const boardStore = {
@@ -27,6 +28,7 @@ const boardStore = {
     },
     SEARCH_BOARD_COMMENT(state, payload) {
       state.boardComment = payload;
+      console.log(state.boardComment);
     },
   },
   actions: {
@@ -118,6 +120,30 @@ const boardStore = {
       ).then(() => {
         getArticleCommentList(
           comment.boardId,
+          ({ data }) => {
+            commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      });
+    },
+
+    deleteBoardComment({ commit }, payload) {
+      deleteArticleComment(
+        payload,
+        ({ data }) => {
+          if (data === "success") {
+            console.log("댓글 삭제 성공");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      ).then(() => {
+        getArticleCommentList(
+          payload.boardId,
           ({ data }) => {
             commit("SEARCH_BOARD_COMMENT", data.boardCommentList);
           },

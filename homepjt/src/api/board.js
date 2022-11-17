@@ -36,6 +36,13 @@ function writeArticleComment(comment, success, fail) {
     .catch(fail);
 }
 
+function deleteArticleComment(boardCommentId, success, fail) {
+  return api
+    .delete(`board/comment/delete/${boardCommentId}`)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   listArticle,
   writeArticle,
@@ -44,4 +51,5 @@ export {
   deleteArticle,
   getArticleCommentList,
   writeArticleComment,
+  deleteArticleComment,
 };

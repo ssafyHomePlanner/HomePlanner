@@ -20,10 +20,17 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
+const boardStore = "boardStore";
+
 export default {
   name: "BoardCommentItem",
   props: {
     comment: Object,
+  },
+  methods: {
+    ...mapActions(boardStore, ["deleteBoardComment"]),
   },
 };
 </script>
