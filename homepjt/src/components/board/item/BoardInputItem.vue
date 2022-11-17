@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       article: {
+        memberId: "",
         title: "",
         content: "",
       },
@@ -56,6 +57,7 @@ export default {
   },
   methods: {
     registArticle() {
+      this.article.memberId = this.$store.state.member.id;
       this.writeBoard(this.article);
       this.moveList();
     },

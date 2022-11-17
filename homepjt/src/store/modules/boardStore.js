@@ -61,7 +61,7 @@ const boardStore = {
     },
     writeBoard(context, payload) {
       let article = {
-        memberId: context.state.member.id,
+        memberId: payload.memberId,
         title: payload.title,
         content: payload.content,
       };

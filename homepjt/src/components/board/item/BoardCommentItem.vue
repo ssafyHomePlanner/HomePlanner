@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="end">
-      <v-btn text> 삭제 </v-btn>
+      <v-btn text @click="deleteComment"> 삭제 </v-btn>
     </v-row>
     <v-row class="mt-3 mb-3">
       <v-col cols="col-4">
