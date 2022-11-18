@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import http from "@/api/http";
+// import http from "@/api/http";
 // import createPersistedState from "vuex-persistedstate";
 import boardStore from "@/store/modules/boardStore";
+import aptStore from "@/store/modules/aptStore";
 
 Vue.use(Vuex);
 
@@ -19,52 +20,53 @@ export default new Vuex.Store({
       joinDate: "2022-11-16 09:44:18",
     },
     // 시도, 시군구, 동
-    sidoList: [],
-    gugunList: [],
-    dongList: [],
+    // sidoList: [],
+    // gugunList: [],
+    // dongList: [],
   },
   getters: {},
   mutations: {
-    // 시도, 시군구, 동
-    SEARCH_SIDO_LIST(state, payload) {
-      state.sidoList = payload;
-    },
-    SEARCH_GUGUN_LIST(state, payload) {
-      state.gugunList = payload;
-    },
-    SEARCH_DONG_LIST(state, payload) {
-      state.dongList = payload;
-    },
-    CLEAR_SIDO_LIST(state) {
-      state.sidoList = [];
-    },
-    CLEAR_GUGUN_LIST(state) {
-      state.gunguList = [];
-    },
-    CLEAR_DONG_LIST(state) {
-      state.dongList = [];
-    },
+    // // 시도, 시군구, 동
+    // SEARCH_SIDO_LIST(state, payload) {
+    //   state.sidoList = payload;
+    // },
+    // SEARCH_GUGUN_LIST(state, payload) {
+    //   state.gugunList = payload;
+    // },
+    // SEARCH_DONG_LIST(state, payload) {
+    //   state.dongList = payload;
+    // },
+    // CLEAR_SIDO_LIST(state) {
+    //   state.sidoList = [];
+    // },
+    // CLEAR_GUGUN_LIST(state) {
+    //   state.gunguList = [];
+    // },
+    // CLEAR_DONG_LIST(state) {
+    //   state.dongList = [];
+    // },
   },
   actions: {
-    // 시도, 시군구, 동
-    searchSidoList({ commit }) {
-      http.get(`/dongcode`).then(({ data }) => {
-        commit("SEARCH_SIDO_LIST", data.sidoNameList);
-      });
-    },
-    searchGugunList({ commit }, payload) {
-      http.get(`/dongcode/gugun/${payload}`).then(({ data }) => {
-        commit("SEARCH_GUGUN_LIST", data.gugunNameList);
-      });
-    },
-    searchDongList({ commit }, payload) {
-      http.get(`/dongcode/dong/${payload}`).then(({ data }) => {
-        commit("SEARCH_DONG_LIST", data.dongNameList);
-      });
-    },
+    // // 시도, 시군구, 동
+    // searchSidoList({ commit }) {
+    //   http.get(`/dongcode`).then(({ data }) => {
+    //     commit("SEARCH_SIDO_LIST", data.sidoNameList);
+    //   });
+    // },
+    // searchGugunList({ commit }, payload) {
+    //   http.get(`/dongcode/gugun/${payload}`).then(({ data }) => {
+    //     commit("SEARCH_GUGUN_LIST", data.gugunNameList);
+    //   });
+    // },
+    // searchDongList({ commit }, payload) {
+    //   http.get(`/dongcode/dong/${payload}`).then(({ data }) => {
+    //     commit("SEARCH_DONG_LIST", data.dongNameList);
+    //   });
+    // },
   },
   modules: {
     boardStore,
+    aptStore,
   },
   // plugins: [
   //   createPersistedState({
