@@ -25,7 +25,8 @@
                   height="45"
                   width="270"
                   @click="openAddressAPI"
-                >{{this.address}}</v-sheet>
+                  
+                >changeAddress : {{changeAddress}}</v-sheet>
               </v-row>
             </v-col>
             <v-col cols="auto" class="mr-5 mt-8">
@@ -71,9 +72,10 @@
             </v-col>
           </v-row>
 
-          <v-row> 
-            <button @click="displayMarker(markerPositions1)">marker set 1</button>
-            <button @click="displayInfoWindow">infowindow</button>
+          <v-row v-model="address"> 
+            <v-btn @click="displayMarker(markerPositions1)">테스트 마커 표시</v-btn>
+            <v-btn @click="displayInfoWindow">테스트 메시지 표시</v-btn>
+            {{address}}
           </v-row>
         </v-container>
       </v-col>
@@ -85,7 +87,7 @@
 export default {
   data() {
     return {
-      address: "",
+      address: "asdsads",
       markerPositions1: [
         [33.452278, 126.567803],
         [33.452671, 126.574792],
@@ -95,13 +97,21 @@ export default {
       infowindow: null,
     };
   },
+  computed:{
+    changeAddress(){
+      return this.address+"???";
+    }
+  },
   methods: {
     openAddressAPI() {
+      let _this = this;
       new window.daum.Postcode({
         oncomplete: function (data) {
           //확인 시 결과 데이터 Return 확인
-          console.log(data);
-          this.address = data.address;
+          console.log("Object", data);
+          _this.address = data.address;
+          console.log("address", _this.address);
+          console.log("change address", _this.changeAddress);
         },
       }).open();
     },
@@ -163,7 +173,6 @@ export default {
       this.map.setCenter(iwPosition);
     },
   },
-
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
