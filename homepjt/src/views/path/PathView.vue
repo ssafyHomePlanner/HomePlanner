@@ -79,35 +79,36 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
               <v-tab-item>
-                <v-container style="width: 500px; height: 500px">
-                  <v-virtual-scroll bench="5" :items="items" height="300" item-height="64">
+                <v-container style="width: 500px; height: 280px">
+                  <v-virtual-scroll bench="5" :items="sampleLikeLocationList" height="270" item-height="64">
                     <template v-slot:default="{ item }">
                       <v-list-item :key="item">
-                        <v-list-item-action>
-                          <v-btn fab small depressed color="primary">
-                            {{ item }}
-                          </v-btn>
-                        </v-list-item-action>
-
                         <v-list-item-content>
                           <v-list-item-title>
-                            User Database Record <strong>ID {{ item }}</strong>
+                             <strong>{{ item.name }}</strong>
                           </v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-content>
+                          <v-list-item-subtitle>
+                             {{ item.address }}
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
                       </v-list-item>
-
                       <v-divider></v-divider>
                     </template>
                   </v-virtual-scroll>
                 </v-container>
               </v-tab-item>
-              <v-tab-item>2</v-tab-item>
+              <v-tab-item>아파트 검색 화면</v-tab-item>
             </v-tabs-items>
             <!-- <v-btn @click="displayMarker(markerPositions1)">테스트 마커 표시</v-btn>
             <v-btn @click="displayInfoWindow">테스트 메시지 표시</v-btn> -->
           </v-row>
         </v-container>
       </v-col>
+    </v-row>
+    <v-row class="mt-5 mb-12">
+      <div class="path-item-middle-text">설정된 경유지 목록</div>
     </v-row>
   </v-container>
 </template>
@@ -117,6 +118,26 @@ export default {
   data() {
     return {
       tab: null,
+      sampleLikeLocationList: [
+        {
+          address: "경기도 부천시 중동로 02",
+          name: "팰리스카운티",
+          lon: "126.766986471789",
+          lat: "37.4918092437981",
+        },
+        {
+          address: "경기도 부천시 중동로 02",
+          name: "그린타운(삼성)",
+          lon: "126.769215401626",
+          lat: "37.4981077694787",
+        },
+        {
+          address: "경기도 부천시 중동로 03",
+          name: "리첸시아중동",
+          lon: "126.779310556166",
+          lat: "37.4953683630967",
+        },
+      ],
       startLocation: {
         address: "",
         name: "",
@@ -263,7 +284,7 @@ export default {
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        center: new kakao.maps.LatLng(36.35515, 127.298415),
         level: 5,
       };
 
