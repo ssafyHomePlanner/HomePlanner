@@ -6,7 +6,7 @@
         내 집 마련, 언제까지 생각만 할껀가요?
       </div>
       <v-container>
-        <v-row align="center" justify="center">
+        <v-row justify="center">
           <v-sheet
             rounded="xl"
             class="item-header-card"
@@ -22,7 +22,7 @@
                 solo
                 label="아파트를 검색해보세요."
               ></v-text-field>
-              <v-row align="center" justify="center">
+              <v-row justify="center">
                 <v-col cols="3">
                   <v-select
                     v-model="sidoName"
@@ -52,7 +52,7 @@
         </v-row>
       </v-container>
     </div>
-    <v-container class="mt-5 mb-10 text-center">
+    <v-container class="mt-16 pt-16 pb-16 mb-16 text-center">
       <div class="item-middle-text">아파트 구매 계획 세우기</div>
       <div class="item-middle-subtext mt-2">원하는 아파트를 찾으셨나요?</div>
       <v-container class="mt-8 mb-8">
@@ -113,7 +113,7 @@
         <v-btn outlined block class="mt-8">구매 계획 세우러 가기</v-btn>
       </v-container>
     </v-container>
-    <v-container class="mt-5 mb-10 text-center">
+    <v-container class="mt-16 pt-16 pb-16 mb-16 text-center">
       <div class="item-middle-text">아파트 경로 찾기</div>
       <div class="item-middle-subtext mt-2">
         보고싶은 아파트는 많은데 여디부터 가야할지 모르겠나요?
