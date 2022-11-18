@@ -80,17 +80,20 @@
             <v-tabs-items v-model="tab">
               <v-tab-item>
                 <v-container style="width: 500px; height: 280px">
-                  <v-virtual-scroll bench="5" :items="sampleLikeLocationList" height="270" item-height="64">
+                  <v-virtual-scroll
+                    bench="5"
+                    :items="sampleLikeLocationList"
+                    height="270"
+                    item-height="64"
+                  >
                     <template v-slot:default="{ item }">
-                      <v-list-item :key="item">
+                      <v-list-item :key="item.name" @click="clickLikeApartment(item)">
                         <v-list-item-content>
                           <v-list-item-title>
-                             <strong>{{ item.name }}</strong>
+                            <strong>{{ item.name }}</strong>
                           </v-list-item-title>
-                        </v-list-item-content>
-                        <v-list-item-content>
                           <v-list-item-subtitle>
-                             {{ item.address }}
+                            {{ item.address }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -99,7 +102,9 @@
                   </v-virtual-scroll>
                 </v-container>
               </v-tab-item>
-              <v-tab-item>아파트 검색 화면</v-tab-item>
+              <v-tab-item>
+                <v-container style="width: 500px; height: 280px"> 아파트 검색 화면 </v-container>
+              </v-tab-item>
             </v-tabs-items>
             <!-- <v-btn @click="displayMarker(markerPositions1)">테스트 마커 표시</v-btn>
             <v-btn @click="displayInfoWindow">테스트 메시지 표시</v-btn> -->
@@ -107,9 +112,33 @@
         </v-container>
       </v-col>
     </v-row>
-    <v-row class="mt-5 mb-12">
-      <div class="path-item-middle-text">설정된 경유지 목록</div>
-    </v-row>
+    <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
+      <v-row class="path-item-middle-text mb-7" justify="start"> 설정된 경유지 목록 </v-row>
+      <v-row justify="start">
+        <v-sheet
+          v-for="(apartment, index) in pathList"
+          :key="index"
+          :apartment="apartment"
+          height="120"
+          width="200"
+          elevation="4"
+          class="pl-4 pt-4 mr-5"
+          rounded="xl"
+        >
+        <v-row class="mr-0 ml-2">
+          <v-col cols="auto" >
+            <!-- <v-row justify="end">
+                <v-btn icon>
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-row> -->
+              <v-row justify="center" class="item-middle-box-text mt-4">{{ apartment.name }} </v-row>
+              <v-row justify="center" class="item-middle-box-subtext mt-3"> {{ apartment.address }} </v-row>
+            </v-col>
+          </v-row>
+        </v-sheet>
+      </v-row>
+    </v-container>
   </v-container>
 </template>
 
@@ -138,6 +167,7 @@ export default {
           lat: "37.4953683630967",
         },
       ],
+      pathList: [],
       startLocation: {
         address: "",
         name: "",
@@ -159,15 +189,15 @@ export default {
       infowindow: null,
     };
   },
-  computed: {
-    items() {
-      return Array.from({ length: this.length }, (k, v) => v + 1);
-    },
-    length() {
-      return 7000;
-    },
-  },
   methods: {
+    clickLikeApartment(location) {
+      this.pathList.push(location);
+      this.sampleLikeLocationList.forEach((item, index) => {
+        if (item.name === location.name) {
+          this.sampleLikeLocationList.splice(index, 1);
+        }
+      });
+    },
     searchStartLocationAddress() {
       let _this = this;
       new window.daum.Postcode({
