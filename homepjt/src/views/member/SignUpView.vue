@@ -61,7 +61,7 @@
             hint="abcd@gmail.com"
             required
           ></v-text-field>
-          <v-btn block elevation="2" color="success">확인</v-btn>
+          <v-btn block elevation="2" color="primary">확인</v-btn>
         </v-form>
       </v-col>
     </v-row>

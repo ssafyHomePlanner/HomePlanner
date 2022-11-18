@@ -33,7 +33,7 @@
               type="password"
               required
             ></v-text-field>
-            <v-btn block elevation="2" color="success">확인</v-btn>
+            <v-btn block elevation="2" color="primary">확인</v-btn>
           </v-form>
           <v-col lg="10" md="10" sm="12" class="text-right">
             <router-link :to="{ name: 'idSearchView' }" class="link">
