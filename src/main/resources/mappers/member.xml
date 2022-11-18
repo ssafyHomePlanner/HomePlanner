@@ -36,16 +36,38 @@
 
     <!-- 로그인 -->
     <select id="login" resultMap="memberDto">
-        select <include refid="memberColumns"/>
+        select
+        <include refid="memberColumns"/>
         from member
         where id = #{memberId}
-          and pw
-            = #{memberPw}
+        and pw
+        = #{memberPw}
     </select>
+
+    <!-- 토큰 생성 및 저장  -->
+    <update id="saveRefreshToken" parameterType="map">
+        update member
+        set token = #{token}
+        where id = #{memberId}
+    </update>
+
+    <!-- 토근 발급 -->
+    <select id="getRefreshToken" parameterType="String" resultType="String">
+        select token
+        from member
+        where id = #{memberId}
+    </select>
+    <!-- 토큰 삭제 -->
+    <update id="deleteRefreshToken" parameterType="map">
+        update member
+        set token = #{token, jdbcType=VARCHAR}
+        where id = #{memberId}
+    </update>
 
     <!-- 회원 상세 정보 -->
     <select id="detail" resultMap="memberDto">
-        select <include refid="memberColumns"/>
+        select
+        <include refid="memberColumns"/>
         from member
         where id = #{memberId}
     </select>

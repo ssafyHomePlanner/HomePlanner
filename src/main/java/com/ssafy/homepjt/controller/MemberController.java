@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ssafy.homepjt.model.dto.RecentDto;
+import com.ssafy.homepjt.model.service.JwtServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/member")
 @Api("사용자 컨트롤러 API V1")
@@ -41,10 +44,11 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private JwtServiceImpl jwtService;
+
     // 아이디 중복 확인(회원가입 진행 중, 비동기로 확인)
     @ApiOperation(value = "아이디 중복 확인")
-    @ApiResponses({@ApiResponse(code = 200, message = "아이디 중복 확인 성공!!"),
-            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @GetMapping("/idCheck/{memberId}")
     public ResponseEntity<Map<String, Object>> idCheck(@PathVariable("memberId") String memberId) {
         logger.info("member idCheck controller, memberId : {}", memberId);
@@ -68,8 +72,6 @@ public class MemberController {
 
     // 회원가입 + 아이디 중복 확인
     @ApiOperation(value = "회원가입")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원가입 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-            @ApiResponse(code = 500, message = "서버에러!!")})
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(MemberDto memberDto) {
         logger.info("member join controller, memberDto info : {}", memberDto);
@@ -96,8 +98,6 @@ public class MemberController {
 
     // 로그인
     @ApiOperation(value = "로그인")
-    @ApiResponses({@ApiResponse(code = 200, message = "로그인 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-            @ApiResponse(code = 500, message = "서버에러!!")})
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(
             @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) MemberDto memberDto) {
@@ -106,7 +106,15 @@ public class MemberController {
         try {
             MemberDto loginMember = memberService.login(memberDto.getId(), memberDto.getPw());
             if (loginMember != null) {
-                logger.debug("로그인 성공 : {}", memberDto);
+
+                String accessToken = jwtService.createAccessToken("memberId", loginMember.getId()); //key,data
+                String refreshToken = jwtService.createRefreshToken("memberId", loginMember.getId()); //key,data
+                memberService.saveRefreshToken(memberDto.getId(), refreshToken);
+                logger.debug("로그인 accessToken 정보 : {}", accessToken);
+                logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
+
+                resultMap.put("access-token", accessToken);
+                resultMap.put("refresh-token", refreshToken);
                 resultMap.put("message", SUCCESS);
                 return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
             } else {
@@ -123,13 +131,75 @@ public class MemberController {
 
     }
 
+    @ApiOperation(value = "회원인증")
+    @GetMapping("/info/{memberId}")
+    public ResponseEntity<Map<String, Object>> getInfo(
+            @PathVariable("memberId") String memberId, HttpServletRequest request
+    ) {
+        Map<String, Object> resultMap = new HashMap<>();
+        if (jwtService.checkToken(request.getHeader("access-token"))) {
+            logger.info("사용 가능한 토큰!!");
+            try {
+                //로그인 사용자 정보
+                MemberDto memberDto = memberService.detail(memberId);
+                resultMap.put("memberInfo", memberDto);
+                resultMap.put("message", SUCCESS);
+                return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+            } catch (Exception e) {
+                logger.error("회원 정보 조회 실패 : {}", e);
+                resultMap.put("message", e.getMessage());
+                return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            logger.error("사용 불가능한 토큰!!");
+            resultMap.put("message", FAIL);
+            return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     // 로그아웃
+    @ApiOperation(value = "로그아웃")
+    @GetMapping("/logout/{memberId}")
+    public ResponseEntity<?> removeToken(@PathVariable("memberId") String memberId) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            memberService.deleteRefreshToken(memberId);
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("로그아웃 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Access Token 재발급
+    @ApiOperation(value = "Access Token 재발급")
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody MemberDto memberDto, HttpServletRequest request) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        String token = request.getHeader("refresh-token");
+        logger.debug("token : {}, memberDto : {}", token, memberDto);
+
+        if (jwtService.checkToken(token)) {
+            if (token.equals(memberService.getRefreshToken(memberDto.getId()))) {
+                String accessToken = jwtService.createAccessToken("memberId", memberDto.getId());
+                logger.debug("token : {}", accessToken);
+                logger.debug("정상적으로 액세스토큰 재발급!!!");
+                resultMap.put("access-token", accessToken);
+                resultMap.put("message", SUCCESS);
+                return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+            }
+        } else {
+            logger.debug("refresh token 사용불가!!");
+        }
+        return new ResponseEntity<>(resultMap, HttpStatus.UNAUTHORIZED);
+    }
 
 
     // 회원 상세 정보
     @ApiOperation(value = "회원상세 정보 보기")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원상세 정보 보기 성공!!"),
-            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @GetMapping("/detail/{memberId}")
     public ResponseEntity<Map<String, Object>> detail(@PathVariable("memberId") String memberId) {
         logger.debug("member detail controller, memberId : {}", memberId);
@@ -156,8 +226,6 @@ public class MemberController {
 
     // 회원 정보 수정
     @ApiOperation(value = "회원 정보 수정")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원 정보 수정 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-            @ApiResponse(code = 500, message = "서버에러!!")})
     @PutMapping("/update")
     public ResponseEntity<Map<String, Object>> update(MemberDto memberDto) {
         logger.debug("member update controller, memberDto : {}", memberDto);
@@ -179,8 +247,6 @@ public class MemberController {
 
     // 회원 삭제
     @ApiOperation(value = "회원 삭제")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원 삭제 성공!!"), @ApiResponse(code = 404, message = "잘못된 접근!!"),
-            @ApiResponse(code = 500, message = "서버에러!!")})
     @DeleteMapping("/delete/{memberId}")
     public ResponseEntity<Map<String, Object>> delete(@PathVariable("memberId") String memberId) {
         logger.debug("member delete controller, memberId : {}", memberId);
@@ -200,8 +266,6 @@ public class MemberController {
 
     // 아이디 찾기
     @ApiOperation(value = "회원 아이디 찾기")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원 아이디 찾기 성공!!"),
-            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @GetMapping("/findId/{memberName}/{memberPhone}")
     public ResponseEntity<Map<String, Object>> findId(@PathVariable("memberName") String memberName,
                                                       @PathVariable("memberPhone") String memberPhone) {
@@ -231,8 +295,6 @@ public class MemberController {
 
     // 비밀번호 찾기
     @ApiOperation(value = "회원 비밀번호 찾기")
-    @ApiResponses({@ApiResponse(code = 200, message = "회원 비밀번호 찾기 성공!!"),
-            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @GetMapping("/findPw/{memberId}/{memberPhone}")
     public ResponseEntity<Map<String, Object>> findPw(@PathVariable("memberId") String memberId,
                                                       @PathVariable("memberPhone") String memberPhone) {

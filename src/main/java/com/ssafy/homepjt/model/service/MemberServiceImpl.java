@@ -1,7 +1,9 @@
 package com.ssafy.homepjt.model.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.homepjt.model.dto.RecentDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,27 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto login(String memberId, String memberPw) throws SQLException {
         return memberMapper.login(memberId, memberPw);
+    }
+
+    @Override
+    public void saveRefreshToken(String memberId, String refreshToken) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("token", refreshToken);
+        memberMapper.saveRefreshToken(map);
+    }
+
+    @Override
+    public Object getRefreshToken(String memberId) throws Exception {
+        return memberMapper.getRefreshToken(memberId);
+    }
+
+    @Override
+    public void deleteRefreshToken(String memberId) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("token", null);
+        memberMapper.deleteRefreshToken(map);
     }
 
     @Override

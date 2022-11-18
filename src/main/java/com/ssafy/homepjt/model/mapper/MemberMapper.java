@@ -2,6 +2,7 @@ package com.ssafy.homepjt.model.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.homepjt.model.dto.RecentDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,12 @@ public interface MemberMapper {
 
 	public MemberDto login(@Param("memberId") String memberId, @Param("memberPw") String memberPw)
 			throws SQLException; // 로그인
+
+	public void saveRefreshToken(Map<String, String> map) throws SQLException;
+
+	Object getRefreshToken(String memberId) throws SQLException;
+
+	public void deleteRefreshToken(Map<String, String> map) throws SQLException;
 
 	public MemberDto detail(String memberId) throws SQLException; // 회원 상세 정보
 

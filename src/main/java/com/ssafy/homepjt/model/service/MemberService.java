@@ -16,6 +16,12 @@ public interface MemberService {
     public MemberDto login(@Param("memberId") String memberId, @Param("memberPw") String memberPw)
             throws SQLException; // 로그인
 
+    public void saveRefreshToken(String memberId, String refreshToken) throws Exception;
+
+    public Object getRefreshToken(String memberId) throws Exception;
+
+    public void deleteRefreshToken(String memberId) throws Exception;
+
     public MemberDto detail(String id) throws SQLException; // 회원 상세 정보
 
     public void update(MemberDto memberDto) throws SQLException; // 회원 정보 수정
@@ -37,4 +43,5 @@ public interface MemberService {
 
     // 회원 최근 검색 전체 삭제
     public void deleteRecentDataAll(String memberId) throws SQLException;
+
 }

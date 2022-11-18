@@ -6,7 +6,7 @@ import com.ssafy.homepjt.model.dto.BookmarkPathDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
 import com.ssafy.homepjt.model.mapper.BookmarkMapper;
 import com.ssafy.homepjt.model.request.BookmarkPathRequestDto;
-import com.ssafy.homepjt.response.BookmarkPathResponseDto;
+import com.ssafy.homepjt.model.response.BookmarkPathResponseDto;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;

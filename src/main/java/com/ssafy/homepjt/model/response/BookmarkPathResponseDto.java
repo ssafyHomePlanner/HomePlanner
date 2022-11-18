@@ -1,4 +1,4 @@
-package com.ssafy.homepjt.response;
+package com.ssafy.homepjt.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
