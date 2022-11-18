@@ -9,12 +9,16 @@
           <v-container>
             <v-row justify="space-around">
               <router-link :to="{ name: 'plannerView' }" class="link"
-                >아파트 계획 세우기</router-link
+                >
+                <v-icon size="25" color="blue darken-2"> mdi-draw-pen </v-icon>
+                아파트 계획 세우기</router-link
               >
               <router-link :to="{ name: 'pathView' }" class="link">
+                <v-icon size="25" color="blue darken-2"> mdi-map-marker-distance </v-icon>
                 아파트 경로 찾기</router-link
               >
               <router-link :to="{ name: 'boardView' }" class="link">
+                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
                 아파트 커뮤니티</router-link
               >
             </v-row>
