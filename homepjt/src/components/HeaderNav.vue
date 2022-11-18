@@ -11,7 +11,7 @@
               <router-link :to="{ name: 'plannerView' }" class="link"
                 >
                 <v-icon size="25" color="blue darken-2"> mdi-draw-pen </v-icon>
-                아파트 계획 세우기</router-link
+                아파트 구매계획 세우기</router-link
               >
               <router-link :to="{ name: 'pathView' }" class="link">
                 <v-icon size="25" color="blue darken-2"> mdi-map-marker-distance </v-icon>
