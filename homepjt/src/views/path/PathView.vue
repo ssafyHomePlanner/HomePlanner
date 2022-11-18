@@ -24,9 +24,9 @@
                   elevation="1"
                   height="45"
                   width="270"
-                  @click="openAddressAPI"
-                  
-                >changeAddress : {{changeAddress}}</v-sheet>
+                  @click="searchStartLocationAddress"
+                  >{{ startLocation.name ? startLocation.name : startLocation.address }}</v-sheet
+                >
               </v-row>
             </v-col>
             <v-col cols="auto" class="mr-5 mt-8">
@@ -44,12 +44,7 @@
                 </v-col>
               </v-row>
               <v-row class="mt-6">
-                <v-sheet
-                  color="white"
-                  elevation="1"
-                  height="45"
-                  width="270"
-                ></v-sheet>
+                <v-sheet color="white" elevation="1" height="45" width="270"></v-sheet>
               </v-row>
             </v-col>
           </v-row>
@@ -60,9 +55,7 @@
               <v-row justify="start">
                 <v-col cols="auto">
                   <v-row class="item-middle-box-text mt-4" justify="start">
-                    <div class="path-item-middle-text">
-                      아파트 경유지를 추가하세요
-                    </div>
+                    <div class="path-item-middle-text">아파트 경유지를 추가하세요</div>
                   </v-row>
                 </v-col>
                 <v-col cols="auto" class="pa-0 mt-3">
@@ -72,10 +65,9 @@
             </v-col>
           </v-row>
 
-          <v-row v-model="address"> 
+          <v-row>
             <v-btn @click="displayMarker(markerPositions1)">테스트 마커 표시</v-btn>
             <v-btn @click="displayInfoWindow">테스트 메시지 표시</v-btn>
-            {{address}}
           </v-row>
         </v-container>
       </v-col>
@@ -87,6 +79,12 @@
 export default {
   data() {
     return {
+      startLocation: {
+        address: "",
+        name: "",
+        lat: "",
+        lon: "",
+      },
       address: "asdsads",
       markerPositions1: [
         [33.452278, 126.567803],
@@ -97,23 +95,37 @@ export default {
       infowindow: null,
     };
   },
-  computed:{
-    changeAddress(){
-      return this.address+"???";
-    }
-  },
   methods: {
-    openAddressAPI() {
+     searchStartLocationAddress() {
       let _this = this;
       new window.daum.Postcode({
-        oncomplete: function (data) {
-          //확인 시 결과 데이터 Return 확인
-          console.log("Object", data);
-          _this.address = data.address;
-          console.log("address", _this.address);
-          console.log("change address", _this.changeAddress);
+        oncomplete:  function (data) {
+          //아파트 이름이 있을 경우 아파트 이름을 넣어줌
+          if (data.buildingName) {
+            _this.startLocation.name = data.buildingName;
+          }
+
+          _this.startLocation.address = data.address;
+          // _this.searchAddressToGPS(data.address).then((data) => {
+          //   console.log("gps", data);
+          // });
+
         },
       }).open();
+    },
+    searchAddressToGPS(address) {
+      // 주소-좌표 변환 객체를 생성합니다
+      let geocoder = new kakao.maps.services.Geocoder();
+
+      // 주소로 좌표를 검색합니다
+      geocoder.addressSearch(address, function (result, status) {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+          let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          console.log(coords);
+          return coords;
+        }
+      });
     },
     initMap() {
       const container = document.getElementById("map");
@@ -131,9 +143,7 @@ export default {
         this.markers.forEach((marker) => marker.setMap(null));
       }
 
-      const positions = markerPositions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
+      const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
 
       if (positions.length > 0) {
         this.markers = positions.map(
@@ -181,7 +191,7 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=e22041108e144667e2284ec7ed6bc357";
+        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=e22041108e144667e2284ec7ed6bc357&libraries=services,clusterer,drawing";
       // script.src =
       //   "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" +
       //   process.env.VUE_APP_APT_DEAL_API_KEY;
