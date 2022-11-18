@@ -55,7 +55,7 @@
     <v-container class="mt-16 pt-16 pb-16 mb-16 text-center">
       <div class="item-middle-text">아파트 구매 계획 세우기</div>
       <div class="item-middle-subtext mt-2">원하는 아파트를 찾으셨나요?</div>
-      <v-container class="mt-8 mb-8">
+      <v-container class="mt-8 mb-8" style="width:1167px">
         <v-row justify="space-between">
           <v-sheet height="278" width="214" elevation="4" class="pt-7">
             <v-row justify="center" class="mt-5">
@@ -118,7 +118,7 @@
       <div class="item-middle-subtext mt-2">
         보고싶은 아파트는 많은데 여디부터 가야할지 모르겠나요?
       </div>
-      <v-container class="mt-8 mb-8">
+      <v-container class="mt-8 mb-8" style="width:1167px">
         <v-row justify="space-between" class="ml-6 mr-6">
           <v-sheet
             height="164"
