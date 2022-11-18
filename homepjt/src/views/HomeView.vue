@@ -232,6 +232,7 @@ export default {
 
   data() {
     return {
+      aptName:"",
       sidoName: "",
       gugunName: "",
       dongName: "",
