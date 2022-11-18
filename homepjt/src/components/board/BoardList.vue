@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-container class="bv-example-row mt-3">
+    <v-container class="bv-example-row mt-10">
+      <h2>아파트 커뮤니티</h2>
       <v-row class="mb-1">
         <v-col class="text-right">
           <router-link :to="{ name: 'boardWrite' }">글쓰기</router-link>
@@ -19,7 +20,7 @@
           </v-data-table>
         </v-col>
       </v-row>
-      <div class="text-center">
+      <div class="text-center mt-8">
         <v-pagination v-model="page" :length="6"></v-pagination>
       </div>
     </v-container>
