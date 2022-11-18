@@ -43,10 +43,18 @@
         >
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
-              <v-icon class="mr-2" large color="red darken-2">
-                mdi-heart
-              </v-icon>
+              <v-btn
+              icon
+              color="pink"
+            >
+            <v-icon large color="red darken-2">
+              mdi-heart
+            </v-icon>
+            </v-btn>
+            <span class="ml-2">
+
               {{ board.likeCnt }}
+            </span>
             </v-row>
           </v-container>
         </v-sheet>
