@@ -67,5 +67,26 @@
         from bookmark_board
         where member_id = #{memberId} and board_id = #{boardId}
     </select>
-    <!-- 관심 경로 목록 보기 -->
+
+    <!-- 관심 경로 등록(출발지, 도착지) -->
+    <insert id="insertBookmarkPath" useGeneratedKeys="true" keyProperty="id">
+        insert into bookmark_path(start_apt_code, start_apt_name, start_lat, start_lon,
+                                  end_apt_code, end_apt_name, end_lat, end_lon, member_id, path_name)
+        values (#{startAptCode}, #{startAptName}, #{startLat}, #{startLon},
+                #{endAptCode}, #{endAptName}, #{endLat}, #{endLon},
+                #{memberId}, #{pathName})
+    </insert>
+
+    <!-- 관심 경로 등록(경유지) -->
+    <insert id="insertBookmarkPathDetail">
+        insert into bookmark_path_detail(bookmark_path_id, apt_code, apt_name, lat, lon)
+        values (#{bookmarkPathId}, #{aptCode}, #{aptName}, #{lat}, #{lon})
+    </insert>
+
+    <delete id="deleteBookmarkPath">
+        delete
+        from bookmark_path
+        where id = #{bookmarkPathId}
+    </delete>
+
 </mapper>

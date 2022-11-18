@@ -1,6 +1,7 @@
 package com.ssafy.homepjt.controller;
 
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
+import com.ssafy.homepjt.model.request.BookmarkPathRequestDto;
 import com.ssafy.homepjt.model.service.BookmarkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/bookmark")
 @Api("장바구니 컨트롤러 API V1")
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class BookmarkController {
 
     public static final Logger logger = LoggerFactory.getLogger(BookmarkController.class);
@@ -88,7 +90,7 @@ public class BookmarkController {
     // 게시글 좋아요 회원 등록
     @ApiOperation(value = "게시글 좋아요 회원 등록")
     @PostMapping("/board/{boardId}/{memberId}")
-    public ResponseEntity<Map<String, Object>> insertBookmarkMember(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId){
+    public ResponseEntity<Map<String, Object>> insertBookmarkMember(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId) {
         logger.debug("bookmark insert board member controller, boardId : {}, memberId : {}", boardId, memberId);
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -97,7 +99,7 @@ public class BookmarkController {
             logger.debug("게시글 좋아요 회원 등록 성공");
             resultMap.put("message", SUCCESS);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("게시글 좋아요 회원 등록 실패");
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -107,7 +109,7 @@ public class BookmarkController {
     // 게시글 좋아요 클릭 여부 확인
     @ApiOperation(value = "게시글 좋아요 클릭 여부 확인")
     @GetMapping("/board/check/{boardId}/{memberId}")
-    public ResponseEntity<Map<String, Object>> checkBoardMemberLike(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId){
+    public ResponseEntity<Map<String, Object>> checkBoardMemberLike(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId) {
         logger.debug("bookmark check board member controller, boardId : {}, memberId : {}", boardId, memberId);
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -117,12 +119,75 @@ public class BookmarkController {
             resultMap.put("message", SUCCESS);
             resultMap.put("clickCount", clickCount);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("게시글 좋아요 클릭 여부 확인 실패");
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 관심 경로 목록 보기
+    // 관심 경로 리스트 출력
+    @ApiOperation(value = "관심 경로 리스트 출력")
+    @PostMapping("/path/search")
+    public ResponseEntity<Map<String, Object>> searchPath(@RequestBody List<BookmarkPathRequestDto> bookmarkPathRequestDtoList) {
+        logger.debug("bookmark controller - bookmarkPathRequestDto : {}", bookmarkPathRequestDtoList);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+
+            Map<String, Object> result = bookmarkService.searchPath(bookmarkPathRequestDtoList);
+            resultMap.put("timeArr", result.get("timeArr"));
+            resultMap.put("distArr", result.get("distArr"));
+            resultMap.put("timePointList", result.get("timePointList"));
+            resultMap.put("distPointList", result.get("distPointList"));
+
+            logger.debug("경로 탐색 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+
+        } catch (Exception e) {
+            logger.error("경로 탐색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 관심 경로 등록
+    @ApiOperation(value = "관심 경로 등록")
+    @PostMapping("/path/{memberId}/{pathName}")
+    public ResponseEntity<Map<String, Object>> insertPath(@RequestBody List<BookmarkPathRequestDto> bookmarkPathRequestDtoList,
+                                                          @PathVariable("memberId") String memberId, @PathVariable("pathName") String pathName) {
+        logger.info("bookmark controller - bookmarkPathRequestDto : {}", bookmarkPathRequestDtoList);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            bookmarkService.insertBookmarkPath(bookmarkPathRequestDtoList, memberId, pathName);
+            logger.debug("관심 경로 등록 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("관심 경로 등록 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 관심 경로 삭제
+    @ApiOperation(value = "관심 경로 삭제")
+    @DeleteMapping("/path/{bookmarkPathId}")
+    public ResponseEntity<Map<String, Object>> deletePath(@PathVariable("bookmarkPathId") int bookmarkPathId) {
+        logger.info("bookmark path delete controller, bookmarkPathId : {}", bookmarkPathId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            bookmarkService.deleteBookmarkPath(bookmarkPathId);
+            logger.debug("관심 경로 삭제 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("관심 경로 등록 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

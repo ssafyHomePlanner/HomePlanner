@@ -1,10 +1,13 @@
 package com.ssafy.homepjt.model.service;
 
+import com.ssafy.homepjt.model.dto.BookmarkPathDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
+import com.ssafy.homepjt.model.request.BookmarkPathRequestDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface BookmarkService {
     // 관심 상품 등록
@@ -22,5 +25,13 @@ public interface BookmarkService {
     // 게시글 좋아요 클릭 여부 확인
     public int checkBoardMemberLike(@Param("boardId") int boardId, @Param("memberId") String memberId);
 
-    // 관심 경로 목록 보기
+
+    // 관심 경로 탐색
+    public Map<String, Object> searchPath(List<BookmarkPathRequestDto> bookmarkPathRequestDtoList);
+
+    // 관심 경로 등록
+    void insertBookmarkPath(List<BookmarkPathRequestDto> bookmarkPathRequestDtoList, String memberId, String pathName);
+
+    // 관심 경로 삭제
+    void deleteBookmarkPath(int bookmarkPathId);
 }
