@@ -19,3 +19,5 @@ function insertPath(pathInfo, memberId, pathName, success, fail) {
 function deletePath(bookmarkPathId, success, fail) {
   api.delete(`/bookmark/path/${bookmarkPathId}`).then(success).catch(fail);
 }
+
+export { searchPath, insertPath, deletePath };

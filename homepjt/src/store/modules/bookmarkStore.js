@@ -68,4 +68,4 @@ const bookmarkStore = {
   },
 };
 
-export default bookmarkInfoStore;
+export default bookmarkStore;
