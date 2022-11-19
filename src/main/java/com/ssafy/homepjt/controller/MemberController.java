@@ -73,7 +73,7 @@ public class MemberController {
     // 회원가입 + 아이디 중복 확인
     @ApiOperation(value = "회원가입")
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(MemberDto memberDto) {
+    public ResponseEntity<Map<String, Object>> join(@RequestBody MemberDto memberDto) {
         logger.info("member join controller, memberDto info : {}", memberDto);
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -227,7 +227,7 @@ public class MemberController {
     // 회원 정보 수정
     @ApiOperation(value = "회원 정보 수정")
     @PutMapping("/update")
-    public ResponseEntity<Map<String, Object>> update(MemberDto memberDto) {
+    public ResponseEntity<Map<String, Object>> update(@RequestBody MemberDto memberDto) {
         logger.debug("member update controller, memberDto : {}", memberDto);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {

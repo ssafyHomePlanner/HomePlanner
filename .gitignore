@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 
+application-aws.properties
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
