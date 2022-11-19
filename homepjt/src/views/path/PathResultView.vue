@@ -53,6 +53,7 @@ export default {
       clickLine: {},
       distanceOverlay: null,
       pathResultType: "recommend",
+      dots: [],
       sampleLikeLocationList: [
         {
           lon: "126.766986471789",
@@ -71,16 +72,13 @@ export default {
   },
   methods: {
     showDistance(content, position) {
-      console.log("showDistance");
       if (this.distanceOverlay) {
-        console.log("distanceOverlay 있음");
         // 커스텀오버레이가 생성된 상태이면
 
         // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
         this.distanceOverlay.setPosition(position);
         this.distanceOverlay.setContent(content);
       } else {
-        console.log("distanceOverlay 없음");
         // 커스텀 오버레이가 생성되지 않은 상태이면
 
         // 커스텀 오버레이를 생성하고 지도에 표시합니다
@@ -97,10 +95,9 @@ export default {
       }
     },
     getTimeHTML(distance) {
-      console.log("getTimeHTML");
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
-      var walkkTime = (distance / 67) | 0;
-      var walkHour = "",
+      let walkkTime = (distance / 67) | 0;
+      let walkHour = "",
         walkMin = "";
 
       // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
@@ -111,8 +108,8 @@ export default {
       walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
 
       // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
-      var bycicleTime = (distance / 227) | 0;
-      var bycicleHour = "",
+      let bycicleTime = (distance / 227) | 0;
+      let bycicleHour = "",
         bycicleMin = "";
 
       // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
@@ -125,7 +122,7 @@ export default {
       bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
 
       // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
-      var content = '<ul class="dotOverlay distanceInfo">';
+      let content = '<ul class="dotOverlay distanceInfo">';
       content += "    <li>";
       content +=
         '        <span class="label">총거리</span><span class="number">' +
@@ -143,12 +140,49 @@ export default {
 
       return content;
     },
+    // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
+    // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
+    displayCircleDot(position, distance) {
+      // 클릭 지점을 표시할 빨간 동그라미 커스텀오버레이를 생성합니다
+      let circleOverlay = new kakao.maps.CustomOverlay({
+        content: '<span class="dot"></span>',
+        position: position,
+        zIndex: 1,
+      });
+
+      // 지도에 표시합니다
+      circleOverlay.setMap(this.map);
+
+      if (distance > 0) {
+        // 클릭한 지점까지의 그려진 선의 총 거리를 표시할 커스텀 오버레이를 생성합니다
+        let distanceOverlay = new kakao.maps.CustomOverlay({
+          content:
+            '<div class="dotOverlay">거리 <span class="number">' +
+            distance +
+            "</span>m</div>",
+          position: position,
+          yAnchor: 1,
+          zIndex: 2,
+        });
+
+        // 지도에 표시합니다
+        distanceOverlay.setMap(this.map);
+      }
+
+      // 배열에 추가합니다
+      this.dots.push({ circle: circleOverlay, distance: this.distanceOverlay });
+    },
     makeLine() {
       let linePath = [];
 
       // 만들어질 경로의 위도/경도를 넣는다.
       this.sampleLikeLocationList.forEach((element) => {
         linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
+      });
+
+      linePath.forEach((element) => {
+        // 클릭한 지점에 대한 정보를 지도에 표시합니다
+        this.displayCircleDot(element, 0);
       });
 
       let polyline = new kakao.maps.Polyline({
@@ -162,11 +196,8 @@ export default {
       // 선 화면에 그리기
       polyline.setMap(this.map);
 
-      var distance = Math.round(polyline.getLength()), // 선의 총 거리를 계산합니다
+      let distance = Math.round(polyline.getLength()), // 선의 총 거리를 계산합니다
         content = this.getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
-
-      console.log("content", content);
-      console.log("purposePosition", linePath[linePath.length - 1]);
 
       // 그려진 선의 거리정보를 지도에 표시합니다
       this.showDistance(content, linePath[linePath.length - 1]);
