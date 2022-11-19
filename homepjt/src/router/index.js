@@ -10,9 +10,11 @@ import AptListView from "../views/apt/AptListView";
 import LogInView from "../views/member/LogInView";
 import SignUpView from "../views/member/SignUpView";
 import PathView from "../views/path/PathView";
+import PathResultView from '../views/path/PathResultView';
 import PlannerView from '../views/planner/PlannerView';
 import IdSearchView from '../views/member/IdSearchView';
 import PasswordSearchView from '../views/member/PasswordSearchView';
+
 
 Vue.use(VueRouter);
 
@@ -79,6 +81,11 @@ const routes = [
     path: "/path",
     name: "pathView",
     component: PathView,
+  },
+  {
+    path: "/path/result",
+    name: "pathResult",
+    component: PathResultView,
   },
   {
     path: "/planner",

@@ -125,11 +125,11 @@
         >
           <v-row class="mr-0 ml-2">
             <v-col cols="auto">
-              <!-- <v-row justify="end">
+              <v-row justify="end">
                 <v-btn icon>
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-              </v-row> -->
+              </v-row>
               <v-row justify="center" class="item-middle-box-text mt-4"
                 >{{ apartment.name }}
               </v-row>
