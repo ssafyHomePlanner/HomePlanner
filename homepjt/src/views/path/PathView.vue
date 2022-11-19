@@ -157,7 +157,9 @@
       </v-row>
     </v-container>
     <v-container style="width: 100%; height: 200px">
-      <v-btn block color="primary" @click="movePathResultView"> 최적 경로 탐색하기 </v-btn>
+      <v-btn block color="primary" @click="movePathResultView">
+        최적 경로 탐색하기
+      </v-btn>
     </v-container>
   </v-container>
 </template>
@@ -350,6 +352,10 @@ export default {
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
+
+      // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+      let zoomControl = new kakao.maps.ZoomControl();
+      this.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
     },
     displayMarker(markerPositions) {
       if (this.markers.length > 0) {
