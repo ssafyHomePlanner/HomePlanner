@@ -19,6 +19,8 @@
                 v-model="aptName"
                 solo
                 label="아파트를 검색해보세요."
+                @keyup="makeHouseInfoListAuto"
+                id="searchApt"
               ></v-text-field>
               <v-row justify="center">
                 <v-col cols="3">
@@ -39,6 +41,9 @@
                 </v-col>
                 <v-col cols="3">
                   <v-select v-model="dongName" :items="dongList" label="읍면동 선택"></v-select>
+                </v-col>
+                <v-col cols="3">
+                  <button @click="makeHouseInfoList">버튼</button>
                 </v-col>
               </v-row>
             </v-container>
@@ -167,6 +172,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 
 const aptStore = "aptStore";
+const houseInfoStore = "houseInfoStore";
 
 export default {
   name: "HomeView",
@@ -177,6 +183,7 @@ export default {
       sidoName: "",
       gugunName: "",
       dongName: "",
+      page: 1,
     };
   },
 
@@ -184,10 +191,14 @@ export default {
     this.CLEAR_SIDO_LIST();
     this.CLEAR_GUGUN_LIST();
     this.CLEAR_DONG_LIST();
+
+    this.CLEAR_SEARCH_HOUSE_INFO_LIST();
+    this.CLEAR_SEARCH_HOUSE_INFO();
     // this.searchSidoList();
   },
   computed: {
     ...mapState(aptStore, ["sidoList", "gugunList", "dongList"]),
+    ...mapState(houseInfoStore, ["houseInfo", "houseInfoList"]),
   },
   mounted() {
     this.searchSidoList();
@@ -195,6 +206,13 @@ export default {
   methods: {
     ...mapActions(aptStore, ["searchSidoList", "searchGugunList", "searchDongList"]),
     ...mapMutations(aptStore, ["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST"]),
+    ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
+    ...mapMutations(houseInfoStore, [
+      "SEARCH_HOUSE_INFO_LIST",
+      "SEARCH_HOUSE_INFO",
+      "CLEAR_HOUSE_INFO_LIST",
+      "CLEAR_HOUSE_INFO",
+    ]),
 
     makeGugunList() {
       this.CLEAR_GUGUN_LIST();
@@ -207,6 +225,35 @@ export default {
       if (this.gugunName != "") this.searchDongList(this.gugunName);
       console.log("sidoName : ", this.sidoName);
       console.log("gugunName : ", this.gugunName);
+    },
+    makeHouseInfoListAuto() {
+      this.CLEAR_HOUSE_INFO_LIST();
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }
+      this.timeout = setTimeout(() => {
+        console.log("aptName : ", this.aptName);
+        this.getHouseInfoListAuto(this.aptName);
+        console.log("in HomeView auto :", this.houseInfoList);
+      }, 800);
+    },
+    makeHouseInfoList() {
+      this.CLEAR_HOUSE_INFO_LIST();
+      console.log("sido Name : ", this.sidoName);
+      console.log("gugun Name : ", this.gugunName);
+      console.log("dong Name : ", this.dongName);
+      console.log("apt Name : ", this.aptName);
+
+      const aptInfo = {
+        sidoName: this.sidoName,
+        gugunName: this.gugunName,
+        dongName: this.dongName,
+        aptName: this.aptName,
+        page: this.page,
+      };
+
+      this.getHouseInfoList(aptInfo);
     },
   },
 };

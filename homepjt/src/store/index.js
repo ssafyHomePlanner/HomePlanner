@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import boardStore from "@/store/modules/boardStore";
 import aptStore from "@/store/modules/aptStore";
 import memberStore from "@/store/modules/memberStore";
+import houseInfoStore from "@/store/modules/houseInfoStore";
 
 Vue.use(Vuex);
 
@@ -28,5 +29,6 @@ export default new Vuex.Store({
     boardStore,
     aptStore,
     memberStore,
+    houseInfoStore,
   },
 });
