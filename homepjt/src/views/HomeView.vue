@@ -21,6 +21,9 @@
                 label="아파트를 검색해보세요."
                 @keyup="makeHouseInfoListAuto"
                 v-model="aptName"
+                item-text="apartmentName"
+                item-value="apartmentName"
+                return-object
               ></v-autocomplete>
               <v-row justify="center">
                 <v-col cols="3">
