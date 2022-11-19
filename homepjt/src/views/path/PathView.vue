@@ -1,10 +1,7 @@
 <template>
   <v-container fill-height fluid class="ma-8">
     <v-row>
-      <v-col>
-        <div id="map"></div>
-      </v-col>
-      <v-col>
+      <v-col cols="auto">
         <v-container>
           <v-row>
             <v-col cols="auto" class="mr-5">
@@ -120,6 +117,10 @@
               </v-tab-item>
             </v-tabs-items>
           </v-row>
+        </v-container>
+      </v-col>
+      <v-col cols="auto">
+        <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
       </v-col>
     </v-row>
