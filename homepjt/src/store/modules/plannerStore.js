@@ -22,8 +22,76 @@ const plannerStore = {
     },
   },
   actions: {
-    createCommentInfo(payload) {
-      const commentInfo = {};
+    createPlannerInfo(payload) {
+      const plannerInfo = {
+        aptAmount: payload.aptAmount,
+        aptCode: payload.aptCode,
+        aptName: payload.aptName,
+        budget: payload.budget,
+        expectedDate: payload.expectedDate,
+        hopedDate: payload.hopedDate,
+        loanAmount: payload.loanAmount,
+        memberId: payload.memberId,
+        savingPerMonth: payload.savingPerMonth,
+        writeDate: payload.writeDate,
+      };
+      createPlanner(
+        plannerInfo,
+        ({ data }) => {
+          console.log("message: {}", data.message);
+        },
+        ({ error }) => {
+          console.log(error);
+        }
+      );
+    },
+
+    updatePlannerInfo(payload) {
+      const plannerInfo = {
+        aptAmount: payload.aptAmount,
+        aptCode: payload.aptCode,
+        aptName: payload.aptName,
+        budget: payload.budget,
+        expectedDate: payload.expectedDate,
+        hopedDate: payload.hopedDate,
+        loanAmount: payload.loanAmount,
+        memberId: payload.memberId,
+        savingPerMonth: payload.savingPerMonth,
+        writeDate: payload.writeDate,
+      };
+      updatePlanner(
+        plannerInfo,
+        ({ data }) => {
+          console.log("message: {}", data.message);
+        },
+        ({ error }) => {
+          console.log(error);
+        }
+      );
+    },
+
+    selectPlannerInfo({ commit }, payload) {
+      selectPlanner(
+        payload.memberId,
+        ({ data }) => {
+          commit("SEARCH_PLANNER_INFO", data.plannerList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    deletePlannerInfo(plannerId) {
+      deletePlanner(
+        plannerId,
+        ({ data }) => {
+          console.log(data.message);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
   },
 };
