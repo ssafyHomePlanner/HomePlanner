@@ -127,7 +127,7 @@ const bookmarkStore = {
     },
 
     // 관심 상품 조회
-    selectBookmarkAptList(memberId) {
+    selectBookmarkAptList({ commit }, memberId) {
       selectBookmarkApt(
         memberId,
         ({ data }) => {
@@ -181,7 +181,7 @@ const bookmarkStore = {
     },
 
     // 게시글 좋아요 클릭 여부 확인
-    checkBoardLikeMemberInfo(payload) {
+    checkBoardLikeMemberInfo({ commit }, payload) {
       checkBoardLikeMember(
         payload.boardId,
         payload.memberId,
