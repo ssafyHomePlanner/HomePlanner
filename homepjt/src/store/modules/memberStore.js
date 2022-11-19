@@ -1,6 +1,22 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/member.js";
+import {
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  deleteMember,
+  selectMemberDetail,
+  findMemberId,
+  findMemberPw,
+  checkMemberId,
+  joinMember,
+  updateMember,
+  selectRecentData,
+  insertRecentData,
+  deleteRecentDataAll,
+  deleteRecentData,
+} from "@/api/member.js";
 
 const memberStore = {
   namespaced: true,
@@ -9,6 +25,14 @@ const memberStore = {
     isLoginError: false,
     userInfo: null,
     isValidToken: false,
+
+    memberId: null,
+    memberPw: null,
+
+    isDuplicatedId: false,
+
+    recentDataList: [],
+    recentData: {},
   },
   getters: {
     checkUserInfo: function (state) {
@@ -31,6 +55,18 @@ const memberStore = {
     SET_USER_INFO: (state, userInfo) => {
       state.isLogin = true;
       state.userInfo = userInfo;
+    },
+    SET_MEMBER_ID: (state, memberId) => {
+      state.memberId = memberId;
+    },
+    SET_MEMBER_PW: (state, memberPw) => {
+      state.memberPw = memberPw;
+    },
+    IS_DUPLICATED_ID: (state, flag) => {
+      state.isDuplicatedId = flag;
+    },
+    SET_RECENT_DATA_LIST: (state, data) => {
+      state.recentDataList = data;
     },
   },
   actions: {
@@ -132,6 +168,219 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", false);
           } else {
             console.log("유저 정보 없음!!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 탈퇴
+    deleteMemberInfo({ commit }, memberId) {
+      deleteMember(
+        memberId,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+          } else {
+            console.log("유저 정보 없음 !!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 정보 상세 보기
+    selectMemberInfoDetail({ commit }, memberId) {
+      selectMemberDetail(
+        memberId,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_USER_INFO", data.memberDto);
+          } else {
+            console.log("유저 정보 없음 !!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 아이디 찾기
+    findMemberInfoId({ commit }, payload) {
+      findMemberId(
+        payload.memberName,
+        payload.memberPhone,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_MEMBER_ID", payload.memberId);
+          } else {
+            console.log("유저 정보 없음 !!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 비밀번호 찾기
+    findMemberInfoPw({ commit }, payload) {
+      findMemberPw(
+        payload.memberId,
+        payload.memberPhone,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_MEMBER_PW", payload.memberPw);
+          } else {
+            console.log("유저 정보 없음 !!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 아이디 중복 확인
+    checkMemberInfoId({ commit }, memberId) {
+      checkMemberId(
+        memberId,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("아이디 중복 발생 !!");
+            commit("IS_DUPLICATED_ID", true);
+          } else {
+            console.log("아이디 중복 X");
+            commit("IS_DUPLICATED_ID", false);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원가입
+    joinMemberInfo(payload) {
+      const memberInfo = {
+        age: payload.age,
+        email: payload.email,
+        gender: payload.gender,
+        id: payload.id,
+        joinDate: "",
+        name: payload.name,
+        phone: payload.phone,
+        pw: payload.pw,
+        salt: payload.salt,
+      };
+      joinMember(
+        memberInfo,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("회원가입 성공");
+          } else {
+            console.log("회원가입 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 정보 수정
+    updateMemberInfo(payload) {
+      const memberInfo = {
+        age: payload.age,
+        email: payload.email,
+        gender: payload.gender,
+        id: payload.id,
+        joinDate: "",
+        name: payload.name,
+        phone: payload.phone,
+        pw: payload.pw,
+        salt: payload.salt,
+      };
+      updateMember(
+        memberInfo,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("회원 정보 수정 성공");
+          } else {
+            console.log("회원 정보 수정 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 최근 검색 조회
+    selectRecentDataInfo({ commit }, memberId) {
+      selectRecentData(
+        memberId,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_RECNET_DATA_LIST", []);
+            commit("SET_RECNET_DATA_LIST", data.resultDataList);
+          } else {
+            console.log("회원 정보가 없습니다.");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 최근 검색 등록
+    insertRecentDataInfo(payload) {
+      insertRecentData(
+        payload.memberId,
+        payload.data,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("최근 검색 등록 성공");
+          } else {
+            console.log("최근 검색 등록 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    // 회원 최근 검색 전체 삭제
+    deleteRecentDataInfoAll({ commit }, memberId) {
+      deleteRecentDataAll(memberId, ({ data }) => {
+        if (data.message === "success") {
+          commit("SET_RECENT_DATA_LIST", []);
+          console.log("최근 검색 전체 삭제 성공");
+        } else {
+          console.log("최근 검색 전체 삭제 실패");
+        }
+      });
+    },
+
+    // 회원 최근 검색 삭제
+    deleteRecentDataInfo(payload) {
+      deleteRecentData(
+        payload.memberId,
+        payload.recentId,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("최근 검색 삭제 성공");
+          } else {
+            console.log("최근 검색 삭제 실패");
           }
         },
         (error) => {

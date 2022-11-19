@@ -2,10 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 // import http from "@/api/http";
 // import createPersistedState from "vuex-persistedstate";
-import boardStore from "@/store/modules/boardStore";
 import aptStore from "@/store/modules/aptStore";
-import memberStore from "@/store/modules/memberStore";
+import boardStore from "@/store/modules/boardStore";
+import bookmarkStore from "@/store/modules/bookmarkStore";
 import houseInfoStore from "@/store/modules/houseInfoStore";
+import memberStore from "@/store/modules/memberStore";
+import plannerStore from "@/store/modules/plannerStore";
 
 Vue.use(Vuex);
 
@@ -26,9 +28,11 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    boardStore,
     aptStore,
-    memberStore,
+    boardStore,
+    bookmarkStore,
     houseInfoStore,
+    memberStore,
+    plannerStore,
   },
 });
