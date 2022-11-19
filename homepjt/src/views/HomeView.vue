@@ -14,14 +14,14 @@
             width="825"
           >
             <v-container fill-height fluid>
-              <v-text-field
+              <v-autocomplete
+                :items="houseInfoList"
                 class="mt-5 ml-8 mr-8"
-                v-model="aptName"
                 solo
                 label="아파트를 검색해보세요."
                 @keyup="makeHouseInfoListAuto"
-                id="searchApt"
-              ></v-text-field>
+                v-model="aptName"
+              ></v-autocomplete>
               <v-row justify="center">
                 <v-col cols="3">
                   <v-select
