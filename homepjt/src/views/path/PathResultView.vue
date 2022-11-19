@@ -2,27 +2,37 @@
   <v-container fill-height fluid class="ma-8">
     <v-row>
       <v-col cols="auto">
-        <v-btn-toggle
-          v-model="pathResultType"
-          tile
-          color="deep-purple accent-3"
-          group
-        >
-          <v-btn value="time"> 시간순 </v-btn>
-          <v-btn value="distance"> 거리순 </v-btn>
-          <v-btn @click="makeLine">라인 생성</v-btn>
-        </v-btn-toggle>
+        <v-container >
+          <v-row justify="space-between">
+
+            <v-col>
+              <v-btn-toggle
+                v-model="pathResultType"
+                tile
+                color="deep-purple accent-3"
+                group
+              >
+                <v-btn value="time"> 시간순 </v-btn>
+                <v-btn value="distance"> 거리순 </v-btn>
+              </v-btn-toggle>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn class="mt-4" color="primary"><v-icon>mdi-content-save</v-icon>경로 저장</v-btn>
+              <!-- <v-btn @click="makeLine">테스트 버튼</v-btn> -->
+            </v-col>
+          </v-row>
+        </v-container>
         <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
       </v-col>
       <v-col cols="auto" class="mr-5 mt-12">
-        <v-container class="ml-0 mr-5 pr-1" style="width: 350px; height: 400px">
+        <v-container class="ml-0 mr-5 pr-1" style="width: 350px; height: 500px">
           <v-virtual-scroll
             bench="5"
             :items="sampleLikeLocationList"
             height="270"
             item-height="80"
-            class="pa-1"
+            class="pa-1 mt-3"
           >
             <template v-slot:default="{ item }">
               <v-list-item :key="item.name">
@@ -43,19 +53,19 @@
             </template>
           </v-virtual-scroll>
         </v-container>
+        <v-container style="width: 350px; height: 100px">
+          <h2>총 거리:</h2><br>
+          <h3>총 예상 시간:</h3>
+        </v-container>
       </v-col>
     </v-row>
     <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
-      <v-row class="path-item-middle-text mb-7" justify="start">
+      <!-- <v-row class="path-item-middle-text mb-7" justify="start">
         후보 경로 리스트
-      </v-row>
+      </v-row> -->
       <v-row>
-        <v-col cols="auto">
-          총 거리: 13KM <br>
-          예상 시간: 1시간 30분
-        </v-col>
         <v-col>
-          <v-stepper alt-labels>
+          <v-stepper alt-labels >
             <v-stepper-header>
               <v-stepper-step step="1" > 출발지 </v-stepper-step>
               <v-divider></v-divider>
