@@ -4,7 +4,11 @@ const bookmarkStore = {
   namespaced: true,
   state: {
     pathInfo: {},
-    pathInfoList: [],
+    // pathInfoList: [],
+    timePathList: [],
+    distPathList: [],
+    timeArr: [],
+    distArr: [],
   },
   getters: {},
   mutations: {
@@ -12,13 +16,21 @@ const bookmarkStore = {
       state.pathInfo = payload;
     },
     SEARCH_PATH_INFO_LIST(state, payload) {
-      state.pathInfoList = payload;
+      // state.pathInfoList = payload;
+      state.timePathList = payload.timePointList;
+      state.distPathList = payload.distPointList;
+      state.timeArr = payload.timeArr;
+      state.distArr = payload.distArr;
     },
     CLEAR_PATH_INFO(state) {
       state.pathInfo = null;
     },
     CLEAR_PATH_INFO_LIST(state) {
-      state.pathInfoList = [];
+      // state.pathInfoList = [];
+      state.timePathList = [];
+      state.distPathList = [];
+      state.timeArr = [];
+      state.distArr = [];
     },
   },
   actions: {
@@ -27,8 +39,8 @@ const bookmarkStore = {
         payload,
         ({ data }) => {
           console.log("data : {}", data);
-          commit("SEARCH_PATH_INFO_LIST", data.bookmarkPathRequestDtoList);
-          console.log("pathList : {}", data.bookmarkPathRequestDtoList);
+          commit("SEARCH_PATH_INFO_LIST", data);
+          console.log("pathList : {}", data);
         },
         (error) => {
           console.log(error);
