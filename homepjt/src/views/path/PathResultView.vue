@@ -10,6 +10,7 @@
         >
           <v-btn value="time"> 시간순 </v-btn>
           <v-btn value="distance"> 거리순 </v-btn>
+          <v-btn @click="makeLine">라인 생성</v-btn>
         </v-btn-toggle>
         <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
@@ -26,7 +27,6 @@
             <template v-slot:default="{ item }">
               <v-list-item :key="item.name">
                 <v-list-item-content>
-                  <!-- <v-btn @click="makeLine">라인 생성</v-btn> -->
                   <v-breadcrumbs :items="items" class="pa-2">
                     <template v-slot:divider>
                       <v-container style="width: 100px; height: 50px">
@@ -46,30 +46,56 @@
       </v-col>
     </v-row>
     <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
-      <v-stepper alt-labels>
+      <v-row class="path-item-middle-text mb-7" justify="start">
+        후보 경로 리스트
+      </v-row>
+      <v-row>
+        <v-col cols="auto">
+          총 거리: 13KM <br>
+          예상 시간: 1시간 30분
+        </v-col>
+        <v-col>
+          <v-stepper alt-labels>
+            <v-stepper-header>
+              <v-stepper-step step="1" > 출발지 </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="2" > 펠리스카운티 </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="3" > 그린타운(삼성) </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="4" > 리첸시아중동 </v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="5" > 도착지 </v-stepper-step>
+            </v-stepper-header>
+          </v-stepper>
+        </v-col>
+      </v-row>
+      <v-col>
+      </v-col>
+      <v-stepper non-linear>
         <v-stepper-header>
-          <v-stepper-step step="1" editable> 출발지 </v-stepper-step>
+          <v-stepper-step step="1" > 출발지 </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="2" editable> 펠리스카운티 </v-stepper-step>
+          <v-stepper-step step="2" > 펠리스카운티 </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" editable> 그린타운(삼성) </v-stepper-step>
+          <v-stepper-step step="3" > 그린타운(삼성) </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" editable> 리첸시아중동 </v-stepper-step>
+          <v-stepper-step step="4" > 리첸시아중동 </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" editable> 도착지 </v-stepper-step>
+          <v-stepper-step step="5" > 도착지 </v-stepper-step>
         </v-stepper-header>
       </v-stepper>
       <v-stepper non-linear>
         <v-stepper-header>
-          <v-stepper-step step="1" editable> 출발지 </v-stepper-step>
+          <v-stepper-step step="1" > 출발지 </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="2" editable> 펠리스카운티 </v-stepper-step>
+          <v-stepper-step step="2" > 그린타운(삼성) </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" editable> 그린타운(삼성) </v-stepper-step>
+          <v-stepper-step step="3" > 리첸시아중동  </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" editable> 리첸시아중동 </v-stepper-step>
+          <v-stepper-step step="4" > 펠리스카운티 </v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" editable> 도착지 </v-stepper-step>
+          <v-stepper-step step="5" > 도착지 </v-stepper-step>
         </v-stepper-header>
       </v-stepper>
     </v-container>
