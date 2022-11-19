@@ -34,7 +34,7 @@ public class BoardController {
     @ApiOperation(value = "전체 게시판 목록 확인")
     @ApiResponses({@ApiResponse(code = 200, message = "전체 게시판 목록 확인 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
-    @GetMapping({"{page}", "/"})
+    @GetMapping({"{page}", ""})
     public ResponseEntity<Map<String, Object>> listBoard(@PathVariable("page") Optional<Integer> page) {
 
         if (!page.isPresent()) {

@@ -28,7 +28,7 @@ public class PlannerController {
     private PlannerService plannerService;
 
     @ApiOperation(value = "플래너 생성")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Map<String, Object>> writePlanner(@RequestBody PlannerDto plannerDto) {
         logger.info("planner write controller, plannerDto: {}", plannerDto);
         Map<String, Object> resultMap = new HashMap<>();
@@ -65,7 +65,7 @@ public class PlannerController {
     }
 
     @ApiOperation(value = "플래너 수정")
-    @PutMapping("/")
+    @PutMapping("")
     public ResponseEntity<Map<String, Object>> updatePlanner(@RequestBody PlannerDto plannerDto) {
         logger.info("planner update controller, plannerDto: {}", plannerDto);
         Map<String, Object> resultMap = new HashMap<>();

@@ -23,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/house")
 @Api("아파트 정보 컨트롤러 API V1")
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class HouseInfoController {
 
     public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -89,7 +90,7 @@ public class HouseInfoController {
 
     //아파트 검색(자동완성)
     @ApiOperation(value = "아파트 검색 자동완성")
-    @PostMapping("/")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> selectHouseInfoAuto(@RequestParam("aptName") String aptName) {
         logger.info("houseinfo select houseinfo auto, aptName : {}", aptName);
         Map<String, Object> resultMap = new HashMap<>();
@@ -99,6 +100,7 @@ public class HouseInfoController {
             logger.debug("아파트 검색 자동완성 성공 : {}", houseInfoDtoList);
             resultMap.put("message", SUCCESS);
             resultMap.put("houseInfoList", houseInfoDtoList);
+            logger.info("houseInfoLIst : {}", houseInfoDtoList);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.error("아파트 검색 자동완성 실패 : {}", e.getMessage());
