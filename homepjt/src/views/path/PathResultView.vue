@@ -1,47 +1,77 @@
 <template>
   <v-container fill-height fluid class="ma-8">
     <v-row>
-      <v-col>
+      <v-col cols="auto">
         <v-btn-toggle
           v-model="pathResultType"
           tile
           color="deep-purple accent-3"
           group
         >
-          <v-btn value="recommend"> 추천순 </v-btn>
-
           <v-btn value="time"> 시간순 </v-btn>
-
           <v-btn value="distance"> 거리순 </v-btn>
         </v-btn-toggle>
-        <div id="map"></div>
+        <v-container id="map" style="width: 925px; height: 625px">
+        </v-container>
       </v-col>
-      <v-col>
-        <v-container class="mt-12">
-          <v-row>
-            <v-col cols="auto" class="mr-5">
-              <v-row justify="start">
-                <v-col cols="auto">
-                  <v-row class="item-middle-box-text mt-4" justify="start">
-                    <div class="path-item-middle-text">
-                      아파트 경유지를 추가하세요
-                    </div>
-                    <v-btn @click="makeLine">라인 생성</v-btn>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-
-          <v-row> </v-row>
+      <v-col cols="auto" class="mr-5 mt-12">
+        <v-container class="ml-0 mr-5 pr-1" style="width: 350px; height: 400px">
+          <v-virtual-scroll
+            bench="5"
+            :items="sampleLikeLocationList"
+            height="270"
+            item-height="80"
+            class="pa-1"
+          >
+            <template v-slot:default="{ item }">
+              <v-list-item :key="item.name">
+                <v-list-item-content>
+                  <!-- <v-btn @click="makeLine">라인 생성</v-btn> -->
+                  <v-breadcrumbs :items="items" class="pa-2">
+                    <template v-slot:divider>
+                      <v-container style="width: 100px; height: 50px">
+                        <v-row justify="center">
+                          <v-icon large>mdi-forward</v-icon>
+                          예상 시간: 30분
+                        </v-row>
+                      </v-container>
+                    </template>
+                  </v-breadcrumbs>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider></v-divider>
+            </template>
+          </v-virtual-scroll>
         </v-container>
       </v-col>
     </v-row>
     <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
-      <v-row class="path-item-middle-text mb-7" justify="start">
-        설정된 경유지 목록
-      </v-row>
-      <v-row justify="start"> </v-row>
+      <v-stepper alt-labels>
+        <v-stepper-header>
+          <v-stepper-step step="1" editable> 출발지 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="2" editable> 펠리스카운티 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="3" editable> 그린타운(삼성) </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="4" editable> 리첸시아중동 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="5" editable> 도착지 </v-stepper-step>
+        </v-stepper-header>
+      </v-stepper>
+      <v-stepper non-linear>
+        <v-stepper-header>
+          <v-stepper-step step="1" editable> 출발지 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="2" editable> 펠리스카운티 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="3" editable> 그린타운(삼성) </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="4" editable> 리첸시아중동 </v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="5" editable> 도착지 </v-stepper-step>
+        </v-stepper-header>
+      </v-stepper>
     </v-container>
   </v-container>
 </template>
@@ -50,9 +80,17 @@
 export default {
   data() {
     return {
+      items: [
+        {
+          text: "출발지",
+        },
+        {
+          text: "도착지",
+        },
+      ],
       clickLine: {},
       distanceOverlay: null,
-      pathResultType: "recommend",
+      pathResultType: "time",
       dots: [],
       sampleLikeLocationList: [
         {
@@ -242,6 +280,10 @@ export default {
 </script>
 
 <style>
+#map {
+  width: 100%;
+  height: 600px;
+}
 .dot {
   overflow: hidden;
   float: left;
