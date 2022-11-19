@@ -130,12 +130,11 @@ const houseInfoStore = {
       );
     },
 
-    deletComment(houseCommentId) {
+    deleteComment(houseCommentId) {
       deleteHouseComment(
         houseCommentId,
         ({ data }) => {
           console.log("message : {}", data.message);
-          commit("CLEAR_COMMENT_LIST");
         },
         (error) => {
           console.log(error);

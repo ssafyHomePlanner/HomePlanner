@@ -50,6 +50,5 @@ export {
   selectHouseComment,
   deleteHouseComment,
   searchHouseInfoDetail,
-  searchHouseInfoDetail,
   addHouseInfoViewCnt,
 };
