@@ -2,6 +2,18 @@
   <v-container fill-height fluid class="ma-8">
     <v-row>
       <v-col>
+        <v-btn-toggle
+          v-model="pathResultType"
+          tile
+          color="deep-purple accent-3"
+          group
+        >
+          <v-btn value="recommend"> 추천순 </v-btn>
+
+          <v-btn value="time"> 시간순 </v-btn>
+
+          <v-btn value="distance"> 거리순 </v-btn>
+        </v-btn-toggle>
         <div id="map"></div>
       </v-col>
       <v-col>
@@ -14,52 +26,14 @@
                     <div class="path-item-middle-text">
                       아파트 경유지를 추가하세요
                     </div>
+                    <v-btn @click="makeLine">라인 생성</v-btn>
                   </v-row>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-tabs v-model="tab">
-              <v-tab>찜한 아파트</v-tab>
-              <v-tab>아파트 검색</v-tab>
-            </v-tabs>
-            <v-tabs-items v-model="tab">
-              <v-tab-item>
-                <v-container style="width: 500px; height: 280px">
-                  <v-virtual-scroll
-                    bench="5"
-                    :items="sampleLikeLocationList"
-                    height="270"
-                    item-height="64"
-                  >
-                    <template v-slot:default="{ item }">
-                      <v-list-item
-                        :key="item.name"
-                        @click="clickLikeApartment(item)"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            <strong>{{ item.name }}</strong>
-                          </v-list-item-title>
-                          <v-list-item-subtitle>
-                            {{ item.address }}
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-virtual-scroll>
-                </v-container>
-              </v-tab-item>
-              <v-tab-item>
-                <v-container style="width: 500px; height: 280px">
-                  아파트 검색 화면
-                </v-container>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-row>
+          <v-row> </v-row>
         </v-container>
       </v-col>
     </v-row>
@@ -67,46 +41,145 @@
       <v-row class="path-item-middle-text mb-7" justify="start">
         설정된 경유지 목록
       </v-row>
-      <v-row justify="start">
-        <v-sheet
-          v-for="(apartment, index) in pathList"
-          :key="index"
-          :apartment="apartment"
-          height="120"
-          width="200"
-          elevation="4"
-          class="pl-4 pt-4 mr-5"
-          rounded="xl"
-        >
-          <v-row class="mr-0 ml-2">
-            <v-col cols="auto">
-              <v-row justify="end">
-                <v-btn icon>
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-              </v-row>
-              <v-row justify="center" class="item-middle-box-text mt-4"
-                >{{ apartment.name }}
-              </v-row>
-              <v-row justify="center" class="item-middle-box-subtext mt-3">
-                {{ apartment.address }}
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-sheet>
-      </v-row>
-    </v-container>
-    <v-container class="mt-5 mb-8">
-      <v-btn class="mx-2" fab dark large color="purple">
-        <v-icon dark> mdi-android </v-icon>
-      </v-btn>
+      <v-row justify="start"> </v-row>
     </v-container>
   </v-container>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      clickLine: {},
+      distanceOverlay: null,
+      pathResultType: "recommend",
+      sampleLikeLocationList: [
+        {
+          lon: "126.766986471789",
+          lat: "37.4918092437981",
+        },
+        {
+          lon: "126.769215401626",
+          lat: "37.4981077694787",
+        },
+        {
+          lon: "126.779310556166",
+          lat: "37.4953683630967",
+        },
+      ],
+    };
+  },
   methods: {
+    showDistance(content, position) {
+      console.log("showDistance");
+      if (this.distanceOverlay) {
+        console.log("distanceOverlay 있음");
+        // 커스텀오버레이가 생성된 상태이면
+
+        // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
+        this.distanceOverlay.setPosition(position);
+        this.distanceOverlay.setContent(content);
+      } else {
+        console.log("distanceOverlay 없음");
+        // 커스텀 오버레이가 생성되지 않은 상태이면
+
+        // 커스텀 오버레이를 생성하고 지도에 표시합니다
+        this.distanceOverlay = new kakao.maps.CustomOverlay({
+          content: content, // 커스텀오버레이에 표시할 내용입니다
+          position: position, // 커스텀오버레이를 표시할 위치입니다.
+          xAnchor: 0,
+          yAnchor: 0,
+          zIndex: 3,
+        });
+
+        // 지도에 표시합니다
+        this.distanceOverlay.setMap(this.map);
+      }
+    },
+    getTimeHTML(distance) {
+      console.log("getTimeHTML");
+      // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
+      var walkkTime = (distance / 67) | 0;
+      var walkHour = "",
+        walkMin = "";
+
+      // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
+      if (walkkTime > 60) {
+        walkHour =
+          '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
+      }
+      walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
+
+      // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
+      var bycicleTime = (distance / 227) | 0;
+      var bycicleHour = "",
+        bycicleMin = "";
+
+      // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
+      if (bycicleTime > 60) {
+        bycicleHour =
+          '<span class="number">' +
+          Math.floor(bycicleTime / 60) +
+          "</span>시간 ";
+      }
+      bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
+
+      // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
+      var content = '<ul class="dotOverlay distanceInfo">';
+      content += "    <li>";
+      content +=
+        '        <span class="label">총거리</span><span class="number">' +
+        distance +
+        "</span>m";
+      content += "    </li>";
+      content += "    <li>";
+      content += '        <span class="label">도보</span>' + walkHour + walkMin;
+      content += "    </li>";
+      content += "    <li>";
+      content +=
+        '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+      content += "    </li>";
+      content += "</ul>";
+
+      return content;
+    },
+    makeLine() {
+      let linePath = [];
+
+      // 만들어질 경로의 위도/경도를 넣는다.
+      this.sampleLikeLocationList.forEach((element) => {
+        linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
+      });
+
+      let polyline = new kakao.maps.Polyline({
+        path: linePath, // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+        strokeWeight: 3, // 선의 두께입니다
+        strokeColor: "#db4040", // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+        strokeStyle: "solid", // 선의 스타일입니다
+      });
+
+      // 선 화면에 그리기
+      polyline.setMap(this.map);
+
+      var distance = Math.round(polyline.getLength()), // 선의 총 거리를 계산합니다
+        content = this.getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
+
+      console.log("content", content);
+      console.log("purposePosition", linePath[linePath.length - 1]);
+
+      // 그려진 선의 거리정보를 지도에 표시합니다
+      this.showDistance(content, linePath[linePath.length - 1]);
+
+      //맵에서 이동할 좌표
+      let iwPosition = new kakao.maps.LatLng(
+        this.sampleLikeLocationList[0].lat,
+        this.sampleLikeLocationList[0].lon
+      );
+
+      // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+      this.map.setCenter(iwPosition);
+    },
     initMap() {
       const container = document.getElementById("map");
       const options = {
@@ -137,4 +210,55 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.dot {
+  overflow: hidden;
+  float: left;
+  width: 12px;
+  height: 12px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png");
+}
+.dotOverlay {
+  position: relative;
+  bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ddd;
+  float: left;
+  font-size: 12px;
+  padding: 5px;
+  background: #fff;
+}
+.dotOverlay:nth-of-type(n) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+.number {
+  font-weight: bold;
+  color: #ee6152;
+}
+.dotOverlay:after {
+  content: "";
+  position: absolute;
+  margin-left: -6px;
+  left: 50%;
+  bottom: -8px;
+  width: 11px;
+  height: 8px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png");
+}
+.distanceInfo {
+  position: relative;
+  top: 5px;
+  left: 5px;
+  list-style: none;
+  margin: 0;
+}
+.distanceInfo .label {
+  display: inline-block;
+  width: 50px;
+}
+.distanceInfo:after {
+  content: none;
+}
+</style>
