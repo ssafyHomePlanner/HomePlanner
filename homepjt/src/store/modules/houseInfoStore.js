@@ -1,7 +1,12 @@
 import {
   searchHouseInfo,
   searchHouseInfoAuto,
-  // searchHouseInfoDetail
+  writeHouseComment,
+  updateHouseComment,
+  selectHouseComment,
+  deleteHouseComment,
+  searchHouseInfoDetail,
+  addHouseInfoViewCnt,
 } from "@/api/houseInfo.js";
 
 const houseInfoStore = {
@@ -9,7 +14,11 @@ const houseInfoStore = {
   state: {
     houseInfo: {},
     houseInfoList: [],
+    houseDeal: {},
     houseDealList: [],
+
+    comment: {},
+    commentList: [],
   },
   getters: {},
   mutations: {
@@ -19,8 +28,11 @@ const houseInfoStore = {
     SEARCH_HOUSE_INFO(state, payload) {
       state.houseInfo = payload;
     },
-    SEARCH_HOUSE_DEAL(state, payload) {
+    SEARCH_HOUSE_DEAL_LIST(state, payload) {
       state.houseDealList = payload;
+    },
+    SEARCH_HOUSE_DEAL(state, payload) {
+      state.houseDeal = payload;
     },
     CLEAR_HOUSE_INFO_LIST(state) {
       state.houseInfoList = [];
@@ -30,6 +42,16 @@ const houseInfoStore = {
     },
     CLEAR_HOUSE_DEAL_LIST(state) {
       state.houseDealList = [];
+    },
+    CLEAR_HOUSE_DEAL(state) {
+      state.houseDeal = null;
+    },
+
+    SEARCH_COMMENT_LIST(state, payload) {
+      state.commentList = payload;
+    },
+    CLEAR_COMMENT_LIST(state) {
+      state.commentList = [];
     },
   },
   actions: {
@@ -64,6 +86,80 @@ const houseInfoStore = {
         ({ data }) => {
           console.log(data);
           commit("SEARCH_HOUSE_INFO_LIST", data.houseInfoList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    writeComment(commentInfo) {
+      writeHouseComment(
+        commentInfo,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    updateComment(commentInfo) {
+      updateHouseComment(
+        commentInfo,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    selectComment({ commit }, aptCode) {
+      selectHouseComment(
+        aptCode,
+        ({ data }) => {
+          console.log(data);
+          commit("SEARCH_COMMENT_LIST", data.houseCommentList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    deletComment(houseCommentId) {
+      deleteHouseComment(
+        houseCommentId,
+        ({ data }) => {
+          console.log("message : {}", data.message);
+          commit("CLEAR_COMMENT_LIST");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    getHouseInfoDeal({ commit }, aptCode) {
+      searchHouseInfoDetail(
+        aptCode,
+        ({ data }) => {
+          commit("SEARCH_HOUSE_DEAL_LIST", data.houseDealList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    addViewCnt(aptCode) {
+      addHouseInfoViewCnt(
+        aptCode,
+        ({ data }) => {
+          console.log(data.message);
         },
         (error) => {
           console.log(error);
