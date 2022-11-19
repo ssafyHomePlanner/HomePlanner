@@ -100,7 +100,7 @@ public class MemberController {
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(
-            @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) MemberDto memberDto) {
+            @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) @RequestBody MemberDto memberDto) {
         logger.info("member login controller, memberDto info : {}", memberDto);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
