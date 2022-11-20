@@ -76,6 +76,7 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> join(@RequestBody MemberDto memberDto) {
         logger.info("member join controller, memberDto info : {}", memberDto);
 
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         try {
