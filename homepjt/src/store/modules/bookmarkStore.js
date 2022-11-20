@@ -78,7 +78,7 @@ const bookmarkStore = {
         }
       );
     },
-    insertPathList(payload) {
+    insertPathList(context, payload) {
       const pathInfo = {
         aptCode: payload.aptCode,
         aptName: payload.aptName,
@@ -97,7 +97,7 @@ const bookmarkStore = {
         }
       );
     },
-    deletePathList(payload) {
+    deletePathList(context, payload) {
       deletePath(
         payload,
         ({ data }) => {
@@ -110,7 +110,7 @@ const bookmarkStore = {
     },
 
     // 관심 상품 삭제
-    deleteBookmarkAptInfo(bookmarkAptId) {
+    deleteBookmarkAptInfo(context, bookmarkAptId) {
       deleteBookmarkApt(
         bookmarkAptId,
         ({ data }) => {
@@ -145,7 +145,7 @@ const bookmarkStore = {
     },
 
     // 관심 상품 등록
-    insertBookmarkAptInfo(payload) {
+    insertBookmarkAptInfo(context, payload) {
       insertBookmarkApt(
         payload.memberId,
         payload.aptCode,
@@ -163,7 +163,7 @@ const bookmarkStore = {
     },
 
     // 게시글 좋아요 회원 등록
-    updateBoardLikeMemberInfo(payload) {
+    updateBoardLikeMemberInfo(context, payload) {
       updateBoardLikeMember(
         payload.boardId,
         payload.memberId,

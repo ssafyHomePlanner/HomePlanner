@@ -220,36 +220,44 @@ const memberStore = {
     },
 
     // 회원 아이디 찾기
-    findMemberInfoId({ commit }, payload) {
+    findMemberInfoId(context, payload) {
       findMemberId(
         payload.memberName,
         payload.memberPhone,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_MEMBER_ID", payload.memberId);
+            // commit("SET_MEMBER_ID", payload.memberId);
+            console.log(data);
+            alert("회원님의 아이디는 : " + data.memberId + " 입니다.");
+            router.push({ name: "logInView" });
           } else {
+            alert("유저 정보가 없습니다.");
             console.log("유저 정보 없음 !!!");
           }
         },
         (error) => {
+          alert("유저 정보가 없습니다.");
           console.log(error);
         }
       );
     },
 
     // 회원 비밀번호 찾기
-    findMemberInfoPw({ commit }, payload) {
+    findMemberInfoPw(context, payload) {
       findMemberPw(
         payload.memberId,
         payload.memberPhone,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_MEMBER_PW", payload.memberPw);
+            alert("회원님의 비밀번호는 : " + data.memberPw + "입니다");
+            router.push({ name: "logInView" });
           } else {
+            alert("유저 정보가 없습니다.");
             console.log("유저 정보 없음 !!!");
           }
         },
         (error) => {
+          alert("유저 정보가 없습니다.");
           console.log(error);
         }
       );
@@ -376,7 +384,7 @@ const memberStore = {
     },
 
     // 회원 최근 검색 등록
-    insertRecentDataInfo(payload) {
+    insertRecentDataInfo(context, payload) {
       insertRecentData(
         payload.memberId,
         payload.data,
@@ -406,7 +414,7 @@ const memberStore = {
     },
 
     // 회원 최근 검색 삭제
-    deleteRecentDataInfo(payload) {
+    deleteRecentDataInfo(context, payload) {
       deleteRecentData(
         payload.memberId,
         payload.recentId,

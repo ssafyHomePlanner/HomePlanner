@@ -22,7 +22,7 @@ const plannerStore = {
     },
   },
   actions: {
-    createPlannerInfo(payload) {
+    createPlannerInfo(context, payload) {
       const plannerInfo = {
         aptAmount: payload.aptAmount,
         aptCode: payload.aptCode,
@@ -46,7 +46,7 @@ const plannerStore = {
       );
     },
 
-    updatePlannerInfo(payload) {
+    updatePlannerInfo(context, payload) {
       const plannerInfo = {
         aptAmount: payload.aptAmount,
         aptCode: payload.aptCode,
@@ -82,7 +82,7 @@ const plannerStore = {
       );
     },
 
-    deletePlannerInfo(plannerId) {
+    deletePlannerInfo(context, plannerId) {
       deletePlanner(
         plannerId,
         ({ data }) => {
