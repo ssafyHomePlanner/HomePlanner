@@ -20,6 +20,21 @@
                 <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
                 아파트 커뮤니티</router-link
               >
+
+              <router-link :to="{ name: 'aptBookmarkView' }" class="link">
+                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
+                아파트 즐겨찾기</router-link
+              >
+
+              <router-link :to="{ name: 'pathBookmarkView' }" class="link">
+                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
+                경로 즐겨찾기</router-link
+              >
+
+              <router-link :to="{ name: 'plannerBookmarkView' }" class="link">
+                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
+                플래너 즐겨찾기</router-link
+              >
             </v-row>
           </v-container>
         </v-col>
