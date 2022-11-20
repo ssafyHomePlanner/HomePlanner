@@ -94,6 +94,7 @@
         <include refid="houseInfoColumns"><property name="alias" value="h"/></include>
         from houseinfo h
         where apartment_name like concat('%', #{aptName}, '%')
+        limit 0, 10
     </select>
 
     <!-- 아파트 상세 검색(거래내역) -->
