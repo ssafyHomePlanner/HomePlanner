@@ -41,7 +41,7 @@ function findMemberId(memberName, memberPhone, success, fail) {
 
 // 회원 비밀번호 찾기
 function findMemberPw(memberId, memberPhone, success, fail) {
-  api.get(`/member/findpw/${memberId}/${memberPhone}`).then(success).catch(fail);
+  api.get(`/member/findPw/${memberId}/${memberPhone}`).then(success).catch(fail);
 }
 
 // 아이디 중복 확인

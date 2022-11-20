@@ -93,7 +93,7 @@ const houseInfoStore = {
       );
     },
 
-    writeComment(commentInfo) {
+    writeComment(context, commentInfo) {
       writeHouseComment(
         commentInfo,
         ({ data }) => {
@@ -105,7 +105,7 @@ const houseInfoStore = {
       );
     },
 
-    updateComment(commentInfo) {
+    updateComment(context, commentInfo) {
       updateHouseComment(
         commentInfo,
         ({ data }) => {
@@ -130,7 +130,7 @@ const houseInfoStore = {
       );
     },
 
-    deleteComment(houseCommentId) {
+    deleteComment(context, houseCommentId) {
       deleteHouseComment(
         houseCommentId,
         ({ data }) => {
@@ -154,7 +154,7 @@ const houseInfoStore = {
       );
     },
 
-    addViewCnt(aptCode) {
+    addViewCnt(context, aptCode) {
       addHouseInfoViewCnt(
         aptCode,
         ({ data }) => {
