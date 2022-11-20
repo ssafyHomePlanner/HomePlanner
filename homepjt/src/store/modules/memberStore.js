@@ -249,16 +249,17 @@ const memberStore = {
     },
 
     // 아이디 중복 확인
-    checkMemberInfoId({ commit }, memberId) {
-      checkMemberId(
+    async checkMemberInfoId({ commit }, memberId) {
+      console.log("check id : ", memberId);
+      await checkMemberId(
         memberId,
         ({ data }) => {
           if (data.message === "success") {
-            console.log("아이디 중복 발생 !!");
-            commit("IS_DUPLICATED_ID", true);
-          } else {
-            console.log("아이디 중복 X");
+            console.log("아이디 중복 발생 X!!");
             commit("IS_DUPLICATED_ID", false);
+          } else {
+            console.log("아이디 중복 발생");
+            commit("IS_DUPLICATED_ID", true);
           }
         },
         (error) => {
@@ -268,28 +269,33 @@ const memberStore = {
     },
 
     // 회원가입
-    joinMemberInfo(payload) {
+    joinMemberInfo({ commit }, payload) {
       const memberInfo = {
         age: payload.age,
         email: payload.email,
         gender: payload.gender,
         id: payload.id,
-        joinDate: "",
         name: payload.name,
         phone: payload.phone,
         pw: payload.pw,
         salt: payload.salt,
       };
+
+      console.log(commit);
+
       joinMember(
         memberInfo,
         ({ data }) => {
           if (data.message === "success") {
             console.log("회원가입 성공");
+            router.push({ name: "logInView" });
           } else {
+            alert("회원가입 실패!!");
             console.log("회원가입 실패");
           }
         },
         (error) => {
+          alert("회원가입 실패!!");
           console.log(error);
         }
       );

@@ -45,8 +45,8 @@ function findMemberPw(memberId, memberPhone, success, fail) {
 }
 
 // 아이디 중복 확인
-function checkMemberId(memberId, success, fail) {
-  api.get(`/member/idCheck/${memberId}`).then(success).catch(fail);
+async function checkMemberId(memberId, success, fail) {
+  await api.get(`/member/idCheck/${memberId}`).then(success).catch(fail);
 }
 
 // 회원가입
