@@ -1,5 +1,6 @@
 package com.ssafy.homepjt.model.service;
 
+import com.ssafy.homepjt.model.dto.DongCodeDto;
 import com.ssafy.homepjt.model.mapper.DongCodeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,10 @@ public class DongCodeServiceImpl implements DongCodeService{
     @Override
     public List<String> selectDongName(String gugunName) throws SQLException {
         return dongCodeMapper.selectDongName(gugunName);
+    }
+
+    @Override
+    public DongCodeDto selectDongCodeInfo(String dongCode) throws SQLException {
+        return dongCodeMapper.selectDongCodeInfo(dongCode);
     }
 }
