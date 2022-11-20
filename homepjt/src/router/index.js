@@ -12,13 +12,39 @@ import SignUpView from "../views/member/SignUpView";
 import PathView from "../views/path/PathView";
 import PathResultView from "../views/path/PathResultView";
 import PlannerView from "../views/planner/PlannerView";
-import PlannerResultView from "../views/planner/PlannerResultView"
+import PlannerResultView from "../views/planner/PlannerResultView";
 import IdSearchView from "../views/member/IdSearchView";
 import PasswordSearchView from "../views/member/PasswordSearchView";
 import MyPageView from "../views/member/MyPageView";
 import UpdateMemberInfoView from "../views/member/UpdateMemberInfoView";
+import AptBookmarkView from "../views/bookmark/AptBookmarkView";
+import PathBookmarkView from "../views/bookmark/PathBookmarkView";
+import PlannerBookmarkView from "../views/bookmark/PlannerBookmarkView";
+
+import store from "@/store";
 
 Vue.use(VueRouter);
+
+// https://v3.router.vuejs.org/kr/guide/advanced/navigation-guards.html
+const onlyAuthUser = async (to, from, next) => {
+  const checkUserInfo = store.getters["memberStore/checkUserInfo"];
+  const checkToken = store.getters["memberStore/checkToken"];
+  let token = sessionStorage.getItem("access-token");
+  console.log("로그인 처리 전", checkUserInfo, token);
+
+  if (checkUserInfo != null && token) {
+    console.log("토큰 유효성 체크하러 가자!!!!");
+    await store.dispatch("memberStore/getUserInfo", token);
+  }
+  if (!checkToken || checkUserInfo === null) {
+    alert("로그인이 필요한 페이지입니다..");
+    // next({ name: "login" });
+    router.push({ name: "logInView" });
+  } else {
+    console.log("로그인 했다!!!!!!!!!!!!!.");
+    next();
+  }
+};
 
 const routes = [
   {
@@ -40,16 +66,19 @@ const routes = [
       {
         path: "detail",
         name: "boardDetail",
+        beforeEnter: onlyAuthUser,
         component: BoardDetail,
       },
       {
         path: "write",
         name: "boardWrite",
+        beforeEnter: onlyAuthUser,
         component: BoardWrite,
       },
       {
         path: "update",
         name: "boardUpdate",
+        beforeEnter: onlyAuthUser,
         component: BoardUpdate,
       },
     ],
@@ -105,6 +134,20 @@ const routes = [
     component: PlannerView,
   },
   {
+    path: "/bookmark/apt",
+    name: "aptBookmarkView",
+    component: AptBookmarkView,
+  },
+  {
+    path: "/bookmark/path",
+    name: "pathBookmarkView",
+    component: PathBookmarkView,
+  },
+  {
+    path: "/bookmark/planner",
+    name: "plannerBookmarkView",
+    component: PlannerBookmarkView,
+
     path: "/planner/result",
     name: "plannerResult",
     component: PlannerResultView,

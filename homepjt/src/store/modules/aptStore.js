@@ -1,4 +1,4 @@
-import { searchSido, searchGugun, searchDong } from "@/api/apt.js";
+import { searchSido, searchGugun, searchDong, searchDongCode } from "@/api/apt.js";
 
 const aptStore = {
   namespaced: true,
@@ -6,6 +6,10 @@ const aptStore = {
     sidoList: [],
     gugunList: [],
     dongList: [],
+
+    sidoName: "",
+    gugunName: "",
+    dongName: "",
   },
   getters: {},
   mutations: {
@@ -26,6 +30,17 @@ const aptStore = {
     },
     CLEAR_DONG_LIST(state) {
       state.dongList = [];
+    },
+
+    SET_DONG_CODE_INFO(state, payload) {
+      state.sidoName = payload.sidoName;
+      state.gugunName = payload.gugunName;
+      state.dongName = payload.dongName;
+    },
+    CLEAR_DONG_CODE_INFO(state) {
+      state.sidoName = "";
+      state.gugunName = "";
+      state.dongName = "";
     },
   },
   actions: {
@@ -55,6 +70,19 @@ const aptStore = {
         payload,
         ({ data }) => {
           commit("SEARCH_DONG_LIST", data.dongNameList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    searchDongCodeInfo({ commit }, dongCode) {
+      searchDongCode(
+        dongCode,
+        ({ data }) => {
+          commit("CLEAR_DONG_CODE_INFO");
+          commit("SET_DONG_CODE_INFO", data);
         },
         (error) => {
           console.log(error);

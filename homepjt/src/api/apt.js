@@ -17,4 +17,9 @@ function searchDong(gugunName, success, fail) {
   api.get(`/dongcode/dong/${gugunName}`).then(success).catch(fail);
 }
 
-export { searchSido, searchGugun, searchDong };
+//dongcode info 출력
+function searchDongCode(dongCode, success, fail) {
+  api.get(`/dongcode/info/${dongCode}`).then(success).catch(fail);
+}
+
+export { searchSido, searchGugun, searchDong, searchDongCode };
