@@ -307,7 +307,7 @@ public class MemberController {
             if (findMemberPw != null) {
                 logger.debug("회원 비밀번호 찾기 성공 : {}", findMemberPw);
                 resultMap.put("message", SUCCESS);
-                resultMap.put("memberId", findMemberPw);
+                resultMap.put("memberPw", findMemberPw);
                 return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
             } else {
                 logger.debug("회원 비밀번호 찾기 실패 : 아이디, 번호를 확인해주세요");
