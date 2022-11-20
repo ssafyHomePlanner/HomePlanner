@@ -153,7 +153,7 @@ const memberStore = {
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "loginView" });
+                router.push({ name: "logInView" });
               },
               (error) => {
                 console.log(error);
@@ -347,7 +347,7 @@ const memberStore = {
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "loginView" });
+                router.push({ name: "logInView" });
               },
               (error) => {
                 console.log(error);

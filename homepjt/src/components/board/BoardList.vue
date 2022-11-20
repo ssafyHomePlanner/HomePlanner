@@ -70,14 +70,6 @@ export default {
   },
   methods: {
     clickRow(value) {
-      // if (this.$store.state.member.id != value.memberId) {
-      //   this.addBoardView(value.id);
-      // }
-
-      if (this.$store.state.memberStore.userInfo.id != value.memberId) {
-        this.addBoardView(value.id);
-      }
-
       this.insertBoardOne(value).then(() => {
         this.searchBoardComment(value.id);
       });
@@ -86,12 +78,7 @@ export default {
     moveBoardDetail() {
       this.$router.push({ name: "boardDetail" });
     },
-    ...mapActions(boardStore, [
-      "searchBoardList",
-      "insertBoardOne",
-      "searchBoardComment",
-      "addBoardView",
-    ]),
+    ...mapActions(boardStore, ["searchBoardList", "insertBoardOne", "searchBoardComment"]),
   },
 };
 </script>

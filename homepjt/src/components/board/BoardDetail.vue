@@ -96,6 +96,11 @@ export default {
     ...mapState(boardStore, ["board", "boardComment"]),
     ...mapState(memberStore, "userInfo"),
   },
+  created() {
+    if (this.$store.state.memberStore.userInfo.id != this.$store.state.boardStore.board.memberId) {
+      this.addBoardView(this.board.id);
+    }
+  },
   components: {
     BoardCommentItem,
   },
@@ -127,7 +132,12 @@ export default {
         return false;
       }
     },
-    ...mapActions(boardStore, ["deleteBoard", "searchBoardComment", "writeBoardComment"]),
+    ...mapActions(boardStore, [
+      "deleteBoard",
+      "searchBoardComment",
+      "writeBoardComment",
+      "addBoardView",
+    ]),
   },
 };
 </script>
