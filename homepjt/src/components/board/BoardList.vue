@@ -31,6 +31,7 @@
 import { mapState, mapActions } from "vuex";
 
 const boardStore = "boardStore";
+const memberStore = "memberStore";
 
 export default {
   data() {
@@ -62,13 +63,18 @@ export default {
   },
   computed: {
     ...mapState(boardStore, ["boardList"]),
+    ...mapState(memberStore, ["userInfo"]),
   },
   mounted() {
     this.searchBoardList(this.page);
   },
   methods: {
     clickRow(value) {
-      if (this.$store.state.member.id != value.memberId) {
+      // if (this.$store.state.member.id != value.memberId) {
+      //   this.addBoardView(value.id);
+      // }
+
+      if (this.$store.state.memberStore.userInfo.id != value.memberId) {
         this.addBoardView(value.id);
       }
 

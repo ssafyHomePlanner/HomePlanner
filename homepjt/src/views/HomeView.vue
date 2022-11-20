@@ -230,16 +230,18 @@ export default {
       console.log("gugunName : ", this.gugunName);
     },
     makeHouseInfoListAuto() {
-      this.CLEAR_HOUSE_INFO_LIST();
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.timeout = null;
+      if (this.aptName != "") {
+        this.CLEAR_HOUSE_INFO_LIST();
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+          this.timeout = null;
+        }
+        this.timeout = setTimeout(() => {
+          console.log("aptName : ", this.aptName);
+          this.getHouseInfoListAuto(this.aptName);
+          console.log("in HomeView auto :", this.houseInfoList);
+        }, 800);
       }
-      this.timeout = setTimeout(() => {
-        console.log("aptName : ", this.aptName);
-        this.getHouseInfoListAuto(this.aptName);
-        console.log("in HomeView auto :", this.houseInfoList);
-      }, 800);
     },
     makeHouseInfoList() {
       this.CLEAR_HOUSE_INFO_LIST();

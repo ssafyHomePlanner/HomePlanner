@@ -10,11 +10,12 @@ import AptListView from "../views/apt/AptListView";
 import LogInView from "../views/member/LogInView";
 import SignUpView from "../views/member/SignUpView";
 import PathView from "../views/path/PathView";
-import PathResultView from '../views/path/PathResultView';
-import PlannerView from '../views/planner/PlannerView';
-import IdSearchView from '../views/member/IdSearchView';
-import PasswordSearchView from '../views/member/PasswordSearchView';
-
+import PathResultView from "../views/path/PathResultView";
+import PlannerView from "../views/planner/PlannerView";
+import IdSearchView from "../views/member/IdSearchView";
+import PasswordSearchView from "../views/member/PasswordSearchView";
+import MyPageView from "../views/member/MyPageView";
+import UpdateMemberInfoView from "../views/member/UpdateMemberInfoView";
 
 Vue.use(VueRouter);
 
@@ -66,6 +67,16 @@ const routes = [
     path: "/signup",
     name: "signUpView",
     component: SignUpView,
+  },
+  {
+    path: "/mypage",
+    name: "myPageView",
+    component: MyPageView,
+  },
+  {
+    path: "/update/member",
+    name: "updateMemberInfoView",
+    component: UpdateMemberInfoView,
   },
   {
     path: "/search/id",

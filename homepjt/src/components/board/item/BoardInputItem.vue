@@ -1,12 +1,5 @@
 <template>
-  <v-sheet
-    rounded="xl"
-    color="white"
-    elevation="5"
-    height="400"
-    width="800"
-    class="ma-8"
-  >
+  <v-sheet rounded="xl" color="white" elevation="5" height="400" width="800" class="ma-8">
     <v-container class="pa-6">
       <v-row class="mb-1">
         <v-col style="text-align: left">
@@ -28,9 +21,7 @@
       </v-row>
       <v-row>
         <v-col style="text-align: right">
-          <v-btn @click="registArticle" color="primary" elevation="2"
-            >글작성</v-btn
-          >
+          <v-btn @click="registArticle" color="primary" elevation="2">글작성</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -38,9 +29,10 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const boardStore = "boardStore";
+const memberStore = "memberStore";
 
 export default {
   name: "BoardInputItem",
@@ -55,9 +47,13 @@ export default {
       contentRules: [(v) => !!v || "내용을 입력해주세요"],
     };
   },
+  computed: {
+    ...mapState(memberStore, "userInfo"),
+  },
   methods: {
     registArticle() {
-      this.article.memberId = this.$store.state.member.id;
+      // this.article.memberId = this.$store.state.member.id;
+      this.article.memberId = this.$store.state.memberStore.userInfo.id;
       this.writeBoard(this.article);
       this.moveList();
     },

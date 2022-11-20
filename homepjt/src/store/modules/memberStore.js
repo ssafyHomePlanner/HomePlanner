@@ -83,26 +83,33 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", true);
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
+
+            console.log(data);
+            alert("로그인 성공!!");
           } else {
+            alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
+            router.push({ name: "logInView" });
           }
         },
         (error) => {
+          alert("로그인 성공 !!! @@");
+          router.push({ name: "logInView" });
           console.log(error);
         }
       );
     },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
-      // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+      console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
-        decodeToken.userid,
+        decodeToken.memberId,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_USER_INFO", data.userInfo);
-            // console.log("3. getUserInfo data >> ", data);
+            commit("SET_USER_INFO", data.memberInfo);
+            console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
           }
@@ -146,7 +153,7 @@ const memberStore = {
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "login" });
+                router.push({ name: "loginView" });
               },
               (error) => {
                 console.log(error);
@@ -249,16 +256,17 @@ const memberStore = {
     },
 
     // 아이디 중복 확인
-    checkMemberInfoId({ commit }, memberId) {
-      checkMemberId(
+    async checkMemberInfoId({ commit }, memberId) {
+      console.log("check id : ", memberId);
+      await checkMemberId(
         memberId,
         ({ data }) => {
           if (data.message === "success") {
-            console.log("아이디 중복 발생 !!");
-            commit("IS_DUPLICATED_ID", true);
-          } else {
-            console.log("아이디 중복 X");
+            console.log("아이디 중복 발생 X!!");
             commit("IS_DUPLICATED_ID", false);
+          } else {
+            console.log("아이디 중복 발생");
+            commit("IS_DUPLICATED_ID", true);
           }
         },
         (error) => {
@@ -268,35 +276,41 @@ const memberStore = {
     },
 
     // 회원가입
-    joinMemberInfo(payload) {
+    joinMemberInfo({ commit }, payload) {
       const memberInfo = {
         age: payload.age,
         email: payload.email,
         gender: payload.gender,
         id: payload.id,
-        joinDate: "",
         name: payload.name,
         phone: payload.phone,
         pw: payload.pw,
         salt: payload.salt,
       };
+
+      console.log(commit);
+
       joinMember(
         memberInfo,
         ({ data }) => {
           if (data.message === "success") {
             console.log("회원가입 성공");
+            router.push({ name: "logInView" });
           } else {
+            alert("회원가입 실패!!");
             console.log("회원가입 실패");
           }
         },
         (error) => {
+          alert("회원가입 실패!!");
           console.log(error);
         }
       );
     },
 
     // 회원 정보 수정
-    updateMemberInfo(payload) {
+    updateMemberInfo({ commit }, payload) {
+      console.log(commit);
       const memberInfo = {
         age: payload.age,
         email: payload.email,
@@ -310,11 +324,31 @@ const memberStore = {
       };
       updateMember(
         memberInfo,
-        ({ data }) => {
+        async ({ data }) => {
           if (data.message === "success") {
-            console.log("회원 정보 수정 성공");
+            alert("회원정보 수정 성공 !! 다시 로그인 해주세요!!");
+            // router.push({ name: "home" });
+            await logout(
+              memberInfo.id,
+              ({ data }) => {
+                if (data.message === "success") {
+                  console.log("리프레시 토큰 제거 성공");
+                } else {
+                  console.log("리프레시 토큰 제거 실패");
+                }
+                commit("SET_IS_LOGIN", false);
+                commit("SET_USER_INFO", null);
+                commit("SET_IS_VALID_TOKEN", false);
+                router.push({ name: "loginView" });
+              },
+              (error) => {
+                console.log(error);
+                commit("SET_IS_LOGIN", false);
+                commit("SET_USER_INFO", null);
+              }
+            );
           } else {
-            console.log("회원 정보 수정 실패");
+            alert("회원정보 수정 실패");
           }
         },
         (error) => {

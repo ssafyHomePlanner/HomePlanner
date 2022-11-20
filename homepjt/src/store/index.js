@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 // import http from "@/api/http";
-// import createPersistedState from "vuex-persistedstate";
+import createPersistedState from "vuex-persistedstate";
 import aptStore from "@/store/modules/aptStore";
 import boardStore from "@/store/modules/boardStore";
 import bookmarkStore from "@/store/modules/bookmarkStore";
@@ -35,4 +35,18 @@ export default new Vuex.Store({
     memberStore,
     plannerStore,
   },
+  plugins: [
+    createPersistedState({
+      // 브라우저 종료시 제거하기 위해 localStorage가 아닌 sessionStorage로 변경. (default: localStorage)
+      storage: sessionStorage,
+      paths: [
+        "aptStore",
+        "boardStore",
+        "bookmarkStore",
+        "houseInfoStore",
+        "memberStore",
+        "plannerStore",
+      ],
+    }),
+  ],
 });
