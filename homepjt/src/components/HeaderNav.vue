@@ -28,7 +28,7 @@
         <v-col cols="col-2" v-if="userInfo">
           <v-container class="mr-4">
             <v-row justify="end">
-              <router-link :to="{ name: 'signUpView' }" class="link mr-4"> 내정보보기</router-link>
+              <router-link :to="{ name: 'myPageView' }" class="link mr-4"> 마이페이지</router-link>
               <!-- <router-link :to="{ name: 'logInView' }" class="link"> 로그아웃</router-link> -->
               <v-icon size="25" color="blue darken-2" @click.prevent="onClickLogout">
                 mdi-account-multiple
@@ -71,6 +71,7 @@ export default {
       sessionStorage.removeItem("access-token");
       sessionStorage.removeItem("refresh-token");
       // if (this.$router.name != "home") {
+      alert("로그아웃 되었습니다!!");
       this.$router.push({ name: "home" });
       // }
     },

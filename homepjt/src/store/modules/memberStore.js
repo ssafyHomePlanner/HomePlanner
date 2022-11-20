@@ -84,9 +84,10 @@ const memberStore = {
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
 
-            console.log("로그인 성공");
+            console.log(data);
+            alert("로그인 성공!!");
           } else {
-            console.log("로그인 실패, 아이디 패스워드 확인 필요!");
+            alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
@@ -94,7 +95,7 @@ const memberStore = {
           }
         },
         (error) => {
-          console.log("로그인 실패, 아이디 패스워드 확인 필요!");
+          alert("로그인 성공 !!! @@");
           router.push({ name: "logInView" });
           console.log(error);
         }
@@ -152,7 +153,7 @@ const memberStore = {
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "login" });
+                router.push({ name: "loginView" });
               },
               (error) => {
                 console.log(error);
@@ -308,7 +309,8 @@ const memberStore = {
     },
 
     // 회원 정보 수정
-    updateMemberInfo(payload) {
+    updateMemberInfo({ commit }, payload) {
+      console.log(commit);
       const memberInfo = {
         age: payload.age,
         email: payload.email,
@@ -322,11 +324,31 @@ const memberStore = {
       };
       updateMember(
         memberInfo,
-        ({ data }) => {
+        async ({ data }) => {
           if (data.message === "success") {
-            console.log("회원 정보 수정 성공");
+            alert("회원정보 수정 성공 !! 다시 로그인 해주세요!!");
+            // router.push({ name: "home" });
+            await logout(
+              memberInfo.id,
+              ({ data }) => {
+                if (data.message === "success") {
+                  console.log("리프레시 토큰 제거 성공");
+                } else {
+                  console.log("리프레시 토큰 제거 실패");
+                }
+                commit("SET_IS_LOGIN", false);
+                commit("SET_USER_INFO", null);
+                commit("SET_IS_VALID_TOKEN", false);
+                router.push({ name: "loginView" });
+              },
+              (error) => {
+                console.log(error);
+                commit("SET_IS_LOGIN", false);
+                commit("SET_USER_INFO", null);
+              }
+            );
           } else {
-            console.log("회원 정보 수정 실패");
+            alert("회원정보 수정 실패");
           }
         },
         (error) => {

@@ -7,7 +7,7 @@
         </div>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="auto">
+      <v-col cols="auto" v-if="checkId()">
         <v-btn text @click="moveUpdate"> 수정 </v-btn>
         <v-btn text @click="clickDeleteBoard"> 삭제 </v-btn>
       </v-col>
@@ -33,28 +33,15 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-2" class="align-center">
-        <v-sheet
-          rounded="pill"
-          color="white"
-          elevation="3"
-          height="50"
-          width="90"
-          class="ma-8"
-        >
+        <v-sheet rounded="pill" color="white" elevation="3" height="50" width="90" class="ma-8">
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
-              <v-btn
-              icon
-              color="pink"
-            >
-            <v-icon large color="red darken-2">
-              mdi-heart
-            </v-icon>
-            </v-btn>
-            <span class="ml-2">
-
-              {{ board.likeCnt }}
-            </span>
+              <v-btn icon color="pink">
+                <v-icon large color="red darken-2"> mdi-heart </v-icon>
+              </v-btn>
+              <span class="ml-2">
+                {{ board.likeCnt }}
+              </span>
             </v-row>
           </v-container>
         </v-sheet>
@@ -66,11 +53,7 @@
     <div>
       <v-divider></v-divider>
     </div>
-    <board-comment-item
-      v-for="(comment, index) in boardComment"
-      :key="index"
-      :comment="comment"
-    />
+    <board-comment-item v-for="(comment, index) in boardComment" :key="index" :comment="comment" />
     <v-divider></v-divider>
     <v-container>
       <v-row>
@@ -84,9 +67,7 @@
           ></v-text-field>
         </v-col>
         <v-col cols="col-4">
-          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large
-            >등록</v-btn
-          >
+          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large>등록</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -99,6 +80,7 @@ import { mapState, mapActions } from "vuex";
 import BoardCommentItem from "./item/BoardCommentItem.vue";
 
 const boardStore = "boardStore";
+const memberStore = "memberStore";
 
 export default {
   data() {
@@ -112,6 +94,7 @@ export default {
   },
   computed: {
     ...mapState(boardStore, ["board", "boardComment"]),
+    ...mapState(memberStore, "userInfo"),
   },
   components: {
     BoardCommentItem,
@@ -119,7 +102,8 @@ export default {
   methods: {
     clickEnrollComment() {
       this.comment.boardId = this.board.id;
-      this.comment.memberId = this.$store.state.member.id;
+      // this.comment.memberId = this.$store.state.member.id;
+      this.comment.memberId = this.$store.state.memberStore.userInfo.id;
       this.writeBoardComment(this.comment);
       this.comment = {};
     },
@@ -133,11 +117,17 @@ export default {
     moveUpdate() {
       this.$router.push({ name: "boardUpdate" });
     },
-    ...mapActions(boardStore, [
-      "deleteBoard",
-      "searchBoardComment",
-      "writeBoardComment",
-    ]),
+
+    checkId() {
+      if (
+        this.$store.state.memberStore.userInfo.id == this.$store.state.boardStore.board.memberId
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    ...mapActions(boardStore, ["deleteBoard", "searchBoardComment", "writeBoardComment"]),
   },
 };
 </script>
