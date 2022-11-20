@@ -75,11 +75,18 @@ export default {
   methods: {
     ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
     async confirm() {
+      console.log("this.member.id = ", this.member.id);
+      console.log("this.member.pw = ", this.member.pw);
       await this.userConfirm(this.member);
       let token = sessionStorage.getItem("access-token");
       if (this.isLogin) {
         await this.getUserInfo(token);
+
+        console.log("user info id = ", this.userInfo);
+
         this.$router.push({ name: "home" });
+      } else {
+        alert("로그인 실패!! 아이디, 패스워드를 확인하세요!");
       }
     },
   },

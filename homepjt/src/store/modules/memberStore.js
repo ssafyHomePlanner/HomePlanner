@@ -83,26 +83,32 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", true);
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
+
+            console.log("로그인 성공");
           } else {
+            console.log("로그인 실패, 아이디 패스워드 확인 필요!");
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
+            router.push({ name: "logInView" });
           }
         },
         (error) => {
+          console.log("로그인 실패, 아이디 패스워드 확인 필요!");
+          router.push({ name: "logInView" });
           console.log(error);
         }
       );
     },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
-      // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+      console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
-        decodeToken.userid,
+        decodeToken.memberId,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_USER_INFO", data.userInfo);
-            // console.log("3. getUserInfo data >> ", data);
+            commit("SET_USER_INFO", data.memberInfo);
+            console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
           }
