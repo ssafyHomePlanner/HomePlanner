@@ -12,6 +12,7 @@ import SignUpView from "../views/member/SignUpView";
 import PathView from "../views/path/PathView";
 import PathResultView from "../views/path/PathResultView";
 import PlannerView from "../views/planner/PlannerView";
+import PlannerResultView from "../views/planner/PlannerResultView";
 import IdSearchView from "../views/member/IdSearchView";
 import PasswordSearchView from "../views/member/PasswordSearchView";
 import MyPageView from "../views/member/MyPageView";
@@ -146,6 +147,10 @@ const routes = [
     path: "/bookmark/planner",
     name: "plannerBookmarkView",
     component: PlannerBookmarkView,
+
+    path: "/planner/result",
+    name: "plannerResult",
+    component: PlannerResultView,
   },
 ];
 

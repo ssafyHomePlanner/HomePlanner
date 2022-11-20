@@ -74,8 +74,8 @@
     <v-row>
       <v-text-field solo style="max-width: 300px" label="대출 가능금액" hint="없으면 0을 적어주세요 (단위, 만원)"></v-text-field>
     </v-row>
-    <v-row style="max-width: 500px">
-      <v-btn  color="primary" block>검색</v-btn>
+    <v-row style="max-width: 500px" >
+      <v-btn  color="primary" block @click="moveResult">검색</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -93,6 +93,9 @@ export default {
     },
   },
   methods: {
+    moveResult() {
+      this.$router.push({ name: "plannerResult" });
+    },
     save(date) {
       this.$refs.menu.save(date);
     },
