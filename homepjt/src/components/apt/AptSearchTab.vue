@@ -17,7 +17,9 @@
                       <v-list-item-title>
                         <strong>{{ item.apartmentName }}</strong>
                       </v-list-item-title>
-                      <v-list-item-subtitle> {{ item.dong }} ({{ item.roadName }}) </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        {{ item.dong }} ({{ item.roadName }})
+                      </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider></v-divider>
@@ -28,6 +30,47 @@
 
           <v-tab-item>
             <v-container style="width: 500px; height: 280px"> 아파트 검색 화면 </v-container>
+            <v-container fill-height fluid>
+              <v-autocomplete
+                :items="houseInfoList"
+                :search-input.sync="search"
+                class="mt-5 ml-8 mr-8"
+                solo
+                label="아파트를 검색해보세요."
+                @input="inputChanged"
+                ref="autoinput"
+                v-model="aptObject"
+                clearable
+                @keyup.enter="makeHouseInfoList"
+                item-text="apartmentName"
+                item-value="apartmentName"
+                return-object
+              >
+                <template v-slot:no-data>
+                  <v-row justify="space-between" class="ma-2">
+                    <h3 class="ma-2">최근 검색어</h3>
+                    <v-btn @click="deleteAllRecentSearch" text class="ma-2">전체삭제 </v-btn>
+                  </v-row>
+                  <v-list-item
+                    v-for="(recentData, index) in recentDataList"
+                    :key="index" @click="clickRecentSearch(recentData.searchedName)"
+                  >
+                    <v-list-item-action>
+                      <v-icon>mdi-clock-outline</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ recentData.searchedName }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </template>
+              </v-autocomplete>
           </v-tab-item>
         </v-tabs-items>
       </v-row>
@@ -55,8 +98,9 @@ export default {
     this.selectBookmarkAptList(this.userInfo.id);
   },
   methods: {
-    clickLikeApartment() {
+    clickLikeApartment(item) {
       // 해당 아파트 상세 페이지로 이동해야함
+      this.$emit("clickLikeApartment", item);
     },
 
     ...mapActions(bookmarkStore, ["selectBookmarkAptList"]),

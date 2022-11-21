@@ -176,6 +176,7 @@ const houseInfoStore = {
       searchHouseDeal(
         aptCode,
         ({ data }) => {
+          commit("CLEAR_HOUSE_DEAL_LIST");
           commit("SEARCH_HOUSE_DEAL_LIST", data.houseDealList);
         },
         (error) => {

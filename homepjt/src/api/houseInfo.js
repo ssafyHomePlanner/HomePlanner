@@ -38,8 +38,8 @@ function deleteHouseComment(houseCommentId, success, fail) {
 }
 
 // 아파트 상세 검색(거래내역)
-function searchHouseDeal(aptCode, success, fail) {
-  api.get(`/house/deal/${aptCode}`).then(success).catch(fail);
+async function searchHouseDeal(aptCode, success, fail) {
+  await api.get(`/house/deal/${aptCode}`).then(success).catch(fail);
 }
 
 // 아파트 조회수 증가

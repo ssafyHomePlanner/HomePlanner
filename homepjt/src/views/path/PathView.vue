@@ -16,9 +16,14 @@
                 </v-col>
               </v-row>
               <v-row class="mt-6">
-                <v-sheet color="white" elevation="1" height="45" width="270" @click="searchStartLocationAddress">{{
-                  startLocation.name ? startLocation.name : startLocation.address
-                }}</v-sheet>
+                <v-sheet
+                  color="white"
+                  elevation="1"
+                  height="45"
+                  width="270"
+                  @click="searchStartLocationAddress"
+                  >{{ startLocation.name ? startLocation.name : startLocation.address }}</v-sheet
+                >
               </v-row>
             </v-col>
             <v-col cols="auto" class="mr-5 mt-8">
@@ -36,9 +41,14 @@
                 </v-col>
               </v-row>
               <v-row class="mt-6">
-                <v-sheet color="white" elevation="1" height="45" width="270" @click="searchEndLocationAddress">{{
-                  endLocation.name ? endLocation.name : endLocation.address
-                }}</v-sheet>
+                <v-sheet
+                  color="white"
+                  elevation="1"
+                  height="45"
+                  width="270"
+                  @click="searchEndLocationAddress"
+                  >{{ endLocation.name ? endLocation.name : endLocation.address }}</v-sheet
+                >
               </v-row>
             </v-col>
           </v-row>
@@ -59,7 +69,7 @@
             </v-col>
           </v-row>
         </v-container>
-        <AptSearchTab />
+        <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" />
       </v-col>
       <v-col cols="auto">
         <v-container id="map" style="width: 925px; height: 625px"> </v-container>
@@ -82,12 +92,14 @@
             <v-col cols="auto">
               <v-row justify="end">
                 <v-btn icon>
-                  <v-icon>mdi-close</v-icon>
+                  <v-icon @click="deleteAparment(apartment.aptCode)">mdi-close</v-icon>
                 </v-btn>
               </v-row>
-              <v-row justify="center" class="item-middle-box-text mt-4">{{ apartment.name }} </v-row>
+              <v-row justify="center" class="item-middle-box-text mt-4"
+                >{{ apartment.apartmentName }}
+              </v-row>
               <v-row justify="center" class="item-middle-box-subtext mt-3">
-                {{ apartment.address }}
+                {{ apartment.dong }} ({{ apartment.roadName }})
               </v-row>
             </v-col>
           </v-row>
@@ -110,26 +122,7 @@ export default {
   data() {
     return {
       tab: null,
-      sampleLikeLocationList: [
-        {
-          address: "경기도 부천시 중동로 02",
-          name: "팰리스카운티",
-          lon: "126.766986471789",
-          lat: "37.4918092437981",
-        },
-        {
-          address: "경기도 부천시 중동로 02",
-          name: "그린타운(삼성)",
-          lon: "126.769215401626",
-          lat: "37.4981077694787",
-        },
-        {
-          address: "경기도 부천시 중동로 03",
-          name: "리첸시아중동",
-          lon: "126.779310556166",
-          lat: "37.4953683630967",
-        },
-      ],
+
       pathList: [],
       startLocation: {
         address: "",
@@ -153,16 +146,36 @@ export default {
       this.$router.push({ name: "pathResult" });
     },
     clickLikeApartment(location) {
-      this.pathList.push(location);
+      let cnt = 0;
+      console.log(location);
+
+      if (this.pathList.length == 0) {
+        this.pathList.push(location);
+      } else {
+        this.pathList.forEach((item) => {
+          console.log("item : " + item);
+          if (item.aptCode === location.aptCode) {
+            console.log("같음");
+            cnt++;
+          }
+        });
+
+        if (cnt === 0) {
+          this.pathList.push(location);
+        }
+      }
 
       //마커 추가
       let gps = [location.lat, location.lon];
       this.markerPositions.push(gps);
       this.displayMarker(this.markerPositions);
 
-      this.sampleLikeLocationList.forEach((item, index) => {
-        if (item.name === location.name) {
-          this.sampleLikeLocationList.splice(index, 1);
+      // x 표시 누르면, 삭제된 리스트 되돌리기
+    },
+    deleteAparment(aptCode) {
+      this.pathList.forEach((item, index) => {
+        if (item.aptCode === aptCode) {
+          this.pathList.splice(index, 1);
         }
       });
     },
@@ -308,7 +321,10 @@ export default {
             })
         );
 
-        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
+        const bounds = positions.reduce(
+          (bounds, latlng) => bounds.extend(latlng),
+          new kakao.maps.LatLngBounds()
+        );
 
         this.map.setBounds(bounds);
       }
