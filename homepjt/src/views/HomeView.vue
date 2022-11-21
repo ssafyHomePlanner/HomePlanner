@@ -16,17 +16,19 @@
             width="825"
           >
             <v-container fill-height fluid>
-              <v-combobox
+              <v-autocomplete
                 :items="houseInfoList"
+                :search-input.sync="search"
                 class="mt-5 ml-8 mr-8"
                 solo
                 label="아파트를 검색해보세요."
-                @keyup="makeHouseInfoListAuto"
+                @input="inputChanged"
+                ref="autoinput"
                 v-model="aptName"
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
-              ></v-combobox>
+              ></v-autocomplete>
               <v-row justify="center" class="ml-2 mr-2">
                 <v-col cols="3">
                   <v-select
@@ -250,9 +252,17 @@ export default {
       gugunName: "",
       dongName: "",
       page: 1,
+      search: "",
     };
   },
-
+  watch: {
+    search(val) {
+      if (!val) {
+        return;
+      }
+      this.makeHouseInfoListAuto(val);
+    },
+  },
   create() {
     this.CLEAR_SIDO_LIST();
     this.CLEAR_GUGUN_LIST();
@@ -270,6 +280,13 @@ export default {
     this.searchSidoList();
   },
   methods: {
+    inputChanged() {
+      //↓ For clear v-menu slot
+      this.$refs.autoinput.blur();
+      setTimeout(() => {
+        this.$refs.autoinput.focus();
+      }, 500);
+    },
     ...mapActions(aptStore, [
       "searchSidoList",
       "searchGugunList",
@@ -300,20 +317,14 @@ export default {
       console.log("sidoName : ", this.sidoName);
       console.log("gugunName : ", this.gugunName);
     },
-    makeHouseInfoListAuto() {
-      if (this.aptName != "") {
-        this.CLEAR_HOUSE_INFO_LIST();
-        if (this.timeout) {
-          clearTimeout(this.timeout);
-          this.timeout = null;
-        }
-        this.timeout = setTimeout(() => {
-          console.log("makeHouseInfoListAuto");
-          console.log("aptName : ", this.aptName);
-          this.getHouseInfoListAuto(this.aptName);
-          console.log("in HomeView auto :", this.houseInfoList);
-        }, 800);
-      }
+    makeHouseInfoListAuto(value) {
+      console.log("makeHouseInfoListAuto", value);
+      // cancel pending call
+      clearTimeout(this._timerId);
+
+      this._timerId = setTimeout(() => {
+        this.getHouseInfoListAuto(value);
+      }, 500);
     },
     makeHouseInfoList() {
       this.CLEAR_HOUSE_INFO_LIST();
