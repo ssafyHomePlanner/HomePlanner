@@ -34,6 +34,7 @@
                   <v-select
                     v-model="sidoName"
                     :items="sidoList"
+                    no-data-text="데이터가 존재하지 않습니다."
                     label="시도 선택"
                     @change="makeGugunList"
                   ></v-select>
@@ -42,6 +43,7 @@
                   <v-select
                     v-model="gugunName"
                     :items="gugunList"
+                    no-data-text="데이터가 존재하지 않습니다."
                     label="시군구 선택"
                     @change="makeDongList"
                   ></v-select>
@@ -50,6 +52,7 @@
                   <v-select
                     v-model="dongName"
                     :items="dongList"
+                    no-data-text="데이터가 존재하지 않습니다."
                     label="읍면동 선택"
                   ></v-select>
                 </v-col>
