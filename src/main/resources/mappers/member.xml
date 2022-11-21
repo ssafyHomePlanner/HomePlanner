@@ -114,6 +114,14 @@
             = #{memberPhone}
     </select>
 
+    <!-- 입력 데이터 등록 여부 확인 -->
+    <select id="checkRecentData" resultType="int">
+        select count(*)
+        from recent_search
+        where member_id = #{memberId}
+          and searched_name = #{data}
+    </select>
+
     <!-- 최근 검색 등록 -->
     <insert id="insertRecentData">
         insert into recent_search(member_id, searched_name, searched_date)

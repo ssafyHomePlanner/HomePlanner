@@ -35,6 +35,8 @@ public interface MemberMapper {
 
 	public String findPw(@Param("memberId") String memberId, @Param("memberPhone") String memberPhone); // 비밀번호 찾기
 
+	public int checkRecentData(@Param("memberId") String memberId, @Param("data") String data);
+
 	// 회원 최근 검색 등록
 	public void insertRecentData(String memberId, String data) throws SQLException;
 

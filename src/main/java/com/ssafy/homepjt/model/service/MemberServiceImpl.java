@@ -81,7 +81,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void insertRecentData(String memberId, String data) throws SQLException {
-        memberMapper.insertRecentData(memberId, data);
+        if(memberMapper.checkRecentData(memberId, data) == 0){
+            memberMapper.insertRecentData(memberId, data);
+        }
     }
 
     @Override
