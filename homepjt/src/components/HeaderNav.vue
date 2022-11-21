@@ -74,7 +74,7 @@ export default {
       sessionStorage.removeItem("refresh-token");
       // if (this.$router.name != "home") {
       alert("로그아웃 되었습니다!!");
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "home" }).catch(()=>{});
       // }
     },
 

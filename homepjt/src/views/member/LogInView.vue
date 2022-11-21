@@ -94,7 +94,7 @@ export default {
 
         console.log("user info id = ", this.userInfo);
 
-        this.$router.push({ name: "home" });
+        this.$router.push({ name: "home" }).catch(()=>{});
       }
     },
   },

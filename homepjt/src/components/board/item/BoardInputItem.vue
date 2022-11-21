@@ -58,7 +58,7 @@ export default {
       this.moveList();
     },
     moveList() {
-      this.$router.push({ name: "boardList" });
+      this.$router.push({ name: "boardList" }).catch(()=>{});
     },
     ...mapActions(boardStore, ["writeBoard"]),
   },

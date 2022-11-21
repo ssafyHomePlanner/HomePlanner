@@ -322,10 +322,10 @@ export default {
   },
   methods: {
     movePathView() {
-      this.$router.push({ name: "pathView" });
+      this.$router.push({ name: "pathView" }).catch(()=>{});
     },
     movePlannerView() {
-      this.$router.push({ name: "plannerView" });
+      this.$router.push({ name: "plannerView" }).catch(()=>{});
     },
     inputChanged() {
       //↓ For clear v-menu slot
@@ -406,7 +406,7 @@ export default {
       };
 
       this.getHouseInfoList(aptInfo);
-      this.$router.push({ name: "aptListView" });
+      this.$router.push({ name: "aptListView" }).catch(()=>{});
     },
     clickRecentSearch(recentStr){
       this.aptObject.apartmentName = recentStr;

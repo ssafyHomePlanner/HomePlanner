@@ -117,10 +117,10 @@ export default {
       this.moveList();
     },
     moveList() {
-      this.$router.push({ name: "boardList" });
+      this.$router.push({ name: "boardList" }).catch(()=>{});
     },
     moveUpdate() {
-      this.$router.push({ name: "boardUpdate" });
+      this.$router.push({ name: "boardUpdate" }).catch(()=>{});
     },
 
     checkId() {

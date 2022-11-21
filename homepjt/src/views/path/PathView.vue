@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     movePathResultView() {
-      this.$router.push({ name: "pathResult" });
+      this.$router.push({ name: "pathResult" }).catch(()=>{});
     },
     clickLikeApartment(location) {
       this.pathList.push(location);
