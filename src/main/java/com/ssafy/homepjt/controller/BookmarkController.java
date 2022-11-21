@@ -1,7 +1,9 @@
 package com.ssafy.homepjt.controller;
 
+import com.ssafy.homepjt.model.dto.BookmarkPathDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
 import com.ssafy.homepjt.model.request.BookmarkPathRequestDto;
+import com.ssafy.homepjt.model.response.BookmarkPathResponseDto;
 import com.ssafy.homepjt.model.service.BookmarkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -126,8 +128,8 @@ public class BookmarkController {
         }
     }
 
-    // 관심 경로 리스트 출력
-    @ApiOperation(value = "관심 경로 리스트 출력")
+    // 경로 리스트 출력
+    @ApiOperation(value = "경로 리스트 출력")
     @PostMapping("/path/search")
     public ResponseEntity<Map<String, Object>> searchPath(@RequestBody List<BookmarkPathRequestDto> bookmarkPathRequestDtoList) {
         logger.debug("bookmark controller - bookmarkPathRequestDto : {}", bookmarkPathRequestDtoList);
@@ -147,6 +149,46 @@ public class BookmarkController {
 
         } catch (Exception e) {
             logger.error("경로 탐색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 관심 경로 리스트 출력(출발지, 도착지)
+    @ApiOperation(value="관심 경로 리스트(출발지, 도착지)")
+    @GetMapping("/path/{memberId}")
+    public ResponseEntity<Map<String, Object>> searchBookmarkPath(@PathVariable("memberId") String memberId){
+        logger.info("bookmark controller - memberId : {]", memberId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            List<BookmarkPathDto> bookmarkPathDtoList = bookmarkService.searchBookmarkPath(memberId);
+            logger.info("관심 경로 탐색 성공 : {}", bookmarkPathDtoList);
+            resultMap.put("success", SUCCESS);
+            resultMap.put("bookmarkPathList", bookmarkPathDtoList);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("관심 경로 탐색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 관심 경로 리스트 출력(경유지)
+    @ApiOperation(value = "관심 경로 리스트(경유지)")
+    @GetMapping("/path/detail/{bookmarkPathId}")
+    public ResponseEntity<Map<String, Object>> searchBookmarkPathDetail(@PathVariable("bookmarkPathId") int bookmarkPathId){
+        logger.info("bookmark controller - bookmarkPathId : {]", bookmarkPathId);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            List<BookmarkPathResponseDto> bookmarkPathResponseDtoList = bookmarkService.searchBookmarkPathDetail(bookmarkPathId);
+            logger.info("관심 경로 탐색 성공 : {}", bookmarkPathResponseDtoList);
+            resultMap.put("success", SUCCESS);
+            resultMap.put("bookmarkPathDetailList", bookmarkPathResponseDtoList);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("관심 경로 탐색 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -131,6 +131,16 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    public List<BookmarkPathDto> searchBookmarkPath(String memberId) {
+        return bookmarkMapper.searchBookmarkPath(memberId);
+    }
+
+    @Override
+    public List<BookmarkPathResponseDto> searchBookmarkPathDetail(int bookmarkPathId) {
+        return bookmarkMapper.searchBookmarkPathDetail(bookmarkPathId);
+    }
+
+    @Override
     public void insertBookmarkPath(List<BookmarkPathRequestDto> bookmarkPathRequestDtoList, String memberId, String pathName) {
         int size = bookmarkPathRequestDtoList.size();
         BookmarkPathRequestDto startApt = bookmarkPathRequestDtoList.get(0);

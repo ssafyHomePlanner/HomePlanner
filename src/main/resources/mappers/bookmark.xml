@@ -26,6 +26,24 @@
         <result column="like_cnt" property="likeCnt"/>
     </resultMap>
 
+    <resultMap id="bookmarkPathDto" type="bookmarkPathDto">
+        <result column="start_lat" property="startLat"/>
+        <result column="start_lon" property="startLon"/>
+        <result column="start_apt_name" property="startAptName"/>
+        <result column="end_lat" property="endLat"/>
+        <result column="end_lon" property="endLon"/>
+        <result column="end_apt_name" property="endAptName"/>
+        <result column="member_id" property="memberId"/>
+        <result column="path_name" property="pathName"/>
+        <result column="start_apt_code" property="startAptCode"/>
+        <result column="end_apt_code" property="endAptCode"/>
+    </resultMap>
+
+    <resultMap id="bookmarkPathResponseDto" type="bookmarkPathResponseDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="apt_name" property="aptName"/>
+    </resultMap>
+
     <sql id="houseInfoColumns">
         ${alias}.apt_code, ${alias}.build_year, ${alias}.road_name, ${alias}.road_name_bonbun, ${alias}.road_name_bubun, ${alias}.road_name_seq, ${alias}.road_name_basement_code,
         ${alias}.road_name_code, ${alias}.dong, ${alias}.bonbun, ${alias}.bubun, ${alias}.sigungu_code, ${alias}.eubmyundong_code, ${alias}.dong_code, ${alias}.land_code, ${alias}.apartment_name, ${alias}.jibun,
@@ -66,6 +84,20 @@
         select count(*)
         from bookmark_board
         where member_id = #{memberId} and board_id = #{boardId}
+    </select>
+
+    <!-- 관심 경로 불러오기(출발지, 도착지) -->
+    <select id="searchBookmarkPath" resultMap="bookmarkPathDto">
+        select *
+        from bookmark_path
+        where member_id = #{memberId}
+    </select>
+
+    <!-- 관심 경로 불러오기(경유지) -->
+    <select id="searchBookmarkPathDetail" resultMap="bookmarkPathResponseDto">
+        select *
+        from bookmark_path_detail
+        where bookmark_path_id = #{bookmarkPathId}
     </select>
 
     <!-- 관심 경로 등록(출발지, 도착지) -->
