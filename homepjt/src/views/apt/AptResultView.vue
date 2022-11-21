@@ -11,15 +11,21 @@
             <v-btn icon color="pink">
               <v-icon large color="red darken-2"> mdi-heart </v-icon>
             </v-btn>
-            <span class="ml-2 mr-3"> 0 회 </span>
+            <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
             <v-icon large color="#999999"> mdi-eye </v-icon>
-            <span class="ml-2 mr-3"> 0 회 </span>
+            <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
           </v-row>
         </v-container>
-        <div class="apt-item-middle-text">아파트 명</div>
-        <div class="apt-item-middle-text">건축년도</div>
-        <div class="apt-item-middle-text">해당 동</div>
-        <div class="apt-item-middle-text">도로명 주소</div>
+        <div class="apt-item-middle-text">
+          아파트 명: {{ houseInfo.apartmentName }}
+        </div>
+        <div class="apt-item-middle-text">
+          건축년도: {{ houseInfo.buildYear }}년
+        </div>
+        <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
+        <div class="apt-item-middle-text">
+          도로명주소: {{ houseInfo.roadName }}
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -64,10 +70,15 @@
 
 <script>
 import LineChart from "@/components/chart/LineChart.vue";
+import { mapState, mapActions } from "vuex";
+const houseInfoStore = "houseInfoStore";
 
 export default {
   components: {
     LineChart,
+  },
+  computed: {
+    ...mapState(houseInfoStore, ["houseInfo", "houseDealList"]),
   },
   data() {
     return {
@@ -169,6 +180,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
     initMap() {
       const container = document.getElementById("map");
       const options = {

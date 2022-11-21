@@ -56,6 +56,9 @@ const houseInfoStore = {
     },
   },
   actions: {
+    searchHouseInfo({ commit }, payload) {
+      commit("SEARCH_HOUSE_INFO", payload);
+    },
     getHouseInfoList({ commit }, payload) {
       let houseInfo = {
         aptName: payload.aptName,
