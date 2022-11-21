@@ -279,7 +279,7 @@ export default {
   },
   computed: {
     ...mapState(aptStore, ["sidoList", "gugunList", "dongList"]),
-    ...mapState(houseInfoStore, ["houseInfo", "houseInfoList"]),
+    ...mapState(houseInfoStore, ["houseInfoList"]),
   },
   mounted() {
     this.searchSidoList();
