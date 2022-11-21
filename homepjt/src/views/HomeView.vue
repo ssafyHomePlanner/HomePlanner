@@ -25,7 +25,7 @@
                 label="아파트를 검색해보세요."
                 @input="inputChanged"
                 ref="autoinput"
-                v-model="aptName"
+                v-model="aptObject"
                 @keyup.enter="makeHouseInfoList"
                 item-text="apartmentName"
                 item-value="apartmentName"
@@ -252,7 +252,7 @@ export default {
 
   data() {
     return {
-      aptName: "",
+      aptObject: {},
       sidoName: "",
       gugunName: "",
       dongName: "",
@@ -336,13 +336,13 @@ export default {
       console.log("sido Name : ", this.sidoName);
       console.log("gugun Name : ", this.gugunName);
       console.log("dong Name : ", this.dongName);
-      console.log("apt Name : ", this.aptName);
+      console.log("apt Name : ", this.aptObject.apartmentName);
 
       const aptInfo = {
         sidoName: this.sidoName,
         gugunName: this.gugunName,
         dongName: this.dongName,
-        aptName: this.aptName,
+        aptName: this.aptObject.apartmentName,
         page: this.page,
       };
 
