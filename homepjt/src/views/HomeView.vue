@@ -17,7 +17,6 @@
           >
             <v-container fill-height fluid>
               <v-autocomplete
-                no-data-text="해당 아파트가 존재하지 않습니다."
                 :items="houseInfoList"
                 :search-input.sync="search"
                 class="mt-5 ml-8 mr-8"
@@ -31,7 +30,34 @@
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
-              ></v-autocomplete>
+              >
+                <template v-slot:no-data>
+                  <v-row justify="space-between" class="ma-2">
+                    <h3 class="ma-2">최근 검색어</h3>
+                    <v-btn text class="ma-2"> 최근검색 전체삭제 </v-btn>
+                  </v-row>
+                  <v-list-item
+                    v-for="(recentData, index) in recentDataList"
+                    :key="index"
+                  >
+                    <v-list-item-action>
+                      <v-icon>mdi-clock-outline</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ recentData.searchedName }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+
+                  <v-divider></v-divider>
+                </template>
+              </v-autocomplete>
               <v-row justify="center" class="ml-2 mr-2">
                 <v-col cols="3">
                   <v-select
@@ -251,6 +277,7 @@ import { mapState, mapActions, mapMutations } from "vuex";
 
 const aptStore = "aptStore";
 const houseInfoStore = "houseInfoStore";
+const memberStore = "memberStore";
 
 export default {
   name: "HomeView",
@@ -263,12 +290,14 @@ export default {
       dongName: "",
       page: 1,
       search: "",
+      benched: 0,
     };
   },
   watch: {
     search(val) {
       if (!val) {
         this.aptObject.apartmentName = "";
+        this.CLEAR_HOUSE_INFO_LIST();
         return;
       }
       this.aptObject.apartmentName = val;
@@ -287,9 +316,11 @@ export default {
   computed: {
     ...mapState(aptStore, ["sidoList", "gugunList", "dongList"]),
     ...mapState(houseInfoStore, ["houseInfoList"]),
+    ...mapState(memberStore, ["recentDataList"]),
   },
   mounted() {
     this.searchSidoList();
+    this.selectRecentDataInfo(this.$store.state.memberStore.userInfo.id);
   },
   methods: {
     movePathView() {
@@ -316,6 +347,12 @@ export default {
       "CLEAR_DONG_LIST",
     ]),
     ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
+    ...mapActions(memberStore, [
+      "selectRecentDataInfo",
+      "insertRecentDataInfo",
+      "deleteRecentDataInfoAll",
+      "deleteRecentDataInfo",
+    ]),
     ...mapMutations(houseInfoStore, [
       "SEARCH_HOUSE_INFO_LIST",
       "SEARCH_HOUSE_INFO",

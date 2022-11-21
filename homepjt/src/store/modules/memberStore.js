@@ -365,8 +365,8 @@ const memberStore = {
         memberId,
         ({ data }) => {
           if (data.message === "success") {
-            commit("SET_RECNET_DATA_LIST", []);
-            commit("SET_RECNET_DATA_LIST", data.resultDataList);
+            commit("SET_RECENT_DATA_LIST", []);
+            commit("SET_RECENT_DATA_LIST", data.resultDataList);
           } else {
             console.log("회원 정보가 없습니다.");
           }
