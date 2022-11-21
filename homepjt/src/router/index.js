@@ -101,11 +101,13 @@ const routes = [
   {
     path: "/mypage",
     name: "myPageView",
+    beforeEnter: onlyAuthUser,
     component: MyPageView,
   },
   {
     path: "/update/member",
     name: "updateMemberInfoView",
+    beforeEnter: onlyAuthUser,
     component: UpdateMemberInfoView,
   },
   {
@@ -121,36 +123,43 @@ const routes = [
   {
     path: "/path",
     name: "pathView",
+    beforeEnter: onlyAuthUser,
     component: PathView,
   },
   {
     path: "/path/result",
     name: "pathResult",
+    beforeEnter: onlyAuthUser,
     component: PathResultView,
   },
   {
     path: "/planner",
     name: "plannerView",
+    beforeEnter: onlyAuthUser,
     component: PlannerView,
   },
   {
     path: "/bookmark/apt",
     name: "aptBookmarkView",
+    beforeEnter: onlyAuthUser,
     component: AptBookmarkView,
   },
   {
     path: "/bookmark/path",
     name: "pathBookmarkView",
+    beforeEnter: onlyAuthUser,
     component: PathBookmarkView,
   },
   {
     path: "/bookmark/planner",
     name: "plannerBookmarkView",
+    beforeEnter: onlyAuthUser,
     component: PlannerBookmarkView,
   },
   {
     path: "/planner/result",
     name: "plannerResult",
+    beforeEnter: onlyAuthUser,
     component: PlannerResultView,
   },
 ];
