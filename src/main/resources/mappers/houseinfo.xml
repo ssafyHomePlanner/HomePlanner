@@ -112,6 +112,7 @@
         <include refid="houseDealColumns"/>
         from housedeal
         where apt_code = #{aptCode}
+        order by deal_year desc, deal_month desc, deal_day desc
     </select>
 
     <!-- 아파트 댓글 조회 -->
