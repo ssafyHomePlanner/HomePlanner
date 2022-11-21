@@ -13,7 +13,7 @@
             아파트 검색
           </v-col>
           <v-col align-self="center">
-            <v-text-field hide-details class="mt-0 pt-0"></v-text-field>
+            <v-text-field hide-details class="mt-0 pt-0" v-model="searchedApartName"></v-text-field>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -156,7 +156,7 @@ export default {
     ]),
   },
   computed: {
-    ...mapState(aptStore, ["sidoList", "gugunList", "dongList", "sidoName", "gugunName", "dongName"]),
+    ...mapState(aptStore, ["sidoList", "gugunList", "dongList", "sidoName", "gugunName", "dongName", "searchedApartName"]),
     ...mapState(houseInfoStore, ["houseInfo", "houseInfoList"]),
   },
   data() {

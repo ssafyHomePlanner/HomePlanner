@@ -337,7 +337,8 @@ export default {
       "searchSidoList",
       "searchGugunList",
       "searchDongList",
-      "setAddressInfo"
+      "setAddressInfo",
+      "setSearchedApartName"
     ]),
     ...mapMutations(aptStore, [
       "CLEAR_SIDO_LIST",
@@ -414,6 +415,7 @@ export default {
       }
 
       this.setAddressInfo(addressInfo);
+      this.setSearchedApartName(this.aptObject.apartmentName);
 
       this.$router.push({ name: "aptListView" }).catch(()=>{});
     },
