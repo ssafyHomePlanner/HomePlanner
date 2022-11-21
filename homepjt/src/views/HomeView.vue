@@ -38,18 +38,18 @@
                   </v-row>
                   <v-list-item
                     v-for="(recentData, index) in recentDataList"
-                    :key="index" @click="clickRecentSearch(recentData.searchedName)"
+                    :key="index"
                   >
                     <v-list-item-action>
                       <v-icon>mdi-clock-outline</v-icon>
                     </v-list-item-action>
-                    <v-list-item-content>
+                    <v-list-item-content  @click="clickRecentSearch(recentData.searchedName)">
                       <v-list-item-title>
                         {{ recentData.searchedName }}
                       </v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-btn icon>
+                      <v-btn icon @click="deleteRecentSearch(recentData.id)">
                         <v-icon>mdi-close</v-icon>
                       </v-btn>
                     </v-list-item-action>
@@ -416,6 +416,15 @@ export default {
       if(this.$store.state.memberStore.userInfo.id.length >= 1){
         this.deleteRecentDataInfoAll(this.$store.state.memberStore.userInfo.id);
       }
+    },
+    deleteRecentSearch(recentId){
+      // console.log("recentId", recentId);
+      let payload = {
+        memberId: this.$store.state.memberStore.userInfo.id,
+        recentId: recentId
+      }
+
+      this.deleteRecentDataInfo(payload);
     }
   },
 };

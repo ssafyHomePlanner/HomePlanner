@@ -68,6 +68,13 @@ const memberStore = {
     SET_RECENT_DATA_LIST: (state, data) => {
       state.recentDataList = data;
     },
+    DELETE_RECENT_DATA: (state, data) => {
+      state.recentDataList.forEach((item, index) => {
+        if (item.id === data) {
+          state.recentDataList.splice(index, 1);
+        }
+      });
+    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -379,6 +386,7 @@ const memberStore = {
 
     // 회원 최근 검색 등록
     insertRecentDataInfo(context, payload) {
+      console.log("insertRecentDataInfo", payload);
       insertRecentData(
         payload.memberId,
         payload.data,
@@ -408,12 +416,13 @@ const memberStore = {
     },
 
     // 회원 최근 검색 삭제
-    deleteRecentDataInfo(context, payload) {
+    deleteRecentDataInfo({commit}, payload) {
       deleteRecentData(
         payload.memberId,
         payload.recentId,
         ({ data }) => {
           if (data.message === "success") {
+            commit("DELETE_RECENT_DATA", payload.recentId);
             console.log("최근 검색 삭제 성공");
           } else {
             console.log("최근 검색 삭제 실패");
