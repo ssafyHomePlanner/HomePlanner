@@ -25,7 +25,7 @@
         </v-col>
 
         <!-- after login -->
-        <v-col cols="col-2" v-if="userInfo">
+        <v-col cols="col-2" v-if="userInfo.id.length >= 1">
           <v-container class="mr-4">
             <v-row justify="end">
               <router-link :to="{ name: 'bookmarkView' }" class="link mr-4">
