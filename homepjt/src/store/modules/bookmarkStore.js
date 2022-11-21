@@ -178,6 +178,7 @@ const bookmarkStore = {
         memberId,
         ({ data }) => {
           if (data.message === "success") {
+            commit("CLEAR_BOOKMARK_APT_LIST");
             commit("SEARCH_BOOKMARK_APT_LIST", data.houseInfoList);
             console.log("관심 상품 조회 성공");
           } else {

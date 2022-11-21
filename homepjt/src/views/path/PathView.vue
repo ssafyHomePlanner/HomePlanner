@@ -16,18 +16,9 @@
                 </v-col>
               </v-row>
               <v-row class="mt-6">
-                <v-sheet
-                  color="white"
-                  elevation="1"
-                  height="45"
-                  width="270"
-                  @click="searchStartLocationAddress"
-                  >{{
-                    startLocation.name
-                      ? startLocation.name
-                      : startLocation.address
-                  }}</v-sheet
-                >
+                <v-sheet color="white" elevation="1" height="45" width="270" @click="searchStartLocationAddress">{{
+                  startLocation.name ? startLocation.name : startLocation.address
+                }}</v-sheet>
               </v-row>
             </v-col>
             <v-col cols="auto" class="mr-5 mt-8">
@@ -45,16 +36,9 @@
                 </v-col>
               </v-row>
               <v-row class="mt-6">
-                <v-sheet
-                  color="white"
-                  elevation="1"
-                  height="45"
-                  width="270"
-                  @click="searchEndLocationAddress"
-                  >{{
-                    endLocation.name ? endLocation.name : endLocation.address
-                  }}</v-sheet
-                >
+                <v-sheet color="white" elevation="1" height="45" width="270" @click="searchEndLocationAddress">{{
+                  endLocation.name ? endLocation.name : endLocation.address
+                }}</v-sheet>
               </v-row>
             </v-col>
           </v-row>
@@ -65,9 +49,7 @@
               <v-row justify="start">
                 <v-col cols="auto">
                   <v-row class="item-middle-box-text mt-4" justify="start">
-                    <div class="path-item-middle-text">
-                      아파트 경유지를 추가하세요
-                    </div>
+                    <div class="path-item-middle-text">아파트 경유지를 추가하세요</div>
                   </v-row>
                 </v-col>
                 <v-col cols="auto" class="pa-0 mt-3">
@@ -76,58 +58,15 @@
               </v-row>
             </v-col>
           </v-row>
-
-          <v-row>
-            <v-tabs v-model="tab">
-              <v-tab>찜한 아파트</v-tab>
-              <v-tab>아파트 검색</v-tab>
-            </v-tabs>
-            <v-tabs-items v-model="tab">
-              <v-tab-item>
-                <v-container style="width: 500px; height: 280px">
-                  <v-virtual-scroll
-                    bench="5"
-                    :items="sampleLikeLocationList"
-                    height="270"
-                    item-height="64"
-                  >
-                    <template v-slot:default="{ item }">
-                      <v-list-item
-                        :key="item.name"
-                        @click="clickLikeApartment(item)"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            <strong>{{ item.name }}</strong>
-                          </v-list-item-title>
-                          <v-list-item-subtitle>
-                            {{ item.address }}
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-virtual-scroll>
-                </v-container>
-              </v-tab-item>
-              <v-tab-item>
-                <v-container style="width: 500px; height: 280px">
-                  아파트 검색 화면
-                </v-container>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-row>
         </v-container>
+        <AptSearchTab />
       </v-col>
       <v-col cols="auto">
-        <v-container id="map" style="width: 925px; height: 625px">
-        </v-container>
+        <v-container id="map" style="width: 925px; height: 625px"> </v-container>
       </v-col>
     </v-row>
     <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
-      <v-row class="path-item-middle-text mb-7" justify="start">
-        설정된 경유지 목록
-      </v-row>
+      <v-row class="path-item-middle-text mb-7" justify="start"> 설정된 경유지 목록 </v-row>
       <v-row justify="start">
         <v-sheet
           v-for="(apartment, index) in pathList"
@@ -146,9 +85,7 @@
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-row>
-              <v-row justify="center" class="item-middle-box-text mt-4"
-                >{{ apartment.name }}
-              </v-row>
+              <v-row justify="center" class="item-middle-box-text mt-4">{{ apartment.name }} </v-row>
               <v-row justify="center" class="item-middle-box-subtext mt-3">
                 {{ apartment.address }}
               </v-row>
@@ -158,15 +95,18 @@
       </v-row>
     </v-container>
     <v-container style="width: 100%; height: 200px">
-      <v-btn block color="primary" @click="movePathResultView">
-        최적 경로 탐색하기
-      </v-btn>
+      <v-btn block color="primary" @click="movePathResultView"> 최적 경로 탐색하기 </v-btn>
     </v-container>
   </v-container>
 </template>
 
 <script>
+import AptSearchTab from "@/components/apt/AptSearchTab.vue";
+
 export default {
+  components: {
+    AptSearchTab,
+  },
   data() {
     return {
       tab: null,
@@ -239,48 +179,40 @@ export default {
           let geocoder = new kakao.maps.services.Geocoder();
 
           // 주소로 좌표를 검색합니다
-          geocoder.addressSearch(
-            _this.startLocation.address,
-            function (result, status) {
-              // 정상적으로 검색이 완료됐으면
-              if (status === kakao.maps.services.Status.OK) {
-                let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          geocoder.addressSearch(_this.startLocation.address, function (result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+              let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                let infowindow = new kakao.maps.InfoWindow({
-                  content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.startLocation.address}</div>`,
-                  removable: true,
-                });
+              // 인포윈도우로 장소에 대한 설명을 표시합니다
+              let infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.startLocation.address}</div>`,
+                removable: true,
+              });
 
-                let startSrc =
-                    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
-                  startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
-                  startOption = {
-                    offset: new kakao.maps.Point(15, 43), // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
-                  };
+              let startSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
+                startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
+                startOption = {
+                  offset: new kakao.maps.Point(15, 43), // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+                };
 
-                // 출발 마커 이미지를 생성합니다
-                let startImage = new kakao.maps.MarkerImage(
-                  startSrc,
-                  startSize,
-                  startOption
-                );
+              // 출발 마커 이미지를 생성합니다
+              let startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
 
-                // 출발 마커를 생성합니다
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                let startMarker = new kakao.maps.Marker({
-                  map: _this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
-                  position: coords,
-                  image: startImage, // 출발 마커이미지를 설정합니다
-                });
+              // 출발 마커를 생성합니다
+              // 결과값으로 받은 위치를 마커로 표시합니다
+              let startMarker = new kakao.maps.Marker({
+                map: _this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
+                position: coords,
+                image: startImage, // 출발 마커이미지를 설정합니다
+              });
 
-                infowindow.open(_this.map, startMarker);
+              infowindow.open(_this.map, startMarker);
 
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                _this.map.setCenter(coords);
-              }
+              // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+              _this.map.setCenter(coords);
             }
-          );
+          });
         },
       }).open();
     },
@@ -298,48 +230,40 @@ export default {
           let geocoder = new kakao.maps.services.Geocoder();
 
           // 주소로 좌표를 검색합니다
-          geocoder.addressSearch(
-            _this.endLocation.address,
-            function (result, status) {
-              // 정상적으로 검색이 완료됐으면
-              if (status === kakao.maps.services.Status.OK) {
-                let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          geocoder.addressSearch(_this.endLocation.address, function (result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+              let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                let infowindow = new kakao.maps.InfoWindow({
-                  content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.endLocation.address}</div>`,
-                  removable: true,
-                });
+              // 인포윈도우로 장소에 대한 설명을 표시합니다
+              let infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.endLocation.address}</div>`,
+                removable: true,
+              });
 
-                let arriveSrc =
-                    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
-                  arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
-                  arriveOption = {
-                    offset: new kakao.maps.Point(15, 43), // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
-                  };
+              let arriveSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
+                arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
+                arriveOption = {
+                  offset: new kakao.maps.Point(15, 43), // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+                };
 
-                // 도착 마커 이미지를 생성합니다
-                let arriveImage = new kakao.maps.MarkerImage(
-                  arriveSrc,
-                  arriveSize,
-                  arriveOption
-                );
+              // 도착 마커 이미지를 생성합니다
+              let arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
 
-                // 도착 마커를 생성합니다
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                let arriveMarker = new kakao.maps.Marker({
-                  map: _this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
-                  position: coords,
-                  image: arriveImage, // 도착 마커이미지를 설정합니다
-                });
+              // 도착 마커를 생성합니다
+              // 결과값으로 받은 위치를 마커로 표시합니다
+              let arriveMarker = new kakao.maps.Marker({
+                map: _this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
+                position: coords,
+                image: arriveImage, // 도착 마커이미지를 설정합니다
+              });
 
-                infowindow.open(_this.map, arriveMarker);
+              infowindow.open(_this.map, arriveMarker);
 
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                _this.map.setCenter(coords);
-              }
+              // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+              _this.map.setCenter(coords);
             }
-          );
+          });
         },
       }).open();
     },
@@ -363,13 +287,10 @@ export default {
         this.markers.forEach((marker) => marker.setMap(null));
       }
 
-      const positions = markerPositions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
+      const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
 
       // 마커 이미지의 이미지 주소입니다
-      let imageSrc =
-        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+      let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
       if (positions.length > 0) {
         // 마커 이미지의 이미지 크기 입니다
@@ -387,10 +308,7 @@ export default {
             })
         );
 
-        const bounds = positions.reduce(
-          (bounds, latlng) => bounds.extend(latlng),
-          new kakao.maps.LatLngBounds()
-        );
+        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
 
         this.map.setBounds(bounds);
       }
