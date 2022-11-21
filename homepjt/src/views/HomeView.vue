@@ -288,7 +288,6 @@ export default {
       dongName: "",
       page: 1,
       search: "",
-      benched: 0,
     };
   },
   watch: {
