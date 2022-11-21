@@ -11,7 +11,9 @@
             <v-btn icon color="pink">
               <v-icon large color="red darken-2"> mdi-heart </v-icon>
             </v-btn>
-            <span class="ml-2"> 0 </span>
+            <span class="ml-2 mr-3"> 0 회 </span>
+            <v-icon large color="#999999"> mdi-eye </v-icon>
+            <span class="ml-2 mr-3"> 0 회 </span>
           </v-row>
         </v-container>
         <div class="apt-item-middle-text">아파트 명</div>
@@ -34,7 +36,7 @@
           ></v-data-table>
         </v-col>
       </v-col>
-      <v-col> 차트 영역 </v-col>
+      <v-col> <LineChart /> </v-col>
     </v-row>
     <v-divider></v-divider>
     <v-row>
@@ -61,7 +63,12 @@
 </template>
 
 <script>
+import LineChart from "@/components/chart/LineChart.vue";
+
 export default {
+  components: {
+    LineChart,
+  },
   data() {
     return {
       headers: [
