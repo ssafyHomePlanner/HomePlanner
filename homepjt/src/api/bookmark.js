@@ -2,17 +2,24 @@ import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
-// 관심 경로 리스트 출력
+// 경로 리스트 출력
 function searchPath(pahtInfo, success, fail) {
   api.post(`/bookmark/path/search`, JSON.stringify(pahtInfo)).then(success).catch(fail);
 }
 
+// 관심 경로 리스트 불러오기(출발지, 도착지)
+function searchBookmarkPath(memberId, succes, fail) {
+  api.get(`/bookmark/path/${memberId}`).then(succes).catch(fail);
+}
+
+// 관심 경로 리스트 불러오기(경유지)
+function searchBookmarkPathDetail(bookmarkPathId, success, fail) {
+  api.get(`/bookmark/path/detail/${bookmarkPathId}`).then(success).catch(fail);
+}
+
 // 관심 경로 등록
 function insertPath(pathInfo, memberId, pathName, success, fail) {
-  api
-    .post(`/bookmark/path/${memberId}/${pathName}`, JSON.stringify(pathInfo))
-    .then(success)
-    .catch(fail);
+  api.post(`/bookmark/path/${memberId}/${pathName}`, JSON.stringify(pathInfo)).then(success).catch(fail);
 }
 
 // 관심 경로 삭제
@@ -54,4 +61,6 @@ export {
   insertBookmarkApt,
   updateBoardLikeMember,
   checkBoardLikeMember,
+  searchBookmarkPath,
+  searchBookmarkPathDetail,
 };

@@ -7,13 +7,15 @@ import {
   insertBookmarkApt,
   updateBoardLikeMember,
   checkBoardLikeMember,
+  searchBookmarkPath,
+  searchBookmarkPathDetail,
 } from "@/api/bookmark.js";
 
 const bookmarkStore = {
   namespaced: true,
   state: {
-    pathInfo: {},
-    // pathInfoList: [],
+    // pathInfo: {},
+    pathInfoList: [],
     timePathList: [],
     distPathList: [],
     timeArr: [],
@@ -21,6 +23,9 @@ const bookmarkStore = {
 
     bookmarkAptList: [],
     bookmarkApt: {},
+
+    bookmarkPathList: [],
+    bookmarkPathDetailList: [],
 
     isClicked: false,
   },
@@ -30,7 +35,6 @@ const bookmarkStore = {
       state.pathInfo = payload;
     },
     SEARCH_PATH_INFO_LIST(state, payload) {
-      // state.pathInfoList = payload;
       state.timePathList = payload.timePointList;
       state.distPathList = payload.distPointList;
       state.timeArr = payload.timeArr;
@@ -60,6 +64,20 @@ const bookmarkStore = {
       state.bookmarkApt = null;
     },
 
+    SERACH_BOOKMARK_PATH_LIST(state, payload) {
+      state.bookmarkPathList = payload;
+    },
+    CLEAR_BOOKMARK_PATH_LIST(state) {
+      state.bookmarkPathList = [];
+    },
+
+    SEARCH_BOOKMARK_PATH_DETAIL_LIST(state, payload) {
+      state.bookmarkPathDetailList = payload;
+    },
+    CLEAR_BOOKMARK_PATH_DETAIL_LIST(state) {
+      state.bookmarkPathDetailList = [];
+    },
+
     SET_BOARD_LIKE_CLICK(state, payload) {
       state.isClicked = payload;
     },
@@ -70,6 +88,7 @@ const bookmarkStore = {
         payload,
         ({ data }) => {
           console.log("data : {}", data);
+          commit("CLEAR_PATH_INFO_LIST");
           commit("SEARCH_PATH_INFO_LIST", data);
           console.log("pathList : {}", data);
         },
@@ -78,6 +97,33 @@ const bookmarkStore = {
         }
       );
     },
+
+    searchBookmarkPathInfo({ commit }, memberId) {
+      searchBookmarkPath(
+        memberId,
+        ({ data }) => {
+          commit("CLEAR_BOOKMARK_PATH_LIST");
+          commit("SEARCH_BOOKMARK_PATH_LIST", data.bookmarkPathList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    searchBookmarkPathDetailInfo({ commit }, bookmarkPathId) {
+      searchBookmarkPathDetail(
+        bookmarkPathId,
+        ({ data }) => {
+          commit("CLEAR_BOOKMARK_PATH_DETAIL_LIST");
+          commit("SEARCH_BOOKMARK_PATH_DETAIL_LIST", data.bookmarkPathDetailList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
     insertPathList(context, payload) {
       const pathInfo = {
         aptCode: payload.aptCode,
