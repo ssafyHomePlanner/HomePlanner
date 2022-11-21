@@ -132,6 +132,18 @@ export default {
     moveResultPage() {
       this.$router.push({ name: "aptResultView" }).catch(()=>{});
     },
+    makeGugunList() {
+      this.CLEAR_GUGUN_LIST();
+      this.gugunName = "";
+      if (this.sidoName) this.searchGugunList(this.sidoName);
+    },
+    makeDongList() {
+      this.CLEAR_DONG_LIST();
+      this.dongName = "";
+      if (this.gugunName != "") this.searchDongList(this.gugunName);
+      console.log("sidoName : ", this.sidoName);
+      console.log("gugunName : ", this.gugunName);
+    },
     ...mapActions(aptStore, [
       "searchSidoList",
       "searchGugunList",
@@ -144,7 +156,7 @@ export default {
     ]),
   },
   computed: {
-    ...mapState(aptStore, ["sidoList", "gugunList", "dongList"]),
+    ...mapState(aptStore, ["sidoList", "gugunList", "dongList", "sidoName", "gugunName", "dongName"]),
     ...mapState(houseInfoStore, ["houseInfo", "houseInfoList"]),
   },
   data() {

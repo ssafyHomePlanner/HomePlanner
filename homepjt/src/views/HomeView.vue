@@ -288,7 +288,6 @@ export default {
       dongName: "",
       page: 1,
       search: "",
-      benched: 0,
     };
   },
   watch: {
@@ -338,6 +337,7 @@ export default {
       "searchSidoList",
       "searchGugunList",
       "searchDongList",
+      "setAddressInfo"
     ]),
     ...mapMutations(aptStore, [
       "CLEAR_SIDO_LIST",
@@ -406,6 +406,15 @@ export default {
       };
 
       this.getHouseInfoList(aptInfo);
+
+      const addressInfo = {
+        sidoName: this.sidoName,
+        gugunName: this.gugunName,
+        dongName: this.dongName,
+      }
+
+      this.setAddressInfo(addressInfo);
+
       this.$router.push({ name: "aptListView" }).catch(()=>{});
     },
     clickRecentSearch(recentStr){

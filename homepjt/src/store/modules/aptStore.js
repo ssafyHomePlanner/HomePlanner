@@ -6,7 +6,6 @@ const aptStore = {
     sidoList: [],
     gugunList: [],
     dongList: [],
-
     sidoName: "",
     gugunName: "",
     dongName: "",
@@ -89,6 +88,11 @@ const aptStore = {
         }
       );
     },
+
+    setAddressInfo({ commit }, payload){
+      commit("CLEAR_DONG_CODE_INFO");
+      commit("SET_DONG_CODE_INFO", payload);
+    }
   },
 };
 
