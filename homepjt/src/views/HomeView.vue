@@ -17,6 +17,7 @@
           >
             <v-container fill-height fluid>
               <v-autocomplete
+                no-data-text="해당 아파트가 존재하지 않습니다."
                 :items="houseInfoList"
                 :search-input.sync="search"
                 class="mt-5 ml-8 mr-8"
@@ -25,6 +26,7 @@
                 @input="inputChanged"
                 ref="autoinput"
                 v-model="aptName"
+                @keyup.enter="makeHouseInfoList"
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
