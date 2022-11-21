@@ -24,7 +24,12 @@ const memberStore = {
     isLogin: false,
     isLoginError: false,
     userInfo: {
-      id: ""
+      id: "",
+      name: "",
+      email: "",
+      age: "",
+      phone: "",
+      gender: "",
     },
     isValidToken: false,
 
@@ -121,14 +126,20 @@ const memberStore = {
           }
         },
         async (error) => {
-          console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+          console.log(
+            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
+            error.response.status
+          );
           commit("SET_IS_VALID_TOKEN", false);
           await dispatch("tokenRegeneration");
         }
       );
     },
     async tokenRegeneration({ commit, state }) {
-      console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
+      console.log(
+        "토큰 재발급 >> 기존 토큰 정보 : {}",
+        sessionStorage.getItem("access-token")
+      );
       await tokenRegeneration(
         JSON.stringify(state.userInfo),
         ({ data }) => {
@@ -152,16 +163,32 @@ const memberStore = {
                 } else {
                   console.log("리프레시 토큰 제거 실패");
                 }
-                alert("refresh token 기간이 만료되었습니다! 다시 로그인해 주세요.");
+                alert(
+                  "refresh token 기간이 만료되었습니다! 다시 로그인해 주세요."
+                );
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit("SET_USER_INFO", {
+                  id: "",
+                  name: "",
+                  email: "",
+                  age: "",
+                  phone: "",
+                  gender: "",
+                });
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "logInView" });
               },
               (error) => {
                 console.log(error);
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit("SET_USER_INFO", {
+                  id: "",
+                  name: "",
+                  email: "",
+                  age: "",
+                  phone: "",
+                  gender: "",
+                });
               }
             );
           }
@@ -174,7 +201,14 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_IS_LOGIN", false);
-            commit("SET_USER_INFO", null);
+            commit("SET_USER_INFO", {
+              id: "",
+              name: "",
+              email: "",
+              age: "",
+              phone: "",
+              gender: "",
+            });
             commit("SET_IS_VALID_TOKEN", false);
           } else {
             console.log("유저 정보 없음!!!!");
@@ -193,7 +227,14 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_IS_LOGIN", false);
-            commit("SET_USER_INFO", null);
+            commit("SET_USER_INFO", {
+              id: "",
+              name: "",
+              email: "",
+              age: "",
+              phone: "",
+              gender: "",
+            });
             commit("SET_IS_VALID_TOKEN", false);
           } else {
             console.log("유저 정보 없음 !!");
@@ -348,14 +389,28 @@ const memberStore = {
                   console.log("리프레시 토큰 제거 실패");
                 }
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit("SET_USER_INFO", {
+                  id: "",
+                  name: "",
+                  email: "",
+                  age: "",
+                  phone: "",
+                  gender: "",
+                });
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "logInView" });
               },
               (error) => {
                 console.log(error);
                 commit("SET_IS_LOGIN", false);
-                commit("SET_USER_INFO", null);
+                commit("SET_USER_INFO", {
+                  id: "",
+                  name: "",
+                  email: "",
+                  age: "",
+                  phone: "",
+                  gender: "",
+                });
               }
             );
           } else {
@@ -418,7 +473,7 @@ const memberStore = {
     },
 
     // 회원 최근 검색 삭제
-    deleteRecentDataInfo({commit}, payload) {
+    deleteRecentDataInfo({ commit }, payload) {
       deleteRecentData(
         payload.memberId,
         payload.recentId,
