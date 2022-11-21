@@ -2,7 +2,9 @@
   <div class="item">
     <div class="item-bg">
       <div class="item-header-text">Home Planner</div>
-      <div class="item-header-subtext">내 집 마련, 언제까지 생각만 할껀가요?</div>
+      <div class="item-header-subtext">
+        내 집 마련, 언제까지 생각만 할껀가요?
+      </div>
       <v-container>
         <v-row justify="center">
           <v-sheet
@@ -14,7 +16,7 @@
             width="825"
           >
             <v-container fill-height fluid>
-              <v-autocomplete
+              <v-combobox
                 :items="houseInfoList"
                 class="mt-5 ml-8 mr-8"
                 solo
@@ -24,8 +26,8 @@
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
-              ></v-autocomplete>
-              <v-row justify="center">
+              ></v-combobox>
+              <v-row justify="center" class="ml-2 mr-2">
                 <v-col cols="3">
                   <v-select
                     v-model="sidoName"
@@ -43,10 +45,16 @@
                   ></v-select>
                 </v-col>
                 <v-col cols="3">
-                  <v-select v-model="dongName" :items="dongList" label="읍면동 선택"></v-select>
+                  <v-select
+                    v-model="dongName"
+                    :items="dongList"
+                    label="읍면동 선택"
+                  ></v-select>
                 </v-col>
-                <v-col cols="3">
-                  <button @click="makeHouseInfoList">버튼</button>
+                <v-col cols="auto">
+                  <v-btn color="primary" x-large @click="makeHouseInfoList"
+                    >검색</v-btn
+                  >
                 </v-col>
               </v-row>
             </v-container>
@@ -63,7 +71,9 @@
             <v-row justify="center" class="mt-5">
               <v-icon size="109" color="green darken-2"> mdi-bank </v-icon>
             </v-row>
-            <v-row class="item-middle-box-text mt-4" justify="center"> 저축 계획 세우기 </v-row>
+            <v-row class="item-middle-box-text mt-4" justify="center">
+              저축 계획 세우기
+            </v-row>
             <v-row justify="center" class="item-middle-box-subtext mt-4">
               내가 찜한 아파트를 목표로 <br />
               저축 계획 세우기
@@ -73,7 +83,9 @@
             <v-row justify="center" class="mt-5">
               <v-icon size="109" color="red darken-2"> mdi-check </v-icon>
             </v-row>
-            <v-row class="item-middle-box-text mt-4" justify="center"> 계획 점검하기 </v-row>
+            <v-row class="item-middle-box-text mt-4" justify="center">
+              계획 점검하기
+            </v-row>
             <v-row justify="center" class="item-middle-box-subtext mt-4">
               내가 목표로 한 저축 계획이 <br />
               실천할 수 있는 계획인지 체크
@@ -81,9 +93,13 @@
           </v-sheet>
           <v-sheet height="278" width="214" elevation="4" class="pt-7">
             <v-row justify="center" class="mt-5">
-              <v-icon size="109" color="yellow darken-2"> mdi-clock-outline </v-icon>
+              <v-icon size="109" color="yellow darken-2">
+                mdi-clock-outline
+              </v-icon>
             </v-row>
-            <v-row class="item-middle-box-text mt-4" justify="center"> 계획 실천하기 </v-row>
+            <v-row class="item-middle-box-text mt-4" justify="center">
+              계획 실천하기
+            </v-row>
             <v-row justify="center" class="item-middle-box-subtext mt-4">
               내 계획을 잘 지키고 있는지 <br />
               지속적으로 체크하기
@@ -93,7 +109,9 @@
             <v-row justify="center" class="mt-5">
               <v-icon size="109" color="blue darken-2"> mdi-home </v-icon>
             </v-row>
-            <v-row class="item-middle-box-text mt-4" justify="center"> 내 집 마련 성공!! </v-row>
+            <v-row class="item-middle-box-text mt-4" justify="center">
+              내 집 마련 성공!!
+            </v-row>
             <v-row justify="center" class="item-middle-box-subtext mt-4">
               드디어 내가 원하던 집을 <br />
               구매했다!
@@ -112,16 +130,31 @@
       </div>
       <v-container class="mt-8 mb-8" style="width: 1167px">
         <v-row justify="space-between" class="ml-6 mr-6">
-          <v-sheet height="164" width="274" elevation="4" class="pt-4" rounded="xl">
+          <v-sheet
+            height="164"
+            width="274"
+            elevation="4"
+            class="pt-4"
+            rounded="xl"
+          >
             <v-row justify="start" class="ml-8">
               <v-col cols="auto" class="pa-0 mt-7">
-                <v-sheet class="rounded-circle pt-1" elevation="2" height="30" width="30"
+                <v-sheet
+                  class="rounded-circle pt-1"
+                  elevation="2"
+                  height="30"
+                  width="30"
                   >1</v-sheet
                 >
               </v-col>
               <v-col cols="auto" class="ml-3">
-                <v-row class="item-middle-box-text mt-4" justify="start"> 위브더스테이트 </v-row>
-                <v-row justify="start" class="item-middle-box-subtext mt-3 text-start">
+                <v-row class="item-middle-box-text mt-4" justify="start">
+                  위브더스테이트
+                </v-row>
+                <v-row
+                  justify="start"
+                  class="item-middle-box-subtext mt-3 text-start"
+                >
                   경기도 부천시 원미구<br /><br />
                   건축 년도: 2010.08
                 </v-row>
@@ -129,16 +162,31 @@
             </v-row>
           </v-sheet>
           <v-icon size="40"> mdi-play </v-icon>
-          <v-sheet height="164" width="274" elevation="4" class="pt-4" rounded="xl">
+          <v-sheet
+            height="164"
+            width="274"
+            elevation="4"
+            class="pt-4"
+            rounded="xl"
+          >
             <v-row justify="start" class="ml-8">
               <v-col cols="auto" class="pa-0 mt-7">
-                <v-sheet class="rounded-circle pt-1" elevation="2" height="30" width="30"
+                <v-sheet
+                  class="rounded-circle pt-1"
+                  elevation="2"
+                  height="30"
+                  width="30"
                   >2</v-sheet
                 >
               </v-col>
               <v-col cols="auto" class="ml-3">
-                <v-row class="item-middle-box-text mt-4" justify="start"> 소사 SKView </v-row>
-                <v-row justify="start" class="item-middle-box-subtext mt-3 text-start">
+                <v-row class="item-middle-box-text mt-4" justify="start">
+                  소사 SKView
+                </v-row>
+                <v-row
+                  justify="start"
+                  class="item-middle-box-subtext mt-3 text-start"
+                >
                   경기도 부천시 소사구<br /><br />
                   건축 년도: 2016.07
                 </v-row>
@@ -146,16 +194,31 @@
             </v-row>
           </v-sheet>
           <v-icon size="40"> mdi-play </v-icon>
-          <v-sheet height="164" width="274" elevation="4" class="pt-4" rounded="xl">
+          <v-sheet
+            height="164"
+            width="274"
+            elevation="4"
+            class="pt-4"
+            rounded="xl"
+          >
             <v-row justify="start" class="ml-8">
               <v-col cols="auto" class="pa-0 mt-7">
-                <v-sheet class="rounded-circle pt-1" elevation="2" height="30" width="30"
+                <v-sheet
+                  class="rounded-circle pt-1"
+                  elevation="2"
+                  height="30"
+                  width="30"
                   >3</v-sheet
                 >
               </v-col>
               <v-col cols="auto" class="ml-3">
-                <v-row class="item-middle-box-text mt-4" justify="start"> 범박 힐스테이트 </v-row>
-                <v-row justify="start" class="item-middle-box-subtext mt-3 text-start">
+                <v-row class="item-middle-box-text mt-4" justify="start">
+                  범박 힐스테이트
+                </v-row>
+                <v-row
+                  justify="start"
+                  class="item-middle-box-subtext mt-3 text-start"
+                >
                   경기도 부천시 도봉구<br /><br />
                   건축 년도: 2013.02
                 </v-row>
@@ -207,8 +270,16 @@ export default {
     this.searchSidoList();
   },
   methods: {
-    ...mapActions(aptStore, ["searchSidoList", "searchGugunList", "searchDongList"]),
-    ...mapMutations(aptStore, ["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST"]),
+    ...mapActions(aptStore, [
+      "searchSidoList",
+      "searchGugunList",
+      "searchDongList",
+    ]),
+    ...mapMutations(aptStore, [
+      "CLEAR_SIDO_LIST",
+      "CLEAR_GUGUN_LIST",
+      "CLEAR_DONG_LIST",
+    ]),
     ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
     ...mapMutations(houseInfoStore, [
       "SEARCH_HOUSE_INFO_LIST",
@@ -237,6 +308,7 @@ export default {
           this.timeout = null;
         }
         this.timeout = setTimeout(() => {
+          console.log("makeHouseInfoListAuto");
           console.log("aptName : ", this.aptName);
           this.getHouseInfoListAuto(this.aptName);
           console.log("in HomeView auto :", this.houseInfoList);
@@ -259,6 +331,7 @@ export default {
       };
 
       this.getHouseInfoList(aptInfo);
+      this.$router.push({ name: "aptListView" });
     },
   },
 };
