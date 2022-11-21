@@ -147,7 +147,8 @@ const routes = [
     path: "/bookmark/planner",
     name: "plannerBookmarkView",
     component: PlannerBookmarkView,
-
+  },
+  {
     path: "/planner/result",
     name: "plannerResult",
     component: PlannerResultView,
