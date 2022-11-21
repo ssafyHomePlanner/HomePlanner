@@ -34,11 +34,11 @@
                 <template v-slot:no-data>
                   <v-row justify="space-between" class="ma-2">
                     <h3 class="ma-2">최근 검색어</h3>
-                    <v-btn text class="ma-2"> 최근검색 전체삭제 </v-btn>
+                    <v-btn @click="deleteAllRecentSearch" text class="ma-2">전체삭제 </v-btn>
                   </v-row>
                   <v-list-item
                     v-for="(recentData, index) in recentDataList"
-                    :key="index"
+                    :key="index" @click="clickRecentSearch(recentData.searchedName)"
                   >
                     <v-list-item-action>
                       <v-icon>mdi-clock-outline</v-icon>
@@ -54,8 +54,6 @@
                       </v-btn>
                     </v-list-item-action>
                   </v-list-item>
-
-                  <v-divider></v-divider>
                 </template>
               </v-autocomplete>
               <v-row justify="center" class="ml-2 mr-2">
@@ -387,6 +385,17 @@ export default {
       console.log("gugun Name : ", this.gugunName);
       console.log("dong Name : ", this.dongName);
       console.log("apt Name : ", this.aptObject.apartmentName);
+      console.log("userInfo.id: ", this.$store.state.memberStore.userInfo.id);
+
+      if(this.$store.state.memberStore.userInfo.id.length >= 1 && this.aptObject.apartmentName.length >= 1){
+        console.log("최근 검색어 저장 로직 실행");
+        let tempMember = {
+          memberId: this.$store.state.memberStore.userInfo.id,
+          data: this.aptObject.apartmentName
+        }
+
+        this.insertRecentDataInfo(tempMember);
+      }
 
       const aptInfo = {
         sidoName: this.sidoName,
@@ -399,6 +408,15 @@ export default {
       this.getHouseInfoList(aptInfo);
       this.$router.push({ name: "aptListView" });
     },
+    clickRecentSearch(recentStr){
+      this.aptObject.apartmentName = recentStr;
+      this.makeHouseInfoList();
+    },
+    deleteAllRecentSearch(){
+      if(this.$store.state.memberStore.userInfo.id.length >= 1){
+        this.deleteRecentDataInfoAll(this.$store.state.memberStore.userInfo.id);
+      }
+    }
   },
 };
 </script>
