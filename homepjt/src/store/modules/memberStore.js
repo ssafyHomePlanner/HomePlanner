@@ -86,16 +86,13 @@ const memberStore = {
 
             console.log(data);
             alert("로그인 성공!!");
-          } else {
-            alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
-            commit("SET_IS_LOGIN", false);
-            commit("SET_IS_LOGIN_ERROR", true);
-            commit("SET_IS_VALID_TOKEN", false);
-            router.push({ name: "logInView" });
           }
         },
         (error) => {
-          alert("로그인 성공 !!! @@");
+          alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
+          commit("SET_IS_LOGIN", false);
+          commit("SET_IS_LOGIN_ERROR", true);
+          commit("SET_IS_VALID_TOKEN", false);
           router.push({ name: "logInView" });
           console.log(error);
         }
@@ -115,10 +112,7 @@ const memberStore = {
           }
         },
         async (error) => {
-          console.log(
-            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
+          console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
           commit("SET_IS_VALID_TOKEN", false);
           await dispatch("tokenRegeneration");
         }
