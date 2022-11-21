@@ -6,6 +6,7 @@ import {
   selectHouseComment,
   deleteHouseComment,
   searchHouseInfoDetail,
+  searchHouseDeal,
   addHouseInfoViewCnt,
 } from "@/api/houseInfo.js";
 
@@ -78,6 +79,32 @@ const houseInfoStore = {
         }
       );
     },
+    getHouseInfoDetailInfo({ commit }, payload) {
+      const houseInfo = {
+        aptName: payload.aptName,
+        dongName: payload.dongName,
+        gugunName: payload.gugunName,
+        sidoName: payload.sidoName,
+        maxArea: payload.maxArea,
+        minArea: payload.minArea,
+        maxBuildYear: payload.maxBuildYear,
+        minBuildYear: payload.minBuildYear,
+        maxDealAmount: payload.maxDealAmount,
+        minDealAmount: payload.minDealAmount,
+      };
+
+      searchHouseInfoDetail(
+        houseInfo,
+        payload.page,
+        ({ data }) => {
+          commit("CLEAR_HOUSE_INFO_LIST");
+          commit("SEARCH_HOUSE_INFO_LIST", data.houseInfoList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
 
     getHouseInfoListAuto({ commit }, aptName) {
       const params = { aptName: aptName };
@@ -143,7 +170,7 @@ const houseInfoStore = {
     },
 
     getHouseInfoDeal({ commit }, aptCode) {
-      searchHouseInfoDetail(
+      searchHouseDeal(
         aptCode,
         ({ data }) => {
           commit("SEARCH_HOUSE_DEAL_LIST", data.houseDealList);

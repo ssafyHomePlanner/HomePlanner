@@ -7,6 +7,11 @@ function searchHouseInfo(houseInfo, page, success, fail) {
   api.post(`/house/${page}`, JSON.stringify(houseInfo)).then(success).catch(fail);
 }
 
+//아파트 상세 검색
+function searchHouseInfoDetail(houseInfo, page, succes, fail) {
+  api.post(`/house/detail/${page}`, JSON.stringify(houseInfo)).then(succes).catch(fail);
+}
+
 // 아파트 검색 자동완성
 function searchHouseInfoAuto(params, success, fail) {
   api.get(`/house`, { params: params }).then(success).catch(fail);
@@ -33,7 +38,7 @@ function deleteHouseComment(houseCommentId, success, fail) {
 }
 
 // 아파트 상세 검색(거래내역)
-function searchHouseInfoDetail(aptCode, success, fail) {
+function searchHouseDeal(aptCode, success, fail) {
   api.get(`/house/deal/${aptCode}`).then(success).catch(fail);
 }
 
@@ -51,4 +56,5 @@ export {
   deleteHouseComment,
   searchHouseInfoDetail,
   addHouseInfoViewCnt,
+  searchHouseDeal,
 };
