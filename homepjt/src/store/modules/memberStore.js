@@ -23,7 +23,9 @@ const memberStore = {
   state: {
     isLogin: false,
     isLoginError: false,
-    userInfo: null,
+    userInfo: {
+      id: ""
+    },
     isValidToken: false,
 
     memberId: null,
