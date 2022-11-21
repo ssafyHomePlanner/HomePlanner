@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     moveToUpdate() {
-      this.$router.push({ name: "updateMemberInfoView" });
+      this.$router.push({ name: "updateMemberInfoView" }).catch(()=>{});
     },
   },
 };

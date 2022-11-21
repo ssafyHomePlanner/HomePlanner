@@ -76,7 +76,7 @@ export default {
       this.moveBoardDetail();
     },
     moveBoardDetail() {
-      this.$router.push({ name: "boardDetail" });
+      this.$router.push({ name: "boardDetail" }).catch(()=>{});
     },
     ...mapActions(boardStore, ["searchBoardList", "insertBoardOne", "searchBoardComment"]),
   },

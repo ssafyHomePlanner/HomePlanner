@@ -138,7 +138,7 @@ export default {
     ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
 
     moveResult() {
-      this.$router.push({ name: "plannerResult" });
+      this.$router.push({ name: "plannerResult" }).catch(()=>{});
     },
     save(date) {
       this.$refs.menu.save(date);

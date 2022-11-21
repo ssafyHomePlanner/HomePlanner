@@ -130,7 +130,7 @@ export default {
       this.moveResultPage();
     },
     moveResultPage() {
-      this.$router.push({ name: "aptResultView" });
+      this.$router.push({ name: "aptResultView" }).catch(()=>{});
     },
     ...mapActions(aptStore, [
       "searchSidoList",

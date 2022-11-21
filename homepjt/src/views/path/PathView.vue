@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     movePathResultView() {
-      this.$router.push({ name: "pathResult" });
+      this.$router.push({ name: "pathResult" }).catch(()=>{});
     },
     clickLikeApartment(location) {
       let cnt = 0;
