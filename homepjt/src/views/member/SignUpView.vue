@@ -9,7 +9,7 @@
           <v-row>
             <v-col>
               <v-text-field
-                autofocus="true"
+                :autofocus="true"
                 v-model="memberId"
                 :rules="memberIdRules"
                 label="아이디를 입력하세요."

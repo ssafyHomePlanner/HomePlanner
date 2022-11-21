@@ -21,7 +21,7 @@
           </v-row>
           <v-form class="mb-5" ref="form" lazy-validation>
             <v-text-field
-              autofocus="true"
+              :autofocus="true"
               v-model="member.id"
               :rules="memberIdRules"
               label="아이디"
