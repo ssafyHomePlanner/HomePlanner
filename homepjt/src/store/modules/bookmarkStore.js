@@ -64,7 +64,7 @@ const bookmarkStore = {
       state.bookmarkApt = null;
     },
 
-    SERACH_BOOKMARK_PATH_LIST(state, payload) {
+    SEARCH_BOOKMARK_PATH_LIST(state, payload) {
       state.bookmarkPathList = payload;
     },
     CLEAR_BOOKMARK_PATH_LIST(state) {

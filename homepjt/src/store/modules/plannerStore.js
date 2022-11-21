@@ -70,11 +70,14 @@ const plannerStore = {
       );
     },
 
-    selectPlannerInfo({ commit }, payload) {
+    selectPlannerInfo({ commit }, memberId) {
       selectPlanner(
-        payload.memberId,
+        memberId,
         ({ data }) => {
-          commit("SEARCH_PLANNER_INFO", data.plannerList);
+          commit("CLEAR_PLANNER_INFO");
+          commit("SEARCH_PLANNER_INFO_LIST", data.plannerList);
+          console.log(data);
+          console.log(data.plannerList);
         },
         (error) => {
           console.log(error);
