@@ -107,7 +107,7 @@
           :headers="headers"
           :items="houseInfoList"
           :items-per-page="10"
-          @click:row="moveResultPage"
+          @click:row="clickRow"
           class="elevation-1"
         ></v-data-table>
       </v-col>
@@ -123,6 +123,12 @@ const houseInfoStore = "houseInfoStore";
 
 export default {
   methods: {
+    clickRow(value) {
+      console.log(value);
+      this.searchHouseInfo(value);
+      console.log("houseInfo", this.houseInfo);
+      this.moveResultPage();
+    },
     moveResultPage() {
       this.$router.push({ name: "aptResultView" });
     },
@@ -131,7 +137,11 @@ export default {
       "searchGugunList",
       "searchDongList",
     ]),
-    ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
+    ...mapActions(houseInfoStore, [
+      "getHouseInfoList",
+      "getHouseInfoListAuto",
+      "searchHouseInfo",
+    ]),
   },
   computed: {
     ...mapState(aptStore, ["sidoList", "gugunList", "dongList"]),
