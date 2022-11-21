@@ -26,6 +26,7 @@
                 @input="inputChanged"
                 ref="autoinput"
                 v-model="aptObject"
+                clearable
                 @keyup.enter="makeHouseInfoList"
                 item-text="apartmentName"
                 item-value="apartmentName"
@@ -267,8 +268,10 @@ export default {
   watch: {
     search(val) {
       if (!val) {
+        this.aptObject.apartmentName = "";
         return;
       }
+      this.aptObject.apartmentName = val;
       this.makeHouseInfoListAuto(val);
     },
   },
