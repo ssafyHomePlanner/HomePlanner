@@ -127,7 +127,9 @@
         </v-row>
       </v-container>
       <v-container fluid style="max-width: 600px">
-        <v-btn outlined block class="mt-8">구매 계획 세우러 가기</v-btn>
+        <v-btn @click="movePlannerView" outlined block class="mt-8"
+          >구매 계획 세우러 가기</v-btn
+        >
       </v-container>
     </v-container>
     <v-container class="mt-16 pt-16 pb-16 mb-16 text-center">
@@ -235,7 +237,9 @@
         </v-row>
       </v-container>
       <v-container fluid style="max-width: 600px">
-        <v-btn outlined block class="mt-8">아파트 최적 경로 찾기</v-btn>
+        <v-btn @click="movePathView" outlined block class="mt-8"
+          >아파트 최적 경로 찾기</v-btn
+        >
       </v-container>
     </v-container>
   </div>
@@ -285,6 +289,12 @@ export default {
     this.searchSidoList();
   },
   methods: {
+    movePathView() {
+      this.$router.push({ name: "pathView" });
+    },
+    movePlannerView() {
+      this.$router.push({ name: "plannerView" });
+    },
     inputChanged() {
       //↓ For clear v-menu slot
       this.$refs.autoinput.blur();
