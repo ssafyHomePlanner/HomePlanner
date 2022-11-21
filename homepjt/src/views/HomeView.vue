@@ -318,7 +318,7 @@ export default {
       console.log("gugunName : ", this.gugunName);
     },
     makeHouseInfoListAuto(value) {
-      console.log("makeHouseInfoListAuto", value);
+      // console.log("makeHouseInfoListAuto", value);
       // cancel pending call
       clearTimeout(this._timerId);
 
