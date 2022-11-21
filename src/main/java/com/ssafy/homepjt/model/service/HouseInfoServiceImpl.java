@@ -4,11 +4,13 @@ import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
 import com.ssafy.homepjt.model.mapper.HouseInfoMapper;
+import com.ssafy.homepjt.model.request.AptSearchDetailRequestDto;
 import com.ssafy.homepjt.model.request.AptSearchRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,45 @@ public class HouseInfoServiceImpl implements HouseInfoService {
     }
 
     @Override
+    public Map<String, Object> selectHouseInfoDetail(AptSearchDetailRequestDto aptSearchDetailRequestDto, int page) {
+        if(aptSearchDetailRequestDto.getSidoName() == null){
+            aptSearchDetailRequestDto.setSidoName("");
+        }
+        if(aptSearchDetailRequestDto.getGugunName()== null){
+            aptSearchDetailRequestDto.setGugunName("");
+        }
+        if(aptSearchDetailRequestDto.getDongName() == null){
+            aptSearchDetailRequestDto.setDongName("");
+        }
+        if(aptSearchDetailRequestDto.getAptName() == null){
+            aptSearchDetailRequestDto.setAptName("");
+        }
+
+        int totalCount = houseInfoMapper.selectHouseInfoDetailTotalCount(aptSearchDetailRequestDto);
+        int totalPage = totalCount / COUNT_PER_PAGE;
+        if (totalPage % COUNT_PER_PAGE > 0) {
+            totalPage++;
+        }
+
+        int startPage = (page - 1) / 10 * 10 + 1;
+        int endPage = startPage + 9;
+        if (endPage > totalPage) {
+            endPage = totalPage;
+        }
+
+        int startRow = (page - 1) * COUNT_PER_PAGE;
+        List<HouseInfoDto> houseInfoDtoList = houseInfoMapper.selectHouseInfoDetail(aptSearchDetailRequestDto, startRow, COUNT_PER_PAGE);
+        Map<String, Object> result = new HashMap<>();
+        result.put("startPage", startPage);
+        result.put("endPage", endPage);
+        result.put("currPage", page);
+        result.put("totalPage", totalPage);
+        result.put("houseInfoList", houseInfoDtoList);
+
+        return result;
+    }
+
+    @Override
     public void updateReadCount(long aptCode) throws SQLException {
         houseInfoMapper.updateReadCount(aptCode);
     }
@@ -86,4 +127,6 @@ public class HouseInfoServiceImpl implements HouseInfoService {
     public void deleteHouseComment(int houseCommentId) throws SQLException {
         houseInfoMapper.deleteHouseComment(houseCommentId);
     }
+
+
 }

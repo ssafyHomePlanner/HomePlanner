@@ -3,6 +3,7 @@ package com.ssafy.homepjt.model.service;
 import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
+import com.ssafy.homepjt.model.request.AptSearchDetailRequestDto;
 import com.ssafy.homepjt.model.request.AptSearchRequestDto;
 
 import java.sql.SQLException;
@@ -34,4 +35,7 @@ public interface HouseInfoService {
 
     // 아파트 댓글 삭제
     void deleteHouseComment(int houseCommentId) throws SQLException;
+
+    // 아파트 상세 검색
+    Map<String, Object> selectHouseInfoDetail(AptSearchDetailRequestDto aptSearchDetailRequestDto, int page);
 }

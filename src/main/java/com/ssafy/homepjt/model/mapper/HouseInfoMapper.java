@@ -3,6 +3,7 @@ package com.ssafy.homepjt.model.mapper;
 import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
+import com.ssafy.homepjt.model.request.AptSearchDetailRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,4 +41,8 @@ public interface HouseInfoMapper {
     // 아파트 댓글 삭제
     void deleteHouseComment(int houseCommentId);
 
+    // 아파트 상세 검색
+    List<HouseInfoDto> selectHouseInfoDetail(@Param("dto")AptSearchDetailRequestDto aptSearchDetailRequestDto, @Param("start") int startRow, @Param("cnt") int count);
+
+    int selectHouseInfoDetailTotalCount(AptSearchDetailRequestDto aptSearchDetailRequestDto);
 }

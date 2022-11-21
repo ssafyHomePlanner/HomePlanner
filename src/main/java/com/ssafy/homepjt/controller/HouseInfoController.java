@@ -3,6 +3,7 @@ package com.ssafy.homepjt.controller;
 import com.ssafy.homepjt.model.dto.HouseCommentDto;
 import com.ssafy.homepjt.model.dto.HouseDealDto;
 import com.ssafy.homepjt.model.dto.HouseInfoDto;
+import com.ssafy.homepjt.model.request.AptSearchDetailRequestDto;
 import com.ssafy.homepjt.model.request.AptSearchRequestDto;
 import com.ssafy.homepjt.model.service.HouseInfoService;
 import io.swagger.annotations.Api;
@@ -69,6 +70,41 @@ public class HouseInfoController {
         }
     }
 
+    // 아파트 상세 검색
+    @ApiOperation(value = "아파트 상세 검색")
+    @PostMapping("/detail/{page}")
+    public ResponseEntity<Map<String, Object>> selectHouseInfoDetail(@RequestBody AptSearchDetailRequestDto aptSearchDetailRequestDto, @PathVariable("page") Optional<Integer> page) {
+        if (!page.isPresent()) {
+            page = Optional.of(1);
+        }
+
+        logger.info("houseinfo search detail controller  dto: {}", aptSearchDetailRequestDto);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+
+            Map<String, Object> result = houseInfoService.selectHouseInfoDetail(aptSearchDetailRequestDto, page.get().intValue());
+            int startPage = (int) result.get("startPage");
+            int endPage = (int) result.get("endPage");
+            int currPage = (int) result.get("currPage");
+            int totalPage = (int) result.get("totalPage");
+            List<HouseInfoDto> houseInfoList = (List<HouseInfoDto>) result.get("houseInfoList");
+            resultMap.put("startPage", startPage);
+            resultMap.put("endPage", endPage);
+            resultMap.put("currPage", currPage);
+            resultMap.put("totalPage", totalPage);
+            resultMap.put("houseInfoList", houseInfoList);
+
+            logger.info("아파트 상세 검색 성공 : {}", result);
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("아파트 상세 검색 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // 아파트 조회수 증가
     @ApiOperation(value = "아파트 조회수 증가")
     @PutMapping("/update/view/{aptCode}")
@@ -128,6 +164,7 @@ public class HouseInfoController {
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // 아파트 댓글 조회
     @ApiOperation(value = "아파트 댓글 조회")
