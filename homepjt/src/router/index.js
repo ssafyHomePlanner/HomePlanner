@@ -18,6 +18,7 @@ import PasswordSearchView from "../views/member/PasswordSearchView";
 import MyPageView from "../views/member/MyPageView";
 import UpdateMemberInfoView from "../views/member/UpdateMemberInfoView";
 import BookmarkView from "../views/bookmark/BookmarkView";
+import AptResultView from "../views/apt/AptResultView";
 
 import store from "@/store";
 
@@ -85,6 +86,12 @@ const routes = [
     path: "/apt/list",
     name: "aptListView",
     component: AptListView,
+  },
+  {
+    path: "/apt/result",
+    name: "aptResultView",
+    beforeEnter: onlyAuthUser,
+    component: AptResultView,
   },
   {
     path: "/login",
