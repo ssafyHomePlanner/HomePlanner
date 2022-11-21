@@ -21,19 +21,9 @@
                 아파트 커뮤니티</router-link
               >
 
-              <router-link :to="{ name: 'aptBookmarkView' }" class="link">
+              <router-link :to="{ name: 'bookmarkView' }" class="link">
                 <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
-                아파트 즐겨찾기</router-link
-              >
-
-              <router-link :to="{ name: 'pathBookmarkView' }" class="link">
-                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
-                경로 즐겨찾기</router-link
-              >
-
-              <router-link :to="{ name: 'plannerBookmarkView' }" class="link">
-                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
-                플래너 즐겨찾기</router-link
+                즐겨찾기</router-link
               >
             </v-row>
           </v-container>
@@ -45,9 +35,7 @@
             <v-row justify="end">
               <router-link :to="{ name: 'myPageView' }" class="link mr-4"> 마이페이지</router-link>
               <!-- <router-link :to="{ name: 'logInView' }" class="link"> 로그아웃</router-link> -->
-              <v-icon size="25" color="blue darken-2" @click.prevent="onClickLogout">
-                mdi-account-multiple
-              </v-icon>
+              <v-icon size="25" color="blue darken-2" @click.prevent="onClickLogout"> mdi-account-multiple </v-icon>
               로그아웃
             </v-row>
           </v-container>

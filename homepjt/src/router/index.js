@@ -17,9 +17,7 @@ import IdSearchView from "../views/member/IdSearchView";
 import PasswordSearchView from "../views/member/PasswordSearchView";
 import MyPageView from "../views/member/MyPageView";
 import UpdateMemberInfoView from "../views/member/UpdateMemberInfoView";
-import AptBookmarkView from "../views/bookmark/AptBookmarkView";
-import PathBookmarkView from "../views/bookmark/PathBookmarkView";
-import PlannerBookmarkView from "../views/bookmark/PlannerBookmarkView";
+import BookmarkView from "../views/bookmark/BookmarkView";
 
 import store from "@/store";
 
@@ -138,29 +136,18 @@ const routes = [
     beforeEnter: onlyAuthUser,
     component: PlannerView,
   },
-  {
-    path: "/bookmark/apt",
-    name: "aptBookmarkView",
-    beforeEnter: onlyAuthUser,
-    component: AptBookmarkView,
-  },
-  {
-    path: "/bookmark/path",
-    name: "pathBookmarkView",
-    beforeEnter: onlyAuthUser,
-    component: PathBookmarkView,
-  },
-  {
-    path: "/bookmark/planner",
-    name: "plannerBookmarkView",
-    beforeEnter: onlyAuthUser,
-    component: PlannerBookmarkView,
-  },
+
   {
     path: "/planner/result",
     name: "plannerResult",
     beforeEnter: onlyAuthUser,
     component: PlannerResultView,
+  },
+  {
+    path: "/bookmark",
+    name: "bookmarkView",
+    beforeEnter: onlyAuthUser,
+    component: BookmarkView,
   },
 ];
 
