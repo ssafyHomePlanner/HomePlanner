@@ -100,6 +100,9 @@
         </v-row>
       </v-sheet>
     </v-row>
+    <v-row>
+      <v-btn @click="moveResultPage" color="primary">아파트 검색 결과</v-btn>
+    </v-row>
     <v-row justify="center" class="mt-12">
       <v-col class="ml-8 mr-8 pl-8 pr-8">
         <v-data-table
@@ -115,6 +118,11 @@
 
 <script>
 export default {
+  methods: {
+    moveResultPage() {
+      this.$router.push({ name: "aptResultView" });
+    },
+  },
   data() {
     return {
       headers: [
