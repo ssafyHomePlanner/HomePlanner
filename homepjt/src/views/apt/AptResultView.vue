@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height fluid class="ma-5">
-    <v-row justify="start">
+    <v-row justify="center">
       <v-col cols="auto">
         <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
@@ -30,8 +30,8 @@
         </v-container>
       </v-col>
     </v-row>
-    <v-row class="mb-12">
-      <v-col style="height: 600px; width: 800px">
+    <v-row class="mb-12" justify="center">
+      <v-col cols="auto">
         <v-data-table
           :height="550"
           :headers="headers"
@@ -40,7 +40,7 @@
           class="elevation-1"
         ></v-data-table>
       </v-col>
-      <v-col style="height: 600px; width: 800px">
+      <v-col cols="auto">
         <LineChart :chart-data="charData" />
       </v-col>
     </v-row>
@@ -115,10 +115,12 @@ export default {
   data() {
     return {
       headers: [
-        { text: "거래년도", value: "dealYear" },
-        { text: "전용미터 (m2)", value: "area" },
-        { text: "층", value: "floor" },
-        { text: "거래 금액 (만원)", value: "dealAmount" },
+        { text: "거래년도", value: "dealYear", width: "5%" },
+        { text: "월", value: "dealMonth", width: "5%" },
+        { text: "일", value: "dealDay", width: "5%" },
+        { text: "거래 금액 (만원)", value: "dealAmount", align: "center" },
+        { text: "전용미터 (m2)", value: "area", width: "10%" },
+        { text: "층", value: "floor", width: "10%" },
       ],
     };
   },
