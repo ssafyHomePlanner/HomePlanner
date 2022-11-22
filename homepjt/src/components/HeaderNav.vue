@@ -29,11 +29,11 @@
           <v-container class="mr-4">
             <v-row justify="end">
               <router-link :to="{ name: 'bookmarkView' }" class="link mr-4">
-                <v-icon size="25" color="blue darken-2"> mdi-account-multiple </v-icon>
+                <v-icon size="25" color="blue darken-2"> mdi-star </v-icon>
                 즐겨찾기</router-link
               >
 
-              <router-link :to="{ name: 'myPageView' }" class="link mr-4"> 마이페이지</router-link>
+              <router-link :to="{ name: 'myPageView' }" class="link mr-4">                 <v-icon size="25" color="blue darken-2"> mdi-account-circle </v-icon> 마이페이지</router-link>
               <v-icon size="25" color="blue darken-2" @click.prevent="onClickLogout"> mdi-logout </v-icon>
               <v-btn text @click.prevent="onClickLogout"> 로그아웃 </v-btn>
             </v-row>
