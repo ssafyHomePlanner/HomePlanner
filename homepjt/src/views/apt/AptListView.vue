@@ -61,9 +61,9 @@
           </v-col>
           <v-col align-self="center">
             <v-range-slider
+              v-model="priceRange"
               thumb-label="always"
               thumb-size="35"
-              :value="[10, 50]"
               max="150"
               min="0"
               hide-details
@@ -81,9 +81,9 @@
           </v-col>
           <v-col align-self="center">
             <v-range-slider
+              v-model="areaRange"
               thumb-label="always"
               thumb-size="35"
-              :value="[10, 50]"
               max="130"
               min="0"
               hide-details
@@ -101,9 +101,9 @@
           </v-col>
           <v-col align-self="center">
             <v-range-slider
+              v-model="buildYearRange"
               thumb-label="always"
               thumb-size="40"
-              :value="[2010, 2020]"
               v-bind:max="currentYear"
               min="2000"
               hide-details
@@ -207,6 +207,9 @@ export default {
       gugun: "",
       dong: "",
       currentYear: "2022",
+      priceRange: [10, 50],
+      areaRange: [10, 50],
+      buildYearRange: [2010, 2020],
       headers: [
         { text: "건축년도", value: "buildYear" },
         { text: "아파트 이름", value: "apartmentName" },
