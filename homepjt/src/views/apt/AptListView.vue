@@ -1,5 +1,8 @@
 <template>
   <v-container fill-height fluid class="ma-7">
+    <v-row justify="center" class="ma-8">
+      <h1>아파트 상세 검색</h1>
+    </v-row>
     <v-row justify="center">
       <v-sheet
         height="400"
@@ -118,16 +121,18 @@
       </v-sheet>
     </v-row>
 
-    <v-row justify="center" class="mt-12 mb-12">
-      <v-col class="ma-8 pl-8 pr-8">
-        <v-data-table
-          :height="600"
-          :headers="headers"
-          :items="houseInfoList"
-          :items-per-page="10"
-          @click:row="clickRow"
-          class="elevation-1"
-        ></v-data-table>
+    <v-row justify="center" class="mt-3 mb-12">
+      <v-col cols="auto" class="ma-8 pl-8 pr-8">
+        <v-container style="min-width:1000px">
+          <v-data-table
+            :height="500"
+            :headers="headers"
+            :items="houseInfoList"
+            :items-per-page="10"
+            @click:row="clickRow"
+            class="elevation-1"
+          ></v-data-table>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>
