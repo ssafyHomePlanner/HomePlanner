@@ -33,7 +33,14 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-2" class="align-center">
-        <v-sheet rounded="pill" color="white" elevation="3" height="50" width="90" class="ma-8">
+        <v-sheet
+          rounded="pill"
+          color="white"
+          elevation="3"
+          height="50"
+          width="90"
+          class="ma-8"
+        >
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
               <v-btn icon color="pink">
@@ -53,12 +60,17 @@
     <div>
       <v-divider></v-divider>
     </div>
-    <board-comment-item v-for="(comment, index) in boardComment" :key="index" :comment="comment" />
+    <board-comment-item
+      v-for="(comment, index) in boardComment"
+      :key="index"
+      :comment="comment"
+    />
     <v-divider></v-divider>
     <v-container>
       <v-row>
         <v-col cols="col-8">
           <v-text-field
+            @keyup.enter="clickEnrollComment"
             v-model="comment.content"
             counter="25"
             hint="댓글을 작성하세요"
@@ -67,7 +79,9 @@
           ></v-text-field>
         </v-col>
         <v-col cols="col-4">
-          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large>등록</v-btn>
+          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large
+            >등록</v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -97,7 +111,10 @@ export default {
     ...mapState(memberStore, "userInfo"),
   },
   created() {
-    if (this.$store.state.memberStore.userInfo.id != this.$store.state.boardStore.board.memberId) {
+    if (
+      this.$store.state.memberStore.userInfo.id !=
+      this.$store.state.boardStore.board.memberId
+    ) {
       this.addBoardView(this.board.id);
     }
   },
@@ -117,15 +134,16 @@ export default {
       this.moveList();
     },
     moveList() {
-      this.$router.push({ name: "boardList" }).catch(()=>{});
+      this.$router.push({ name: "boardList" }).catch(() => {});
     },
     moveUpdate() {
-      this.$router.push({ name: "boardUpdate" }).catch(()=>{});
+      this.$router.push({ name: "boardUpdate" }).catch(() => {});
     },
 
     checkId() {
       if (
-        this.$store.state.memberStore.userInfo.id == this.$store.state.boardStore.board.memberId
+        this.$store.state.memberStore.userInfo.id ==
+        this.$store.state.boardStore.board.memberId
       ) {
         return true;
       } else {
