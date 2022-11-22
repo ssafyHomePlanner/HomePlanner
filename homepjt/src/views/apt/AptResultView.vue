@@ -184,13 +184,30 @@ export default {
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(36.35515, 127.298415),
+        center: new kakao.maps.LatLng(
+          this.$store.state.houseInfoStore.houseInfo.lat,
+          this.$store.state.houseInfoStore.houseInfo.lon
+        ),
         level: 5,
       };
 
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
+
+      // 마커가 표시될 위치입니다
+      let markerPosition = new kakao.maps.LatLng(
+        this.$store.state.houseInfoStore.houseInfo.lat,
+        this.$store.state.houseInfoStore.houseInfo.lon
+      );
+
+      // 마커를 생성합니다
+      let marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+
+      // 마커가 지도 위에 표시되도록 설정합니다
+      marker.setMap(this.map);
 
       // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
       let zoomControl = new kakao.maps.ZoomControl();
