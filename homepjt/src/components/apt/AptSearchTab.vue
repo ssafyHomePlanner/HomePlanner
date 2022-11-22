@@ -29,7 +29,7 @@
           </v-tab-item>
 
           <v-tab-item>
-            <v-container style="width: 500px; height: 280px"> 아파트 검색 화면 </v-container>
+            <!-- <v-container style="width: 500px; height: 280px"> 아파트 검색 화면 </v-container> -->
             <v-container fill-height fluid>
               <v-autocomplete
                 :items="houseInfoList"
@@ -41,7 +41,7 @@
                 ref="autoinput"
                 v-model="aptObject"
                 clearable
-                @keyup.enter="makeHouseInfoList"
+                @keyup.enter="selectHouseInfo"
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
@@ -53,7 +53,8 @@
                   </v-row>
                   <v-list-item
                     v-for="(recentData, index) in recentDataList"
-                    :key="index" @click="clickRecentSearch(recentData.searchedName)"
+                    :key="index"
+                    @click="clickRecentSearch(recentData.searchedName)"
                   >
                     <v-list-item-action>
                       <v-icon>mdi-clock-outline</v-icon>
@@ -71,6 +72,7 @@
                   </v-list-item>
                 </template>
               </v-autocomplete>
+            </v-container>
           </v-tab-item>
         </v-tabs-items>
       </v-row>
@@ -79,31 +81,104 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 const bookmarkStore = "bookmarkStore";
 const memberStore = "memberStore";
+const houseInfoStore = "houseInfoStore";
 
 export default {
   data() {
     return {
       tab: null,
+      aptObject: {},
+      page: 1,
+      search: "",
+      benched: 0,
     };
+  },
+  watch: {
+    search(val) {
+      if (!val) {
+        this.aptObject.apartmentName = "";
+        this.CLEAR_HOUSE_INFO_LIST();
+        return;
+      }
+      this.aptObject.apartmentName = val;
+      this.makeHouseInfoListAuto(val);
+    },
   },
   computed: {
     ...mapState(bookmarkStore, ["bookmarkAptList"]),
-    ...mapState(memberStore, ["userInfo"]),
+    ...mapState(memberStore, ["userInfo", "recentDataList"]),
+    ...mapState(houseInfoStore, ["houseInfoList"]),
   },
   mounted() {
     this.selectBookmarkAptList(this.userInfo.id);
+    this.selectRecentDataInfo(this.$store.state.memberStore.userInfo.id);
   },
   methods: {
     clickLikeApartment(item) {
       // 해당 아파트 상세 페이지로 이동해야함
       this.$emit("clickLikeApartment", item);
+      console.log(item.aptCode + " " + item.apartmentName);
+      this.apartmentName = item.apartmentName;
+    },
+    inputChanged() {
+      //↓ For clear v-menu slot
+      this.$refs.autoinput.blur();
+      setTimeout(() => {
+        this.$refs.autoinput.focus();
+      }, 500);
+    },
+    makeHouseInfoListAuto(value) {
+      // console.log("makeHouseInfoListAuto", value);
+      // cancel pending call
+      clearTimeout(this._timerId);
+
+      this._timerId = setTimeout(() => {
+        this.getHouseInfoListAuto(value);
+      }, 500);
+
+      this.$emit("enterApartment", this.aptObject);
+    },
+    clickRecentSearch(recentStr) {
+      this.aptObject.apartmentName = recentStr;
+      this.apartmentName = recentStr;
+    },
+    selectHouseInfo() {
+      console.log(this.aptObject);
+      this.$emit("enterApartment", this.aptObject);
+    },
+    deleteAllRecentSearch() {
+      if (this.$store.state.memberStore.userInfo.id.length >= 1) {
+        this.deleteRecentDataInfoAll(this.$store.state.memberStore.userInfo.id);
+      }
+    },
+    deleteRecentSearch(recentId) {
+      // console.log("recentId", recentId);
+      let payload = {
+        memberId: this.$store.state.memberStore.userInfo.id,
+        recentId: recentId,
+      };
+
+      this.deleteRecentDataInfo(payload);
     },
 
     ...mapActions(bookmarkStore, ["selectBookmarkAptList"]),
+    ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
+    ...mapActions(memberStore, [
+      "selectRecentDataInfo",
+      "insertRecentDataInfo",
+      "deleteRecentDataInfoAll",
+      "deleteRecentDataInfo",
+    ]),
+    ...mapMutations(houseInfoStore, [
+      "SEARCH_HOUSE_INFO_LIST",
+      "SEARCH_HOUSE_INFO",
+      "CLEAR_HOUSE_INFO_LIST",
+      "CLEAR_HOUSE_INFO",
+    ]),
   },
 };
 </script>

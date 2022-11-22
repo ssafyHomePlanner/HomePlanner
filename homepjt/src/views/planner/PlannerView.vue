@@ -97,7 +97,10 @@
     </v-col>
 
     <v-col class="">
-      <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" />
+      <AptSearchTab
+        v-on:clickLikeApartment="clickLikeApartment"
+        v-on:enterApartment="enterApartment"
+      />
     </v-col>
   </v-container>
 </template>
@@ -138,7 +141,7 @@ export default {
     ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
 
     moveResult() {
-      this.$router.push({ name: "plannerResult" }).catch(()=>{});
+      this.$router.push({ name: "plannerResult" }).catch(() => {});
     },
     save(date) {
       this.$refs.menu.save(date);
@@ -156,6 +159,10 @@ export default {
     changeAptAmount(aptCode) {
       this.getHouseInfoDeal(aptCode);
       console.log("after2 = ", this.houseDealList);
+    },
+
+    enterApartment(aptObject) {
+      this.aptName = aptObject.apartmentName;
     },
   },
 };

@@ -172,8 +172,8 @@ const houseInfoStore = {
       );
     },
 
-    getHouseInfoDeal({ commit }, aptCode) {
-      searchHouseDeal(
+    async getHouseInfoDeal({ commit }, aptCode) {
+      await searchHouseDeal(
         aptCode,
         ({ data }) => {
           commit("CLEAR_HOUSE_DEAL_LIST");
