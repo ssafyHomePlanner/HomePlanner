@@ -1,48 +1,48 @@
 <template>
   <v-container fill-height fluid class="ma-5">
-    <v-row justify="start">
+    <v-row justify="center">
       <v-col cols="auto">
         <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
       </v-col>
-      <v-col>
-        <v-container class="heart-shape">
-          <v-row justify="center" class="align-center">
-            <v-btn icon color="pink">
-              <v-icon large color="red darken-2"> mdi-heart </v-icon>
-            </v-btn>
-            <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
-            <v-icon large color="#999999"> mdi-eye </v-icon>
-            <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
-          </v-row>
+      <v-col cols="auto">
+        <v-container style="width: 500px; height: 625px">
+          <v-container class="heart-shape">
+            <v-row justify="center" class="align-center">
+              <v-btn icon color="pink">
+                <v-icon large color="red darken-2"> mdi-heart </v-icon>
+              </v-btn>
+              <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
+              <v-icon large color="#999999"> mdi-eye </v-icon>
+              <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
+            </v-row>
+          </v-container>
+          <div class="apt-item-middle-text">
+            아파트 명: {{ houseInfo.apartmentName }}
+          </div>
+          <div class="apt-item-middle-text">
+            건축년도: {{ houseInfo.buildYear }}년
+          </div>
+          <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
+          <div class="apt-item-middle-text">
+            도로명주소: {{ houseInfo.roadName }}
+          </div>
         </v-container>
-        <div class="apt-item-middle-text">
-          아파트 명: {{ houseInfo.apartmentName }}
-        </div>
-        <div class="apt-item-middle-text">
-          건축년도: {{ houseInfo.buildYear }}년
-        </div>
-        <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
-        <div class="apt-item-middle-text">
-          도로명주소: {{ houseInfo.roadName }}
-        </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>아이콘 영역 </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-col class="ml-8 mr-8 pl-8 pr-8">
-          <v-data-table
-            :headers="headers"
-            :items="desserts"
-            :items-per-page="5"
-            class="elevation-1"
-          ></v-data-table>
-        </v-col>
+    <v-row class="mb-12" justify="center">
+      <v-col cols="auto">
+        <v-data-table
+          :height="550"
+          :headers="headers"
+          :items="houseDealList"
+          :items-per-page="10"
+          class="elevation-1"
+        ></v-data-table>
       </v-col>
-      <v-col> <LineChart /> </v-col>
+      <v-col cols="auto">
+        <LineChart :chart-data="charData" />
+      </v-col>
     </v-row>
     <v-divider></v-divider>
     <v-row>
@@ -70,7 +70,7 @@
 
 <script>
 import LineChart from "@/components/chart/LineChart.vue";
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 const houseInfoStore = "houseInfoStore";
 
 export default {
@@ -79,118 +79,79 @@ export default {
   },
   computed: {
     ...mapState(houseInfoStore, ["houseInfo", "houseDealList"]),
+    charData() {
+      let labelList = [];
+      let dataList = [];
+
+      this.$store.state.houseInfoStore.houseDealList.forEach(
+        (houseDealData) => {
+          let dateTransfer =
+            houseDealData.dealYear.toString() +
+            "년 " +
+            houseDealData.dealMonth.toString().padStart(2, "0") +
+            "월 " +
+            houseDealData.dealDay.toString().padStart(2, "0") +
+            "일";
+
+          labelList.push(dateTransfer);
+          dataList.push(houseDealData.dealAmount.replace(",", ""));
+        }
+      );
+
+      let chartData = {
+        labels: labelList.reverse(),
+        datasets: [
+          {
+            label: "거래 내역",
+            backgroundColor: "#f87979",
+            data: dataList.reverse(),
+          },
+        ],
+      };
+
+      return chartData;
+    },
   },
   data() {
     return {
       headers: [
-        {
-          text: "Dessert (100g serving)",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" },
-      ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%",
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%",
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%",
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%",
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%",
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%",
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%",
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%",
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%",
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%",
-        },
+        { text: "거래년도", value: "dealYear", width: "5%" },
+        { text: "월", value: "dealMonth", width: "5%" },
+        { text: "일", value: "dealDay", width: "5%" },
+        { text: "거래 금액 (만원)", value: "dealAmount", align: "center" },
+        { text: "전용미터 (m2)", value: "area", width: "10%" },
+        { text: "층", value: "floor", width: "10%" },
       ],
     };
   },
   methods: {
-    ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(36.35515, 127.298415),
+        center: new kakao.maps.LatLng(
+          this.$store.state.houseInfoStore.houseInfo.lat,
+          this.$store.state.houseInfoStore.houseInfo.lon
+        ),
         level: 5,
       };
 
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
+
+      // 마커가 표시될 위치입니다
+      let markerPosition = new kakao.maps.LatLng(
+        this.$store.state.houseInfoStore.houseInfo.lat,
+        this.$store.state.houseInfoStore.houseInfo.lon
+      );
+
+      // 마커를 생성합니다
+      let marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+
+      // 마커가 지도 위에 표시되도록 설정합니다
+      marker.setMap(this.map);
 
       // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
       let zoomControl = new kakao.maps.ZoomControl();

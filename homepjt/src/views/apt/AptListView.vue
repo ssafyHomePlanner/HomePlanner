@@ -1,12 +1,12 @@
 <template>
-  <v-container fill-height fluid class="ma-5">
+  <v-container fill-height fluid class="ma-7">
     <v-row justify="center">
       <v-sheet
-        height="360"
+        height="400"
         width="1000"
         elevation="4"
         rounded="xl"
-        class="pt-3"
+        class="pt-8"
       >
         <v-row class="ma-1">
           <v-col cols="auto" align-self="center" style="min-width: 100px">
@@ -14,9 +14,10 @@
           </v-col>
           <v-col align-self="center">
             <v-text-field
+              @keyup.enter="clickSearchBtn"
               hide-details
               class="mt-0 pt-0"
-              v-model="searchedApartName"
+              v-model="search"
             ></v-text-field>
           </v-col>
           <v-col cols="auto">
@@ -118,8 +119,9 @@
     </v-row>
 
     <v-row justify="center" class="mt-12 mb-12">
-      <v-col class="ml-8 mr-8 pl-8 pr-8">
+      <v-col class="ma-8 pl-8 pr-8">
         <v-data-table
+          :height="600"
           :headers="headers"
           :items="houseInfoList"
           :items-per-page="10"
@@ -140,35 +142,43 @@ const houseInfoStore = "houseInfoStore";
 export default {
   methods: {
     clickSearchBtn() {
+      const TransferPongToSquareMeter = 3.306;
+      const TransferOneToMan = 10000;
+
+      let minAreaSquareMeter = this.areaRange[0] * TransferPongToSquareMeter;
+      let maxAreaSquareMeter = this.areaRange[1] * TransferPongToSquareMeter;
+
+      let minDealAmountMan = this.priceRange[0] * TransferOneToMan;
+      let maxDealAmountMan = this.priceRange[1] * TransferOneToMan;
+
       let serachedData = {
-        aptName: this.searchedApartName,
+        aptName: this.search,
         dongName: this.dong,
         gugunName: this.gugun,
         sidoName: this.sido,
-        minArea: this.areaRange[0],
-        maxArea: this.areaRange[1],
+        minArea: minAreaSquareMeter,
+        maxArea: maxAreaSquareMeter,
         minBuildYear: this.buildYearRange[0],
         maxBuildYear: this.buildYearRange[1],
-        minDealAmount: this.priceRange[0],
-        maxDealAmount: this.priceRange[1],
+        minDealAmount: minDealAmountMan,
+        maxDealAmount: maxDealAmountMan,
         page: 1,
       };
 
-      console.log("serachedData", serachedData);
+      this.getHouseInfoDetailInfo(serachedData);
     },
     initData() {
       let today = new Date();
       this.currentYear = today.getFullYear(); // 년도
-      console.log("currentYear", this.currentYear);
 
       this.sido = this.$store.state.aptStore.sidoName;
       this.gugun = this.$store.state.aptStore.gugunName;
       this.dong = this.$store.state.aptStore.dongName;
+      this.search = this.$store.state.aptStore.searchedApartName;
     },
     clickRow(value) {
-      console.log(value);
       this.searchHouseInfo(value);
-      console.log("houseInfo", this.houseInfo);
+      this.getHouseInfoDeal(value.aptCode);
       this.moveResultPage();
     },
     moveResultPage() {
@@ -197,6 +207,7 @@ export default {
       "getHouseInfoListAuto",
       "searchHouseInfo",
       "getHouseInfoDetailInfo",
+      "getHouseInfoDeal",
     ]),
     ...mapMutations(aptStore, [
       "CLEAR_SIDO_LIST",
@@ -224,6 +235,7 @@ export default {
       sido: "",
       gugun: "",
       dong: "",
+      search: "",
       currentYear: "2022",
       priceRange: [10, 50],
       areaRange: [10, 50],
