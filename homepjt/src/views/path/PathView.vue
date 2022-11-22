@@ -107,7 +107,7 @@
       </v-row>
     </v-container>
     <v-container style="width: 100%; height: 200px">
-      <v-btn block color="primary" @click="movePathResultView"> 최적 경로 탐색하기 </v-btn>
+      <v-btn style="height:60px" block color="primary" @click="movePathResultView"> 최적 경로 탐색하기 </v-btn>
     </v-container>
   </v-container>
 </template>
