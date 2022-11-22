@@ -1,12 +1,12 @@
 <template>
-  <v-container fill-height fluid class="ma-5">
+  <v-container fill-height fluid class="ma-7">
     <v-row justify="center">
       <v-sheet
-        height="360"
+        height="400"
         width="1000"
         elevation="4"
         rounded="xl"
-        class="pt-3"
+        class="pt-8"
       >
         <v-row class="ma-1">
           <v-col cols="auto" align-self="center" style="min-width: 100px">
@@ -119,8 +119,9 @@
     </v-row>
 
     <v-row justify="center" class="mt-12 mb-12">
-      <v-col class="ml-8 mr-8 pl-8 pr-8">
+      <v-col class="ma-8 pl-8 pr-8">
         <v-data-table
+          :height="600"
           :headers="headers"
           :items="houseInfoList"
           :items-per-page="10"
