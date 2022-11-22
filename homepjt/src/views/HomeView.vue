@@ -156,7 +156,7 @@
         </v-row>
       </v-container>
       <v-container fluid style="max-width: 600px">
-        <v-btn @click="movePlannerView" outlined block class="mt-8"
+        <v-btn style="height:60px" @click="movePlannerView" outlined block class="mt-8"
           >구매 계획 세우러 가기</v-btn
         >
       </v-container>
@@ -266,7 +266,7 @@
         </v-row>
       </v-container>
       <v-container fluid style="max-width: 600px">
-        <v-btn @click="movePathView" outlined block class="mt-8"
+        <v-btn style="height:60px" @click="movePathView" outlined block class="mt-8"
           >아파트 최적 경로 찾기</v-btn
         >
       </v-container>
