@@ -28,18 +28,18 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <v-col class="ml-8 mr-8 pl-8 pr-8">
-          <v-data-table
-            :headers="headers"
-            :items="houseDealList"
-            :items-per-page="10"
-            class="elevation-1"
-          ></v-data-table>
-        </v-col>
+    <v-row class="mb-12">
+      <v-col style="height: 600px; width: 800px">
+        <v-data-table
+          :headers="headers"
+          :items="houseDealList"
+          :items-per-page="10"
+          class="elevation-1"
+        ></v-data-table>
       </v-col>
-      <v-col> <LineChart :chart-data="charData" /> </v-col>
+      <v-col style="height: 600px; width: 800px">
+        <LineChart :chart-data="charData" />
+      </v-col>
     </v-row>
     <v-divider></v-divider>
     <v-row>
