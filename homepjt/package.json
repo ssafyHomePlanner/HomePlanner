@@ -14,6 +14,7 @@
     "jwt-decode": "^3.1.2",
     "vue": "^2.6.14",
     "vue-chartjs": "^4.1.2",
+    "vue-plain-pagination": "^0.3.0",
     "vue-router": "^3.5.1",
     "vuetify": "^2.6.12",
     "vuex": "^3.6.2",

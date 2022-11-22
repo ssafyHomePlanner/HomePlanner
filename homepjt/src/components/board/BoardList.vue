@@ -21,7 +21,8 @@
         </v-col>
       </v-row>
       <div class="text-center mt-8">
-        <v-pagination v-model="page" :length="6"></v-pagination>
+        <p>{{ page }} ~ {{ totalPage }}</p>
+        <v-pagination v-model="page" :length="30" @input="changeList(page)"></v-pagination>
       </div>
     </v-container>
   </div>
@@ -62,7 +63,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(boardStore, ["boardList"]),
+    ...mapState(boardStore, ["boardList", "currPage", "endPage", "totalPage"]),
     ...mapState(memberStore, ["userInfo"]),
   },
   mounted() {
@@ -75,8 +76,11 @@ export default {
       });
       this.moveBoardDetail();
     },
+    changeList(page) {
+      this.searchBoardList(page);
+    },
     moveBoardDetail() {
-      this.$router.push({ name: "boardDetail" }).catch(()=>{});
+      this.$router.push({ name: "boardDetail" }).catch(() => {});
     },
     ...mapActions(boardStore, ["searchBoardList", "insertBoardOne", "searchBoardComment"]),
   },

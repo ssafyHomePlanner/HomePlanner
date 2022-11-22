@@ -15,11 +15,20 @@ const boardStore = {
     boardList: [],
     board: {},
     boardComment: [],
+
+    startPage: 0,
+    currPage: 0,
+    totalPage: 0,
+    endPage: 0,
   },
   getters: {},
   mutations: {
     SEARCH_BOARD_LIST(state, payload) {
-      state.boardList = payload;
+      state.boardList = payload.boardList;
+      state.startPage = payload.startPage;
+      state.currPage = payload.currPage;
+      state.totalPage = payload.totalPage;
+      state.endPage = payload.endPage;
     },
     INSERT_BOARD_ONE(state, payload) {
       state.board = payload;
@@ -43,7 +52,7 @@ const boardStore = {
       listArticle(
         payload,
         ({ data }) => {
-          commit("SEARCH_BOARD_LIST", data.boardList);
+          commit("SEARCH_BOARD_LIST", data);
         },
         (error) => {
           console.log(error);
