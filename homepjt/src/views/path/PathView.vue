@@ -138,6 +138,10 @@
 <script>
 import AptSearchTab from "@/components/apt/AptSearchTab.vue";
 
+import { mapActions } from "vuex";
+
+const bookmarkStore = "bookmarkStore";
+
 export default {
   components: {
     AptSearchTab,
@@ -164,6 +168,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(bookmarkStore, ["getPathInfoList"]),
     searchOptimalPath() {
       let requestList = [];
 
@@ -197,16 +202,20 @@ export default {
       this.pathList.forEach((element) => {
         let temp = {
           aptCode: element.aptCode,
-        aptName: element.apartmentName,
-        lat: element.lat,
-        lon: element.lon,
+          aptName: element.apartmentName,
+          lat: element.lat,
+          lon: element.lon,
         };
         requestList.push(temp);
       });
 
       requestList.push(end);
 
-      console.log(requestList);
+      // console.log(requestList);
+      this.getPathInfoList(requestList);
+
+      this.movePathResultView();
+
     },
     movePathResultView() {
       this.$router.push({ name: "pathResult" }).catch(() => {});
