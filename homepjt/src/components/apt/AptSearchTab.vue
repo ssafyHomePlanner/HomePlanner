@@ -4,7 +4,7 @@
       <v-row>
         <v-tabs v-model="tab">
           <v-tab>찜한 아파트</v-tab>
-          <v-tab>아파트 검색</v-tab>
+          <!-- <v-tab>아파트 검색</v-tab> -->
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -28,8 +28,7 @@
             </v-container>
           </v-tab-item>
 
-          <v-tab-item>
-            <!-- <v-container style="width: 500px; height: 280px"> 아파트 검색 화면 </v-container> -->
+          <!-- <v-tab-item>
             <v-container fill-height fluid>
               <v-autocomplete
                 :items="houseInfoList"
@@ -48,7 +47,7 @@
               </v-autocomplete>
               <button @click="clickButton">검색</button>
             </v-container>
-          </v-tab-item>
+          </v-tab-item> -->
         </v-tabs-items>
       </v-row>
     </v-container>
