@@ -112,7 +112,6 @@
         <include refid="houseDealColumns"/>
         from housedeal
         where apt_code = #{aptCode}
-        order by cast(replace(deal_amount, ',', '') as unsigned) desc
     </select>
 
     <!-- 아파트 댓글 조회 -->
