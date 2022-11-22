@@ -13,7 +13,14 @@
             아파트 검색
           </v-col>
           <v-col align-self="center">
-            <v-text-field hide-details class="mt-0 pt-0"></v-text-field>
+            <v-text-field
+              hide-details
+              class="mt-0 pt-0"
+              v-model="searchedApartName"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn color="primary">검색</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -24,7 +31,7 @@
           <v-row justify="start" class="ml-3">
             <v-col cols="3">
               <v-select
-                v-model="sidoName"
+                v-model="sido"
                 :items="sidoList"
                 label="시도 선택"
                 @change="makeGugunList"
@@ -32,7 +39,7 @@
             </v-col>
             <v-col cols="3">
               <v-select
-                v-model="gugunName"
+                v-model="gugun"
                 :items="gugunList"
                 label="시군구 선택"
                 @change="makeDongList"
@@ -40,7 +47,7 @@
             </v-col>
             <v-col cols="3">
               <v-select
-                v-model="dongName"
+                v-model="dong"
                 :items="dongList"
                 label="읍면동 선택"
               ></v-select>
@@ -54,31 +61,37 @@
           </v-col>
           <v-col align-self="center">
             <v-range-slider
-              hint="Im a hint"
-              max="50"
-              min="-50"
-              step="20"
-              ticks="always"
-              tick-size="4"
+              v-model="priceRange"
+              thumb-label="always"
+              thumb-size="35"
+              max="150"
+              min="0"
               hide-details
-            ></v-range-slider>
+            >
+              <template v-slot:thumb-label="item">
+                {{ item.value }}억
+              </template>
+            </v-range-slider>
           </v-col>
         </v-row>
         <v-divider></v-divider>
         <v-row class="ma-1">
           <v-col cols="auto" align-self="center" style="min-width: 100px">
-            전용 면적
+            전용 면적(평)
           </v-col>
           <v-col align-self="center">
             <v-range-slider
-              hint="Im a hint"
-              max="50"
-              min="-50"
-              step="20"
-              ticks="always"
-              tick-size="4"
+              v-model="areaRange"
+              thumb-label="always"
+              thumb-size="35"
+              max="130"
+              min="0"
               hide-details
-            ></v-range-slider>
+            >
+              <template v-slot:thumb-label="item">
+                {{ item.value }}평
+              </template>
+            </v-range-slider>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -88,14 +101,17 @@
           </v-col>
           <v-col align-self="center">
             <v-range-slider
-              hint="Im a hint"
-              max="50"
-              min="-50"
-              step="20"
-              ticks="always"
-              tick-size="4"
+              v-model="buildYearRange"
+              thumb-label="always"
+              thumb-size="40"
+              v-bind:max="currentYear"
+              min="2000"
               hide-details
-            ></v-range-slider>
+            >
+              <template v-slot:thumb-label="item">
+                {{ item.value }}년
+              </template></v-range-slider
+            >
           </v-col>
         </v-row>
       </v-sheet>
@@ -116,13 +132,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 const aptStore = "aptStore";
 const houseInfoStore = "houseInfoStore";
 
 export default {
   methods: {
+    initData() {
+      let today = new Date();
+      this.currentYear = today.getFullYear(); // 년도
+      console.log("currentYear", this.currentYear);
+
+      this.sido = this.$store.state.aptStore.sidoName;
+      this.gugun = this.$store.state.aptStore.gugunName;
+      this.dong = this.$store.state.aptStore.dongName;
+    },
     clickRow(value) {
       console.log(value);
       this.searchHouseInfo(value);
@@ -130,19 +155,20 @@ export default {
       this.moveResultPage();
     },
     moveResultPage() {
-      this.$router.push({ name: "aptResultView" }).catch(()=>{});
+      this.$router.push({ name: "aptResultView" }).catch(() => {});
     },
     makeGugunList() {
       this.CLEAR_GUGUN_LIST();
-      this.gugunName = "";
-      if (this.sidoName) this.searchGugunList(this.sidoName);
+      this.CLEAR_DONG_LIST();
+
+      this.gugun = "";
+      this.dong = "";
+      if (this.sido) this.searchGugunList(this.sido);
     },
     makeDongList() {
       this.CLEAR_DONG_LIST();
-      this.dongName = "";
-      if (this.gugunName != "") this.searchDongList(this.gugunName);
-      console.log("sidoName : ", this.sidoName);
-      console.log("gugunName : ", this.gugunName);
+      this.dong = "";
+      if (this.gugun != "") this.searchDongList(this.gugun);
     },
     ...mapActions(aptStore, [
       "searchSidoList",
@@ -154,13 +180,36 @@ export default {
       "getHouseInfoListAuto",
       "searchHouseInfo",
     ]),
+    ...mapMutations(aptStore, [
+      "CLEAR_SIDO_LIST",
+      "CLEAR_GUGUN_LIST",
+      "CLEAR_DONG_LIST",
+    ]),
   },
   computed: {
-    ...mapState(aptStore, ["sidoList", "gugunList", "dongList", "sidoName", "gugunName", "dongName"]),
+    ...mapState(aptStore, [
+      "sidoList",
+      "gugunList",
+      "dongList",
+      "sidoName",
+      "gugunName",
+      "dongName",
+      "searchedApartName",
+    ]),
     ...mapState(houseInfoStore, ["houseInfo", "houseInfoList"]),
+  },
+  mounted() {
+    this.initData();
   },
   data() {
     return {
+      sido: "",
+      gugun: "",
+      dong: "",
+      currentYear: "2022",
+      priceRange: [10, 50],
+      areaRange: [10, 50],
+      buildYearRange: [2010, 2020],
       headers: [
         { text: "건축년도", value: "buildYear" },
         { text: "아파트 이름", value: "apartmentName" },

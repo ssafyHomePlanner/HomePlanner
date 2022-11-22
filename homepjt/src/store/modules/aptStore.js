@@ -3,6 +3,7 @@ import { searchSido, searchGugun, searchDong, searchDongCode } from "@/api/apt.j
 const aptStore = {
   namespaced: true,
   state: {
+    searchedApartName: "",
     sidoList: [],
     gugunList: [],
     dongList: [],
@@ -30,7 +31,9 @@ const aptStore = {
     CLEAR_DONG_LIST(state) {
       state.dongList = [];
     },
-
+    SET_SEARCHED_APART_NAME(state, payload){
+      state.searchedApartName = payload;
+    },
     SET_DONG_CODE_INFO(state, payload) {
       state.sidoName = payload.sidoName;
       state.gugunName = payload.gugunName;
@@ -75,7 +78,6 @@ const aptStore = {
         }
       );
     },
-
     searchDongCodeInfo({ commit }, dongCode) {
       searchDongCode(
         dongCode,
@@ -88,10 +90,12 @@ const aptStore = {
         }
       );
     },
-
     setAddressInfo({ commit }, payload){
       commit("CLEAR_DONG_CODE_INFO");
       commit("SET_DONG_CODE_INFO", payload);
+    },
+    setSearchedApartName({ commit }, payload){
+      commit("SET_SEARCHED_APART_NAME", payload)
     }
   },
 };
