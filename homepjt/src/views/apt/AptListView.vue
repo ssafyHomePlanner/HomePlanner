@@ -164,13 +164,11 @@ export default {
         page: 1,
       };
 
-      console.log("serachedData", serachedData);
       this.getHouseInfoDetailInfo(serachedData);
     },
     initData() {
       let today = new Date();
       this.currentYear = today.getFullYear(); // 년도
-      console.log("currentYear", this.currentYear);
 
       this.sido = this.$store.state.aptStore.sidoName;
       this.gugun = this.$store.state.aptStore.gugunName;
@@ -178,9 +176,8 @@ export default {
       this.search = this.$store.state.aptStore.searchedApartName;
     },
     clickRow(value) {
-      console.log(value);
       this.searchHouseInfo(value);
-      console.log("houseInfo", this.houseInfo);
+      this.getHouseInfoDeal(value.aptCode);
       this.moveResultPage();
     },
     moveResultPage() {
@@ -209,6 +206,7 @@ export default {
       "getHouseInfoListAuto",
       "searchHouseInfo",
       "getHouseInfoDetailInfo",
+      "getHouseInfoDeal",
     ]),
     ...mapMutations(aptStore, [
       "CLEAR_SIDO_LIST",
