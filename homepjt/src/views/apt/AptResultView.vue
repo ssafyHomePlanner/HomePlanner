@@ -96,12 +96,12 @@ export default {
       );
 
       let chartData = {
-        labels: labelList,
+        labels: labelList.reverse(),
         datasets: [
           {
             label: "거래 내역",
             backgroundColor: "#f87979",
-            data: dataList,
+            data: dataList.reverse(),
           },
         ],
       };
