@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height fluid class="ma-12">
     <v-row class="planner-result-item-header-text">
-      압구정 현대아파트 예상 구매 시기는
+      {{ this.aptName }} 예상 구매 시기는 희망 구매 시기보다
 
       <h3>{{ calculatedDate }}</h3>
     </v-row>
@@ -74,22 +74,6 @@ export default {
       if (this.savingPerMonth == 0) {
         this.savingPerMonth = 1;
       }
-      // let needTime = parseInt((myMoney - this.aptAmount) / this.savingPerMonth);
-      // this.calculatedDate = needTime + "개월 만큼 빠른";
-
-      // let date = this.hopedDate.split("-");
-      // let year = parseFloat(date[0]);
-      // let month = parseFloat(date[1]);
-      // console.log("hope date = ", this.hopedDate);
-      // console.log("year = ", year);
-      // console.log("month = ", month);
-
-      // let totalMonth = year * 12 + month - needTime;
-      // let newYear = parseInt(totalMonth / 12);
-      // let newMonth = totalMonth - newYear * 12;
-      // console.log("after ");
-      // console.log("year = ", newYear);
-      // console.log("month", newMonth);
       this.calculatedDate = "현재 구매 가능";
     } else {
       console.log("지금 구매 불가능");
@@ -99,21 +83,31 @@ export default {
       let todayYear = new Date().getFullYear();
       let todayMonth = new Date().getMonth() + 1;
       let todayMonths = todayYear * 12 + todayMonth;
-      console.log(todayMonths);
       let calcMonths = todayMonths + needTime;
+      console.log("calcMonths = ", calcMonths);
 
-      let hopeDayYear = new Date().getFullYear();
-      let hopeDayMonth = new Date().getMonth() + 1;
+      let hopeDate = this.hopedDate.split("-");
+      let hopeDayYear = parseInt(hopeDate[0]);
+      let hopeDayMonth = parseInt(hopeDate[1]);
       let hopeDayMonths = hopeDayYear * 12 + hopeDayMonth;
+      console.log("hopeDayMonths = ", hopeDayMonths);
 
       if (calcMonths < hopeDayMonths) {
         this.calculatedDate = hopeDayMonths - calcMonths;
-        this.calculatedDate += " 보다 개월 빠른";
+        this.calculatedDate += " 개월 빠른";
       } else {
         this.calculatedDate = calcMonths - hopeDayMonths;
-        this.calculatedDate += " 보다 개월 느린";
+        this.calculatedDate += " 개월 느린";
       }
 
+      let resultYear = parseInt(calcMonths / 12);
+      let resultMonth = parseInt(calcMonths % 12);
+      if (resultMonth == 0) {
+        resultMonth = 12;
+      }
+
+      console.log(resultYear + "년 " + resultMonth + "월");
+      this.resultDate = resultYear + "년 " + resultMonth + "월";
       // this.resultDate = year + "년 " + month + "월 입니다.";
     }
   },

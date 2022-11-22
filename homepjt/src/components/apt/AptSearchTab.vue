@@ -17,7 +17,9 @@
                       <v-list-item-title>
                         <strong>{{ item.apartmentName }}</strong>
                       </v-list-item-title>
-                      <v-list-item-subtitle> {{ item.dong }} ({{ item.roadName }}) </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        {{ item.dong }} ({{ item.roadName }})
+                      </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider></v-divider>
@@ -119,7 +121,11 @@ export default {
     clickButton() {
       console.log("clicked button = ", this.aptObject);
       // this.$emit("enterApartment", this.aptObject);
+      this.getHouseInfoDeal(this.aptObject.aptCode);
       this.$emit("enterApartment", this.aptObject);
+    },
+    changeAptAmount(aptCode) {
+      this.getHouseInfoDeal(aptCode);
     },
     deleteAllRecentSearch() {
       if (this.$store.state.memberStore.userInfo.id.length >= 1) {
@@ -137,7 +143,7 @@ export default {
     },
 
     ...mapActions(bookmarkStore, ["selectBookmarkAptList"]),
-    ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto"]),
+    ...mapActions(houseInfoStore, ["getHouseInfoList", "getHouseInfoListAuto", "getHouseInfoDeal"]),
     ...mapActions(memberStore, [
       "selectRecentDataInfo",
       "insertRecentDataInfo",
