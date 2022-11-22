@@ -20,7 +20,9 @@
       <v-row>
         <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal"></v-text-field>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start"> 언제쯤 내 집 마련을 하고 싶나요? </v-row>
+      <v-row class="planner-item-middle-text" justify="start">
+        언제쯤 내 집 마련을 하고 싶나요?
+      </v-row>
       <v-row class="mb-5">
         <div>
           <v-menu
@@ -46,15 +48,21 @@
               locale="kr"
               v-model="hopedDate"
               :active-picker.sync="activePicker"
-              :max="new Date(this.date.getFullYear(), this.date.getMonth() + 1, 10).toISOString().slice(0, 10)"
-              :min="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)"
+              :max="getEndDate"
+              :min="
+                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                  .toISOString()
+                  .substr(0, 10)
+              "
               :allowed-dates="disablePastDates"
               @change="save"
             ></v-date-picker>
           </v-menu>
         </div>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start"> 현재 주택 구매 예산은 얼마나 있나요? </v-row>
+      <v-row class="planner-item-middle-text" justify="start">
+        현재 주택 구매 예산은 얼마나 있나요?
+      </v-row>
       <v-row>
         <v-text-field
           solo
@@ -92,7 +100,10 @@
     </v-col>
 
     <v-col class="">
-      <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" v-on:enterApartment="enterApartment" />
+      <AptSearchTab
+        v-on:clickLikeApartment="clickLikeApartment"
+        v-on:enterApartment="enterApartment"
+      />
     </v-col>
   </v-container>
 </template>
@@ -133,6 +144,10 @@ export default {
         return 0;
       }
       return this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
+    },
+    getEndDate() {
+      var endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 100, 10);
+      return endDate.toISOString().slice(0, 10);
     },
   },
 
@@ -177,9 +192,10 @@ export default {
       this.getHouseInfoDeal(aptCode);
     },
 
-    enterApartment(aptObject) {
+    async enterApartment(aptObject) {
       console.log("enterApartment = ", aptObject);
       this.aptName = aptObject.apartmentName;
+      await this.changeAptAmount(aptObject.aptCode);
     },
     disablePastDates(val) {
       return val >= new Date().toISOString().substr(0, 10);
