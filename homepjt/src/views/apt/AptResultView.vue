@@ -5,32 +5,35 @@
         <v-container id="map" style="width: 925px; height: 625px">
         </v-container>
       </v-col>
-      <v-col>
-        <v-container class="heart-shape">
-          <v-row justify="center" class="align-center">
-            <v-btn icon color="pink">
-              <v-icon large color="red darken-2"> mdi-heart </v-icon>
-            </v-btn>
-            <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
-            <v-icon large color="#999999"> mdi-eye </v-icon>
-            <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
-          </v-row>
+      <v-col cols="auto">
+        <v-container style="width: 500px; height: 625px">
+          <v-container class="heart-shape">
+            <v-row justify="center" class="align-center">
+              <v-btn icon color="pink">
+                <v-icon large color="red darken-2"> mdi-heart </v-icon>
+              </v-btn>
+              <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
+              <v-icon large color="#999999"> mdi-eye </v-icon>
+              <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
+            </v-row>
+          </v-container>
+          <div class="apt-item-middle-text">
+            아파트 명: {{ houseInfo.apartmentName }}
+          </div>
+          <div class="apt-item-middle-text">
+            건축년도: {{ houseInfo.buildYear }}년
+          </div>
+          <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
+          <div class="apt-item-middle-text">
+            도로명주소: {{ houseInfo.roadName }}
+          </div>
         </v-container>
-        <div class="apt-item-middle-text">
-          아파트 명: {{ houseInfo.apartmentName }}
-        </div>
-        <div class="apt-item-middle-text">
-          건축년도: {{ houseInfo.buildYear }}년
-        </div>
-        <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
-        <div class="apt-item-middle-text">
-          도로명주소: {{ houseInfo.roadName }}
-        </div>
       </v-col>
     </v-row>
     <v-row class="mb-12">
       <v-col style="height: 600px; width: 800px">
         <v-data-table
+          :height="550"
           :headers="headers"
           :items="houseDealList"
           :items-per-page="10"
