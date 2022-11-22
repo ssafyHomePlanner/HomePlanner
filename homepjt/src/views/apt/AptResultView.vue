@@ -39,7 +39,7 @@
           ></v-data-table>
         </v-col>
       </v-col>
-      <v-col> <LineChart /> </v-col>
+      <v-col> <LineChart :chart-data="charData" /> </v-col>
     </v-row>
     <v-divider></v-divider>
     <v-row>
@@ -56,13 +56,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="col-4">
-              <v-btn
-                color="primary"
-                elevation="3"
-                large
-                @click="printHouseDealList"
-                >등록</v-btn
-              >
+              <v-btn color="primary" elevation="3" large>등록</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -82,6 +76,38 @@ export default {
   },
   computed: {
     ...mapState(houseInfoStore, ["houseInfo", "houseDealList"]),
+    charData() {
+      let labelList = [];
+      let dataList = [];
+
+      this.$store.state.houseInfoStore.houseDealList.forEach(
+        (houseDealData) => {
+          let dateTransfer =
+            houseDealData.dealYear.toString() +
+            "년 " +
+            houseDealData.dealMonth.toString().padStart(2, "0") +
+            "월 " +
+            houseDealData.dealDay.toString().padStart(2, "0") +
+            "일";
+
+          labelList.push(dateTransfer);
+          dataList.push(houseDealData.dealAmount.replace(",", ""));
+        }
+      );
+
+      let chartData = {
+        labels: labelList,
+        datasets: [
+          {
+            label: "거래 내역",
+            backgroundColor: "#f87979",
+            data: dataList,
+          },
+        ],
+      };
+
+      return chartData;
+    },
   },
   data() {
     return {
@@ -89,14 +115,11 @@ export default {
         { text: "거래년도", value: "dealYear" },
         { text: "전용미터 (m2)", value: "area" },
         { text: "층", value: "floor" },
-        { text: "거래 금액", value: "dealAmount" },
+        { text: "거래 금액 (만원)", value: "dealAmount" },
       ],
     };
   },
   methods: {
-    printHouseDealList() {
-      console.log(this.houseDealList);
-    },
     initMap() {
       const container = document.getElementById("map");
       const options = {
