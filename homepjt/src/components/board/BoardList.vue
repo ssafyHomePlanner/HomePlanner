@@ -10,6 +10,7 @@
       <v-row>
         <v-col>
           <v-data-table
+            :height="800"
             :headers="headers"
             :items="boardList"
             :items-per-page="10"
@@ -76,9 +77,13 @@ export default {
       this.moveBoardDetail();
     },
     moveBoardDetail() {
-      this.$router.push({ name: "boardDetail" }).catch(()=>{});
+      this.$router.push({ name: "boardDetail" }).catch(() => {});
     },
-    ...mapActions(boardStore, ["searchBoardList", "insertBoardOne", "searchBoardComment"]),
+    ...mapActions(boardStore, [
+      "searchBoardList",
+      "insertBoardOne",
+      "searchBoardComment",
+    ]),
   },
 };
 </script>
