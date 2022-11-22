@@ -1,5 +1,12 @@
 <template>
-  <v-sheet rounded="xl" color="white" elevation="5" height="400" width="800" class="ma-8">
+  <v-sheet
+    rounded="xl"
+    color="white"
+    elevation="5"
+    height="400"
+    width="800"
+    class="ma-8"
+  >
     <v-container class="pa-6">
       <v-row class="mb-1">
         <v-col style="text-align: left">
@@ -11,6 +18,7 @@
               required
             ></v-text-field>
             <v-textarea
+              @keyup.enter="registArticle"
               v-model="article.content"
               :rules="contentRules"
               label="내용을 입력하세요."
@@ -21,7 +29,9 @@
       </v-row>
       <v-row>
         <v-col style="text-align: right">
-          <v-btn @click="registArticle" color="primary" elevation="2">글작성</v-btn>
+          <v-btn @click="registArticle" color="primary" elevation="2"
+            >글작성</v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -58,7 +68,7 @@ export default {
       this.moveList();
     },
     moveList() {
-      this.$router.push({ name: "boardList" }).catch(()=>{});
+      this.$router.push({ name: "boardList" }).catch(() => {});
     },
     ...mapActions(boardStore, ["writeBoard"]),
   },
