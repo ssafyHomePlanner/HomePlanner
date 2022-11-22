@@ -14,9 +14,10 @@
           </v-col>
           <v-col align-self="center">
             <v-text-field
+              @keyup.enter="clickSearchBtn"
               hide-details
               class="mt-0 pt-0"
-              v-model="searchedApartName"
+              v-model="search"
             ></v-text-field>
           </v-col>
           <v-col cols="auto">
@@ -140,21 +141,31 @@ const houseInfoStore = "houseInfoStore";
 export default {
   methods: {
     clickSearchBtn() {
+      const TransferPongToSquareMeter = 3.306;
+      const TransferOneToMan = 10000;
+
+      let minAreaSquareMeter = this.areaRange[0] * TransferPongToSquareMeter;
+      let maxAreaSquareMeter = this.areaRange[1] * TransferPongToSquareMeter;
+
+      let minDealAmountMan = this.priceRange[0] * TransferOneToMan;
+      let maxDealAmountMan = this.priceRange[1] * TransferOneToMan;
+
       let serachedData = {
-        aptName: this.searchedApartName,
+        aptName: this.search,
         dongName: this.dong,
         gugunName: this.gugun,
         sidoName: this.sido,
-        minArea: this.areaRange[0],
-        maxArea: this.areaRange[1],
+        minArea: minAreaSquareMeter,
+        maxArea: maxAreaSquareMeter,
         minBuildYear: this.buildYearRange[0],
         maxBuildYear: this.buildYearRange[1],
-        minDealAmount: this.priceRange[0],
-        maxDealAmount: this.priceRange[1],
+        minDealAmount: minDealAmountMan,
+        maxDealAmount: maxDealAmountMan,
         page: 1,
       };
 
       console.log("serachedData", serachedData);
+      this.getHouseInfoDetailInfo(serachedData);
     },
     initData() {
       let today = new Date();
@@ -164,6 +175,7 @@ export default {
       this.sido = this.$store.state.aptStore.sidoName;
       this.gugun = this.$store.state.aptStore.gugunName;
       this.dong = this.$store.state.aptStore.dongName;
+      this.search = this.$store.state.aptStore.searchedApartName;
     },
     clickRow(value) {
       console.log(value);
@@ -224,6 +236,7 @@ export default {
       sido: "",
       gugun: "",
       dong: "",
+      search: "",
       currentYear: "2022",
       priceRange: [10, 50],
       areaRange: [10, 50],
