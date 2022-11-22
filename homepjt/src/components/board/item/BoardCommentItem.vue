@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="end">
-      <v-btn text @click="deleteComment"> 삭제 </v-btn>
+      <v-btn text @click="deleteComment" v-if="checkId()"> 삭제 </v-btn>
     </v-row>
     <v-row class="mt-3 mb-3">
       <v-col cols="col-4">
@@ -23,18 +23,36 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const boardStore = "boardStore";
+const memberStore = "memberStore";
 
 export default {
   name: "BoardCommentItem",
   props: {
     comment: Object,
   },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
     deleteComment() {
       this.deleteBoardComment(this.comment);
+    },
+    checkId() {
+      // console.log(this.userInfo.id);
+      // console.log(this.comment.memberId);
+
+      // console.log(this.userInfo.id == this.comment.memerId);
+      // console.log(this.userInfo.id.trim());
+      // console.log(this.comment.memberId.trim());
+
+      if (this.userInfo.id === this.comment.memerId) {
+        return true;
+      } else {
+        return false;
+      }
     },
     ...mapActions(boardStore, ["deleteBoardComment"]),
   },

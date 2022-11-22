@@ -32,6 +32,16 @@ function addArticleView(boardId, success, fail) {
   api.put(`/board/update/view/${boardId}`).then(success).catch(fail);
 }
 
+// 게시글 좋아요 수 갱신
+function addArticleLike(boardId, flag, success, fail) {
+  api.put(`/board/update/${boardId}/${flag}`).then(success).catch(fail);
+}
+
+// 게시글 좋아요 여부 확인
+function checkArticleLike(boardId, memberId, success, fail) {
+  api.get(`/board/check/like/${boardId}/${memberId}`).then(success).catch(fail);
+}
+
 // 게시글 댓글 조회
 function getArticleCommentList(boardId, success, fail) {
   api.get(`/board/comment/${boardId}`).then(success).catch(fail);
@@ -54,6 +64,8 @@ export {
   modifyArticle,
   deleteArticle,
   addArticleView,
+  addArticleLike,
+  checkArticleLike,
   getArticleCommentList,
   writeArticleComment,
   deleteArticleComment,

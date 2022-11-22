@@ -33,18 +33,12 @@
     </v-row>
     <v-row justify="start">
       <v-col cols="col-2" class="align-center">
-        <v-sheet
-          rounded="pill"
-          color="white"
-          elevation="3"
-          height="50"
-          width="90"
-          class="ma-8"
-        >
+        <v-sheet rounded="pill" color="white" elevation="3" height="50" width="90" class="ma-8">
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
               <v-btn icon color="pink">
-                <v-icon large color="red darken-2"> mdi-heart </v-icon>
+                <v-icon large color="red darken-2" v-if="checkLike"> mdi-heart </v-icon>
+                <v-icon large color="red darken-2" v-else> mdi-heart-outline </v-icon>
               </v-btn>
               <span class="ml-2">
                 {{ board.likeCnt }}
@@ -60,11 +54,7 @@
     <v-row class="mb-3">
       <v-divider></v-divider>
     </v-row>
-    <board-comment-item
-      v-for="(comment, index) in boardComment"
-      :key="index"
-      :comment="comment"
-    />
+    <board-comment-item v-for="(comment, index) in boardComment" :key="index" :comment="comment" />
 
     <v-container class="mt-5">
       <v-row>
@@ -79,9 +69,7 @@
           ></v-text-field>
         </v-col>
         <v-col cols="col-4">
-          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large
-            >등록</v-btn
-          >
+          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large>등록</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -107,16 +95,30 @@ export default {
     };
   },
   computed: {
-    ...mapState(boardStore, ["board", "boardComment"]),
+    ...mapState(boardStore, ["board", "boardComment", "likeFlag"]),
     ...mapState(memberStore, "userInfo"),
+
+    checkLike() {
+      console.log("check like methods => ", this.likeFlag);
+
+      if (this.likeFlag == 1) {
+        return true;
+      }
+      return false;
+    },
   },
   created() {
-    if (
-      this.$store.state.memberStore.userInfo.id !=
-      this.$store.state.boardStore.board.memberId
-    ) {
+    if (this.$store.state.memberStore.userInfo.id != this.$store.state.boardStore.board.memberId) {
       this.addBoardView(this.board.id);
     }
+
+    const payload = {
+      boardId: this.board.id,
+      memberId: this.$store.state.memberStore.userInfo.id,
+    };
+    this.checkBoardLike(payload);
+    console.log("check board like = ", payload);
+    console.log(this.likeFlag);
   },
   components: {
     BoardCommentItem,
@@ -142,19 +144,29 @@ export default {
 
     checkId() {
       if (
-        this.$store.state.memberStore.userInfo.id ==
-        this.$store.state.boardStore.board.memberId
+        this.$store.state.memberStore.userInfo.id == this.$store.state.boardStore.board.memberId
       ) {
         return true;
       } else {
         return false;
       }
     },
+
+    updateLikeCnt() {
+      const payload = {
+        boardId: this.board.id,
+        memberId: this.userInfo.id,
+        likeFlag: this.likeFlag,
+      };
+      this.addBoardLike(payload);
+    },
     ...mapActions(boardStore, [
       "deleteBoard",
       "searchBoardComment",
       "writeBoardComment",
       "addBoardView",
+      "addBoardLike",
+      "checkBoardLike",
     ]),
   },
 };

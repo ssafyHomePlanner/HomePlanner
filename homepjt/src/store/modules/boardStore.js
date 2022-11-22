@@ -7,6 +7,8 @@ import {
   writeArticleComment,
   deleteArticleComment,
   addArticleView,
+  addArticleLike,
+  checkArticleLike,
 } from "@/api/board.js";
 
 const boardStore = {
@@ -15,6 +17,8 @@ const boardStore = {
     boardList: [],
     board: {},
     boardComment: [],
+
+    likeFlag: 0,
 
     startPage: 0,
     currPage: 0,
@@ -42,6 +46,15 @@ const boardStore = {
     },
     ADD_BOARD_VIEW(state) {
       state.board.viewCnt += 1;
+    },
+    ADD_BOARD_LIKE(state) {
+      state.board.likeCnt += 1;
+    },
+    DELETE_BOARD_LIKE(state) {
+      state.board.likeCnt -= 1;
+    },
+    CHECK_BOARD_LIKE(state, payload) {
+      state.likeFlag = payload;
     },
   },
   actions: {
@@ -106,6 +119,34 @@ const boardStore = {
         payload,
         () => {
           commit("ADD_BOARD_VIEW");
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    addBoardLike({ commit }, payload) {
+      addArticleLike(
+        payload.boardId,
+        payload.flag,
+        () => {
+          if (payload.flag) {
+            commit("ADD_BOARD_LIKE");
+          } else {
+            commit("DELETE_BOARD_LIKE");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    checkBoardLike({ commit }, payload) {
+      checkArticleLike(
+        payload.boardId,
+        payload.memberId,
+        ({ data }) => {
+          commit("CHECK_BOARD_LIKE", data.likeCnt);
         },
         (error) => {
           console.log(error);
