@@ -20,7 +20,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="auto">
-            <v-btn color="primary">검색</v-btn>
+            <v-btn color="primary" @click="clickSearchBtn">검색</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -139,6 +139,23 @@ const houseInfoStore = "houseInfoStore";
 
 export default {
   methods: {
+    clickSearchBtn() {
+      let serachedData = {
+        aptName: this.searchedApartName,
+        dongName: this.dong,
+        gugunName: this.gugun,
+        sidoName: this.sido,
+        minArea: this.areaRange[0],
+        maxArea: this.areaRange[1],
+        minBuildYear: this.buildYearRange[0],
+        maxBuildYear: this.buildYearRange[1],
+        minDealAmount: this.priceRange[0],
+        maxDealAmount: this.priceRange[1],
+        page: 1,
+      };
+
+      console.log("serachedData", serachedData);
+    },
     initData() {
       let today = new Date();
       this.currentYear = today.getFullYear(); // 년도
@@ -179,6 +196,7 @@ export default {
       "getHouseInfoList",
       "getHouseInfoListAuto",
       "searchHouseInfo",
+      "getHouseInfoDetailInfo",
     ]),
     ...mapMutations(aptStore, [
       "CLEAR_SIDO_LIST",
