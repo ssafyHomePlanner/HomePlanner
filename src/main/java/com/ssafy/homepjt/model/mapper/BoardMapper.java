@@ -18,11 +18,18 @@ public interface BoardMapper {
 
     public void writeBoard(BoardDto boardDto) throws SQLException; // 게시판 글쓰기
 
-//    public BoardDto readBoard(int boardId) throws SQLException; // 게시판 글 세부내용 보기
-
     public void updateReadCount(int boardId) throws SQLException; // 조회수 변경
 
     public void updateLikeCount(@Param("boardId") int boardId, @Param("flag") int flag) throws SQLException; // 좋아요 수 변경
+
+    // 게시글 회원 죻아요 여부 확인
+    public int checkBoardLike(@Param("boardId") int boardId, @Param("memberId") String memberId) throws SQLException;
+
+    // 게시글 좋아요 회원 추가
+    public void insertBoardLike(@Param("boardId") int boardId, @Param("memberId") String memberId) throws SQLException;
+
+    // 게시글 좋아요 회원 삭제
+    public void deleteBoardLike(@Param("boardId") int boardId, @Param("memberId") String memberId) throws SQLException;
 
     public void updateBoard(BoardDto boardDto) throws SQLException; // 게시판 글 수정
 

@@ -43,20 +43,6 @@
         values (#{memberId}, #{title}, #{content}, 0, 0, NOW())
     </insert>
 
-    <!-- 게시판 글 세부내용 보기 -->
-<!--    <select id="readBoard" parameterType="int"-->
-<!--            resultMap="boardDto">-->
-<!--        select id,-->
-<!--               member_id,-->
-<!--               title,-->
-<!--               content,-->
-<!--               view_cnt,-->
-<!--               like_cnt,-->
-<!--               write_date-->
-<!--        from board-->
-<!--        where id = #{boardId}-->
-<!--    </select>-->
-
     <!-- 조회수 수정 -->
     <update id="updateReadCount" parameterType="int">
         update board
@@ -73,6 +59,25 @@
         </trim>
         where id=#{boardId}
     </update>
+
+    <!-- 게시글 좋아요 회원 추가 -->
+    <insert id="insertBoardLike">
+        insert into bookmark_board(member_id, board_id)
+            vales(#{memberId}, #{boardId})
+    </insert>
+
+    <!-- 게시글 좋아요 회원 삭제 -->
+    <delete id="deleteBoardLike">
+        delete from bookmark_board
+        where member_id = #{memberId} abd board_id=#{boardId}
+    </delete>
+
+    <!-- 게시글 좋아요 회원수 확인 -->
+    <select id="checkBoardLike" resultType="int">
+        select count(id) from bookmark_board
+        where member_id = #{memberId}
+          and board_id = #{boardId}
+    </select>
 
     <!-- 게시판 글 수정 -->
     <update id="updateBoard">

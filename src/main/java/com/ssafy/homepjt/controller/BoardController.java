@@ -89,41 +89,6 @@ public class BoardController {
         }
     }
 
-    // 게시판 글 세부내용 보기
-//    @ApiOperation(value = "게시판 글 세부내용 확인")
-//    @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 세부내용 확인 성공!!"),
-//            @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
-//    @GetMapping("/detail/{boardId}/{flag}")
-//    public ResponseEntity<Map<String, Object>> readBoard(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
-//        logger.info("board detail controller");
-//        Map<String, Object> resultMap = new HashMap<String, Object>();
-//
-//        try {
-//            BoardDto boardDto = boardService.readBoard(boardId);
-//
-//            // 작성자가 아니라면 조회수 증가
-//            if(flag == 1){
-//                boardService.updateReadCount(boardId);
-//            }
-//
-//            if (boardDto != null) {
-//                logger.debug("게시판 글 세부내용 확인 성공 : {}", boardDto);
-//                resultMap.put("message", SUCCESS);
-//                resultMap.put("board", boardDto);
-//                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-//            } else {
-//                logger.debug("게시판 글 세부내용 확인 실패 : ");
-//                resultMap.put("message", FAIL);
-//                resultMap.put("board", null);
-//                return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
-//            }
-//
-//        } catch (Exception e) {
-//            logger.error("게시판 글 세부내용 확인 실패 : {}", e.getMessage());
-//            resultMap.put("message", e.getMessage());
-//            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
     // 게시글 조회수 증가
     @ApiOperation(value = "게시글 조회수 증가")
     @PutMapping("/update/view/{boardId}")
@@ -147,13 +112,13 @@ public class BoardController {
     @ApiOperation(value = "게시판 글 좋아요 수 갱신")
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 좋아요 수 갱신 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
-    @PutMapping("/update/{boardId}/{flag}")
-    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("flag") int flag) {
+    @PutMapping("/update/{boardId}/{memberId}/{flag}")
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId, @PathVariable("flag") int flag) {
         logger.info("board update like count controller");
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            boardService.updateLikeCount(boardId, flag);
+            boardService.updateLikeCount(boardId, memberId, flag);
             logger.debug("좋아요 수 갱신 성공");
             resultMap.put("message", SUCCESS);
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
@@ -161,6 +126,25 @@ public class BoardController {
             logger.error("좋아요 수 갱신 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 좋아요 확인
+    @ApiOperation(value = "게시판 글 좋아요 여부 확인")
+    @GetMapping("/check/like/{boardId}/{memberId}")
+    public ResponseEntity<Map<String, Object>> checkLikeBoard(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId){
+        logger.info("board check like controller");
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            int check = boardService.checkBoardLike(boardId, memberId);
+            logger.debug("좋아요 클릭 여부 확인 : {}", check);
+            resultMap.put("likeCnt", check);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("좋아요 여부 확인 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

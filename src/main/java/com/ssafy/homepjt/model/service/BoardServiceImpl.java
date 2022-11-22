@@ -51,19 +51,24 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.writeBoard(boardDto);
     }
 
-//    @Override
-//    public BoardDto readBoard(int boardId) throws SQLException {
-//        return boardMapper.readBoard(boardId);
-//    }
-
     @Override
     public void updateReadCount(int boardId) throws SQLException {
         boardMapper.updateReadCount(boardId);
     }
 
     @Override
-    public void updateLikeCount(int boardId, int flag) throws SQLException {
+    public void updateLikeCount(int boardId, String memberId, int flag) throws SQLException {
+        if(flag == 1){
+            boardMapper.insertBoardLike(boardId, memberId);
+        }else{
+            boardMapper.deleteBoardLike(boardId, memberId);
+        }
         boardMapper.updateLikeCount(boardId, flag);
+    }
+
+    @Override
+    public int checkBoardLike(int boardId, String memberId) throws SQLException {
+        return boardMapper.checkBoardLike(boardId, memberId);
     }
 
     @Override

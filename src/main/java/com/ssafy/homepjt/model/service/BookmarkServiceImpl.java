@@ -222,7 +222,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
-            java.lang.String line = null;
+            String line = null;
 
             while ((line = br.readLine()) != null) {
                 sb.append(line);
@@ -242,6 +242,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
 
         } catch (Exception e) {
+            System.out.println("error 발생");
             e.printStackTrace();
         }
 
