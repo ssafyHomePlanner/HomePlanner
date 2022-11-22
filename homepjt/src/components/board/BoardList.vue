@@ -21,8 +21,7 @@
         </v-col>
       </v-row>
       <div class="text-center mt-8">
-        <p>{{ page }} ~ {{ totalPage }}</p>
-        <v-pagination v-model="page" :length="30" @input="changeList(page)"></v-pagination>
+        <v-pagination v-model="page" :length="totalPage" @input="changeList(page)"></v-pagination>
       </div>
     </v-container>
   </div>

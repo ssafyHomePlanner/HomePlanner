@@ -18,11 +18,9 @@
         <h3>현재 시세(최근 실거래가 기준):</h3>
       </v-row>
       <v-row>
-        <v-text-field solo style="max-width: 300px" v-model="aptAmount"></v-text-field>
+        <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal"></v-text-field>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        언제쯤 내 집 마련을 하고 싶나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 언제쯤 내 집 마련을 하고 싶나요? </v-row>
       <v-row class="mb-5">
         <div>
           <v-menu
@@ -44,22 +42,19 @@
               ></v-text-field>
             </template>
             <v-date-picker
+              type="month"
+              locale="kr"
               v-model="hopedDate"
               :active-picker.sync="activePicker"
-              :max="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                  .toISOString()
-                  .substr(0, 10)
-              "
-              min="1950-01-01"
+              :max="new Date(this.date.getFullYear(), this.date.getMonth() + 1, 10).toISOString().slice(0, 10)"
+              :min="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)"
+              :allowed-dates="disablePastDates"
               @change="save"
             ></v-date-picker>
           </v-menu>
         </div>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        현재 주택 구매 예산은 얼마나 있나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 현재 주택 구매 예산은 얼마나 있나요? </v-row>
       <v-row>
         <v-text-field
           solo
@@ -97,19 +92,17 @@
     </v-col>
 
     <v-col class="">
-      <AptSearchTab
-        v-on:clickLikeApartment="clickLikeApartment"
-        v-on:enterApartment="enterApartment"
-      />
+      <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" v-on:enterApartment="enterApartment" />
     </v-col>
   </v-container>
 </template>
 
 <script>
 import AptSearchTab from "@/components/apt/AptSearchTab.vue";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 const houseInfoStore = "houseInfoStore";
+const plannerStore = "plannerStore";
 
 export default {
   components: {
@@ -129,40 +122,67 @@ export default {
     loan: "",
   }),
   computed: {
-    ...mapState(houseInfoStore, ["houseInfoStore", "houseDealList"]),
+    ...mapState(houseInfoStore, ["houseInfoStore"]),
+    ...mapState(plannerStore, ["plannerInfo"]),
+    houseDealList() {
+      // console.log("computed house dealList", this.$store.state.houseInfoStore.houseDealList);
+      return 0;
+    },
+    maxHouseDeal() {
+      if (this.aptName == "") {
+        return 0;
+      }
+      return this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
+    },
   },
 
   watch: {
+    houseDealList(val) {
+      console.log("watch", val);
+    },
     menu(val) {
       val && setTimeout(() => (this.activePicker = "YEAR"));
     },
   },
   methods: {
     ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
+    ...mapMutations(plannerStore, ["SEARCH_PLANNER_INFO", "CLEAR_PLANNER_INFO"]),
 
     moveResult() {
+      this.CLEAR_PLANNER_INFO();
+
+      const plannerInfo = {
+        aptName: this.aptName,
+        aptAmount: this.$store.state.houseInfoStore.houseDealList[0].dealAmount,
+        hopedDate: this.hopedDate,
+        budget: this.budget,
+        savingPerMonth: this.savingPerMonth,
+        loan: this.loan,
+      };
+
+      this.SEARCH_PLANNER_INFO(plannerInfo);
+
+      console.log("plannerInfo : ", this.plannerInfo);
       this.$router.push({ name: "plannerResult" }).catch(() => {});
     },
     save(date) {
       this.$refs.menu.save(date);
     },
     async clickLikeApartment(location) {
-      console.log("location : ", location);
       this.aptName = location.apartmentName;
-      console.log("before = ", this.houseDealList);
       await this.changeAptAmount(location.aptCode);
-      console.log("after = ", this.houseDealList);
-
-      this.aptAmount = this.houseDealList[0].dealAmount;
     },
 
     changeAptAmount(aptCode) {
       this.getHouseInfoDeal(aptCode);
-      console.log("after2 = ", this.houseDealList);
     },
 
     enterApartment(aptObject) {
+      console.log("enterApartment = ", aptObject);
       this.aptName = aptObject.apartmentName;
+    },
+    disablePastDates(val) {
+      return val >= new Date().toISOString().substr(0, 10);
     },
   },
 };

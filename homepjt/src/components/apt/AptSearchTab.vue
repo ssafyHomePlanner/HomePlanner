@@ -17,9 +17,7 @@
                       <v-list-item-title>
                         <strong>{{ item.apartmentName }}</strong>
                       </v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{ item.dong }} ({{ item.roadName }})
-                      </v-list-item-subtitle>
+                      <v-list-item-subtitle> {{ item.dong }} ({{ item.roadName }}) </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider></v-divider>
@@ -41,37 +39,12 @@
                 ref="autoinput"
                 v-model="aptObject"
                 clearable
-                @keyup.enter="selectHouseInfo"
                 item-text="apartmentName"
                 item-value="apartmentName"
                 return-object
               >
-                <template v-slot:no-data>
-                  <v-row justify="space-between" class="ma-2">
-                    <h3 class="ma-2">최근 검색어</h3>
-                    <v-btn @click="deleteAllRecentSearch" text class="ma-2">전체삭제 </v-btn>
-                  </v-row>
-                  <v-list-item
-                    v-for="(recentData, index) in recentDataList"
-                    :key="index"
-                    @click="clickRecentSearch(recentData.searchedName)"
-                  >
-                    <v-list-item-action>
-                      <v-icon>mdi-clock-outline</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ recentData.searchedName }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-btn icon>
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </template>
               </v-autocomplete>
+              <button @click="clickButton">검색</button>
             </v-container>
           </v-tab-item>
         </v-tabs-items>
@@ -104,7 +77,7 @@ export default {
         this.CLEAR_HOUSE_INFO_LIST();
         return;
       }
-      this.aptObject.apartmentName = val;
+      // this.aptObject.apartmentName = val;
       this.makeHouseInfoListAuto(val);
     },
   },
@@ -120,8 +93,9 @@ export default {
   methods: {
     clickLikeApartment(item) {
       // 해당 아파트 상세 페이지로 이동해야함
+      console.log("send", item.aptCode + " " + item.apartmentName);
       this.$emit("clickLikeApartment", item);
-      console.log(item.aptCode + " " + item.apartmentName);
+      // console.log(item);
       this.apartmentName = item.apartmentName;
     },
     inputChanged() {
@@ -140,14 +114,11 @@ export default {
         this.getHouseInfoListAuto(value);
       }, 500);
 
-      this.$emit("enterApartment", this.aptObject);
+      // this.$emit("enterApartment", this.aptObject);
     },
-    clickRecentSearch(recentStr) {
-      this.aptObject.apartmentName = recentStr;
-      this.apartmentName = recentStr;
-    },
-    selectHouseInfo() {
-      console.log(this.aptObject);
+    clickButton() {
+      console.log("clicked button = ", this.aptObject);
+      // this.$emit("enterApartment", this.aptObject);
       this.$emit("enterApartment", this.aptObject);
     },
     deleteAllRecentSearch() {

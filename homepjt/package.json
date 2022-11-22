@@ -16,6 +16,7 @@
     "vue-chartjs": "^4.1.2",
     "vue-plain-pagination": "^0.3.0",
     "vue-router": "^3.5.1",
+    "vuejs-paginate": "^2.1.0",
     "vuetify": "^2.6.12",
     "vuex": "^3.6.2",
     "vuex-persistedstate": "^4.1.0"

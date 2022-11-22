@@ -175,9 +175,9 @@ const houseInfoStore = {
     async getHouseInfoDeal({ commit }, aptCode) {
       await searchHouseDeal(
         aptCode,
-        ({ data }) => {
+        async ({ data }) => {
           commit("CLEAR_HOUSE_DEAL_LIST");
-          commit("SEARCH_HOUSE_DEAL_LIST", data.houseDealList);
+          await commit("SEARCH_HOUSE_DEAL_LIST", data.houseDealList);
         },
         (error) => {
           console.log(error);

@@ -98,12 +98,12 @@ const memberStore = {
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
 
-            console.log(data);
+            // console.log(data);
             alert("로그인 성공!!");
           }
         },
         (error) => {
-          alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
+          // alert("로그인 실패!!, 아이디 혹은 패스워드를 확인하세요!!");
           commit("SET_IS_LOGIN", false);
           commit("SET_IS_LOGIN_ERROR", true);
           commit("SET_IS_VALID_TOKEN", false);
@@ -114,38 +114,35 @@ const memberStore = {
     },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
-      console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+      // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
         decodeToken.memberId,
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.memberInfo);
-            console.log("3. getUserInfo data >> ", data);
+            // console.log("3. getUserInfo data >> ", data);
           } else {
-            console.log("유저 정보 없음!!!!");
+            // console.log("유저 정보 없음!!!!");
           }
         },
         async (error) => {
-          console.log(
-            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
+          console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
           commit("SET_IS_VALID_TOKEN", false);
           await dispatch("tokenRegeneration");
         }
       );
     },
     async tokenRegeneration({ commit, state }) {
-      console.log(
-        "토큰 재발급 >> 기존 토큰 정보 : {}",
-        sessionStorage.getItem("access-token")
-      );
+      // console.log(
+      //   "토큰 재발급 >> 기존 토큰 정보 : {}",
+      //   sessionStorage.getItem("access-token")
+      // );
       await tokenRegeneration(
         JSON.stringify(state.userInfo),
         ({ data }) => {
           if (data.message === "success") {
             let accessToken = data["access-token"];
-            console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
+            // console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
             sessionStorage.setItem("access-token", accessToken);
             commit("SET_IS_VALID_TOKEN", true);
           }
@@ -153,7 +150,7 @@ const memberStore = {
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
           if (error.response.status === 401) {
-            console.log("갱신 실패");
+            // console.log("갱신 실패");
             // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
             await logout(
               state.userInfo.userid,
@@ -163,9 +160,7 @@ const memberStore = {
                 } else {
                   console.log("리프레시 토큰 제거 실패");
                 }
-                alert(
-                  "refresh token 기간이 만료되었습니다! 다시 로그인해 주세요."
-                );
+                alert("refresh token 기간이 만료되었습니다! 다시 로그인해 주세요.");
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", {
                   id: "",
@@ -237,7 +232,7 @@ const memberStore = {
             });
             commit("SET_IS_VALID_TOKEN", false);
           } else {
-            console.log("유저 정보 없음 !!");
+            // console.log("유저 정보 없음 !!");
           }
         },
         (error) => {
@@ -254,7 +249,7 @@ const memberStore = {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.memberDto);
           } else {
-            console.log("유저 정보 없음 !!!");
+            // console.log("유저 정보 없음 !!!");
           }
         },
         (error) => {
@@ -271,12 +266,12 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "success") {
             // commit("SET_MEMBER_ID", payload.memberId);
-            console.log(data);
+            // console.log(data);
             alert("회원님의 아이디는 : " + data.memberId + " 입니다.");
             router.push({ name: "logInView" });
           } else {
             alert("유저 정보가 없습니다.");
-            console.log("유저 정보 없음 !!!");
+            // console.log("유저 정보 없음 !!!");
           }
         },
         (error) => {
@@ -297,7 +292,7 @@ const memberStore = {
             router.push({ name: "logInView" });
           } else {
             alert("유저 정보가 없습니다.");
-            console.log("유저 정보 없음 !!!");
+            // console.log("유저 정보 없음 !!!");
           }
         },
         (error) => {
@@ -314,10 +309,10 @@ const memberStore = {
         memberId,
         ({ data }) => {
           if (data.message === "success") {
-            console.log("아이디 중복 발생 X!!");
+            // console.log("아이디 중복 발생 X!!");
             commit("IS_DUPLICATED_ID", false);
           } else {
-            console.log("아이디 중복 발생");
+            // console.log("아이디 중복 발생");
             commit("IS_DUPLICATED_ID", true);
           }
         },
