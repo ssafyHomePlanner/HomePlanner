@@ -16,6 +16,9 @@
         <v-row justify="end"> 작성 일자: {{ comment.writeDate }} </v-row>
       </v-container>
     </v-row>
+    <v-row>
+      <v-divider></v-divider>
+    </v-row>
   </v-container>
 </template>
 

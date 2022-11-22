@@ -57,16 +57,16 @@
     <v-row justify="start">
       <v-col cols="col-2">댓글 {{ boardComment.length }}</v-col>
     </v-row>
-    <div>
+    <v-row class="mb-3">
       <v-divider></v-divider>
-    </div>
+    </v-row>
     <board-comment-item
       v-for="(comment, index) in boardComment"
       :key="index"
       :comment="comment"
     />
-    <v-divider></v-divider>
-    <v-container>
+
+    <v-container class="mt-5">
       <v-row>
         <v-col cols="col-8">
           <v-text-field
