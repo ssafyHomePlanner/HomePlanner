@@ -10,7 +10,7 @@
       <v-row>
         <v-col>
           <v-data-table
-            :height="800"
+            :height="550"
             :headers="headers"
             :items="boardList"
             :items-per-page="10"
