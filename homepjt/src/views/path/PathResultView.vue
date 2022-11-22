@@ -18,7 +18,8 @@
             </v-col>
             <v-col cols="auto">
               <v-btn class="mt-4" color="primary"><v-icon>mdi-content-save</v-icon>경로 저장</v-btn>
-              <!-- <v-btn @click="makeLine">테스트 버튼</v-btn> -->
+              <v-btn @click="makeLine">테스트 버튼</v-btn>
+              <v-btn @click="printData">데이터 출력</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -113,7 +114,15 @@
 </template>
 
 <script>
+
+import { mapState } from "vuex";
+
+const bookmarkStore = "bookmarkStore";
+
 export default {
+  computed: {
+    ...mapState(bookmarkStore, ["timePathList", "distPathList", "timeArr", "distArr"]),
+  },
   data() {
     return {
       items: [
@@ -145,6 +154,12 @@ export default {
     };
   },
   methods: {
+    printData(){
+      console.log("timePathList", this.timePathList);
+      console.log("distPathList", this.distPathList);
+      console.log("timeArr", this.timeArr);
+      console.log("distArr", this.distArr);
+    },
     showDistance(content, position) {
       if (this.distanceOverlay) {
         // 커스텀오버레이가 생성된 상태이면
