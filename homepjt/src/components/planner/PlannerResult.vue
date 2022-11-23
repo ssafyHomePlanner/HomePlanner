@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height fluid class="ma-12">
     <v-row class="planner-result-item-header-text">
-      {{ this.aptName }} 예상 구매 시기는 희망 구매 시기보다
+      {{ plannerData.aptName }} 예상 구매 시기는 희망 구매 시기보다
 
       <h3>{{ calculatedDate }}</h3>
     </v-row>
@@ -12,23 +12,18 @@
     <v-row justify="start" class="mb-2">
       <v-divider></v-divider>
     </v-row>
-
-    <v-col>
-      <LineChart :chart-data="charData" />
-    </v-col>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import LineChart from "@/components/chart/LineChart.vue";
 
 const plannerStore = "plannerStore";
 const memberStore = "memberStore";
 
 export default {
-  components: {
-    LineChart,
+  props: {
+    plannerData: Object,
   },
   data() {
     return {
@@ -100,42 +95,13 @@ export default {
       console.log(resultYear + "년 " + resultMonth + "월");
       this.resultDate = resultYear + "년 " + resultMonth + "월";
       // this.resultDate = year + "년 " + month + "월 입니다.";
+
+      console.log("OBJECT = ", this.object);
     }
   },
   computed: {
     ...mapState(plannerStore, ["plannerInfo"]),
     ...mapState(memberStore, ["userInfo"]),
-
-    charData() {
-      let labelList = [];
-      let dataList = [];
-
-      this.$store.state.houseInfoStore.houseDealList.forEach((houseDealData) => {
-        let dateTransfer =
-          houseDealData.dealYear.toString() +
-          "년 " +
-          houseDealData.dealMonth.toString().padStart(2, "0") +
-          "월 " +
-          houseDealData.dealDay.toString().padStart(2, "0") +
-          "일";
-
-        labelList.push(dateTransfer);
-        dataList.push(houseDealData.dealAmount.replace(",", ""));
-      });
-
-      let chartData = {
-        labels: labelList,
-        datasets: [
-          {
-            label: "거래 내역",
-            backgroundColor: "#f87979",
-            data: dataList,
-          },
-        ],
-      };
-
-      return chartData;
-    },
   },
   methods: {
     ...mapMutations(plannerStore, ["SEARCH_PLANNER_INFO", "CLEAR_PLANNER_INFO"]),

@@ -41,6 +41,7 @@ const plannerStore = {
       createPlanner(
         plannerInfo,
         ({ data }) => {
+          alert("즐겨찾기에 저장되었습니다.");
           console.log("message: {}", data.message);
         },
         ({ error }) => {

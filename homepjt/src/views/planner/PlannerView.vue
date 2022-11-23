@@ -3,9 +3,7 @@
     <v-col>
       <v-row class="mb-5">
         <v-col cols="auto" class="mt-16 mr-8 pt-8">
-          <v-row class="planner-item-middle-text" justify="start">
-            목표 아파트를 설정하세요
-          </v-row>
+          <v-row class="planner-item-middle-text" justify="start"> 목표 아파트를 설정하세요 </v-row>
           <v-row>
             <v-text-field
               solo
@@ -21,26 +19,15 @@
             <h3>현재 시세(최근 실거래가 기준)</h3>
           </v-row>
           <v-row>
-            <v-text-field
-              solo
-              style="max-width: 300px"
-              v-model="maxHouseDeal"
-              readonly
-              suffix="만원"
-            ></v-text-field>
+            <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal" readonly suffix="만원"></v-text-field>
           </v-row>
         </v-col>
         <v-col cols="auto">
-          <AptSearchTab
-            v-on:clickLikeApartment="clickLikeApartment"
-            v-on:enterApartment="enterApartment"
-          />
+          <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" v-on:enterApartment="enterApartment" />
         </v-col>
       </v-row>
 
-      <v-row class="planner-item-middle-text" justify="start">
-        언제쯤 내 집 마련을 하고 싶나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 언제쯤 내 집 마련을 하고 싶나요? </v-row>
       <v-row class="mb-5">
         <div>
           <v-menu
@@ -67,20 +54,14 @@
               v-model="hopedDate"
               :active-picker.sync="activePicker"
               :max="getEndDate"
-              :min="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                  .toISOString()
-                  .substr(0, 10)
-              "
+              :min="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)"
               :allowed-dates="disablePastDates"
               @change="save"
             ></v-date-picker>
           </v-menu>
         </div>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        현재 주택 구매 예산은 얼마나 있나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 현재 주택 구매 예산은 얼마나 있나요? </v-row>
       <v-row>
         <v-text-field
           solo
@@ -106,9 +87,7 @@
           @keyup.enter="moveResult"
         ></v-text-field>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        대출이 가능하신가요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 대출이 가능하신가요? </v-row>
       <v-row>
         <v-text-field
           solo
@@ -136,11 +115,14 @@
         >
       </v-row>
     </v-col>
+
+    <v-col> <PlannerResult /> </v-col>
   </v-container>
 </template>
 
 <script>
 import AptSearchTab from "@/components/apt/AptSearchTab.vue";
+import PlannerResult from "@/components/planner/PlannerResult.vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 const houseInfoStore = "houseInfoStore";
@@ -149,13 +131,25 @@ const plannerStore = "plannerStore";
 export default {
   components: {
     AptSearchTab,
+    PlannerResult,
   },
 
   data: () => ({
+    plannerData: {
+      aptCode: "",
+      aptName: "",
+      aptAmount: 0,
+      hopedDate: "",
+      budget: "",
+      savingPerMonth: "",
+      loadAmount: "",
+    },
+
     activePicker: null,
     date: null,
     menu: false,
 
+    aptCode: "",
     aptName: "",
     aptAmount: 0,
     hopedDate: "",
@@ -177,20 +171,16 @@ export default {
       return this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
     },
     getEndDate() {
-      var endDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth() + 100,
-        10
-      );
+      var endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 500, 10);
       return endDate.toISOString().slice(0, 10);
     },
   },
   mounted() {
     if (this.plannerInfo != null) {
       // this.getHouseInfoDeal(plannerInfo.aptCode);
+      this.aptCode = this.plannerInfo.aptCode;
       this.aptName = this.plannerInfo.aptName;
-      this.aptAmount =
-        this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
+      this.aptAmount = this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
       this.hopedDate = this.plannerInfo.hopedDate;
       this.budget = this.plannerInfo.budget;
       this.savingPerMonth = this.plannerInfo.savingPerMonth;
@@ -209,15 +199,13 @@ export default {
   },
   methods: {
     ...mapActions(houseInfoStore, ["getHouseInfoDeal"]),
-    ...mapMutations(plannerStore, [
-      "SEARCH_PLANNER_INFO",
-      "CLEAR_PLANNER_INFO",
-    ]),
+    ...mapMutations(plannerStore, ["SEARCH_PLANNER_INFO", "CLEAR_PLANNER_INFO"]),
 
     moveResult() {
       this.CLEAR_PLANNER_INFO();
-
+      console.log(this.aptCode + "ASDASDASD");
       const plannerInfo = {
+        aptCode: this.aptCode,
         aptName: this.aptName,
         aptAmount: this.$store.state.houseInfoStore.houseDealList[0].dealAmount,
         hopedDate: this.hopedDate,
@@ -228,6 +216,14 @@ export default {
 
       this.SEARCH_PLANNER_INFO(plannerInfo);
 
+      this.plannerData.aptCode = this.aptCode;
+      this.plannerData.aptName = this.aptName;
+      this.plannerData.aptAmount = this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
+      this.plannerData.hopedDate = this.hopedDate;
+      this.plannerData.budget = this.budget;
+      this.plannerData.savingPerMonth = this.savingPerMonth;
+      this.plannerData.loadAmount = this.loanAmount;
+
       console.log("plannerInfo : ", this.plannerInfo);
       this.$router.push({ name: "plannerResult" }).catch(() => {});
     },
@@ -236,6 +232,8 @@ export default {
     },
     async clickLikeApartment(location) {
       this.aptName = location.apartmentName;
+      this.aptCode = location.aptCode;
+      console.log("click like apartment => ", this.aptCode);
       await this.changeAptAmount(location.aptCode);
     },
 

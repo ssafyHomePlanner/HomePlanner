@@ -141,12 +141,9 @@ export default {
       console.log(value);
     },
     clickPlannerInfo(value) {
-      console.log("플래너 즐겨찾기 item 클릭");
       console.log(value);
       this.selectPlannerInfo(value);
-      console.log("ASD");
       this.getHouseInfoDeal(value.aptCode);
-      console.log("QWE");
       this.$router.push({ name: "plannerView" }).catch(() => {});
     },
   },
