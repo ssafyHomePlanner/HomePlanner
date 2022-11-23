@@ -14,9 +14,9 @@ public interface BoardService {
 
 	public void updateReadCount(int boardId) throws SQLException; // 조회수 수정
 
-	public void updateLikeCount(int boardId, String memberId, int flag) throws SQLException; // 좋아요 수 수정
+	public void updateLikeCount(int boardId, String memberId, boolean flag) throws SQLException; // 좋아요 수 수정
 
-	public int checkBoardLike(int boardId, String memberId) throws SQLException; // 좋아요 확인
+	public boolean checkBoardLike(int boardId, String memberId) throws SQLException; // 좋아요 확인
 
 	public void updateBoard(BoardDto boardDto) throws SQLException; // 게시판 글 수정
 

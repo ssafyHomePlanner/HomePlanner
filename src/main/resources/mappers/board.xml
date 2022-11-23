@@ -53,23 +53,26 @@
     <!-- 좋아요수 수정 -->
     <update id="updateLikeCount" parameterType="int">
         update board
-        <trim prefix="set" suffixOverrides=",">
-            <if test="flag == 1">like_cnt = like_cnt + 1,</if>
-            <if test="flag == 0">like_cnt = like_cnt - 1,</if>
-        </trim>
+        set like_cnt = (
+            select count(*) from bookmark_board where board_id = #{boardId}
+        )
+<!--        <trim prefix="set" suffixOverrides=",">-->
+<!--            <if test="flag == 0">like_cnt = like_cnt + 1,</if>-->
+<!--            <if test="flag >= 1">like_cnt = like_cnt - 1,</if>-->
+<!--        </trim>-->
         where id=#{boardId}
     </update>
 
     <!-- 게시글 좋아요 회원 추가 -->
     <insert id="insertBoardLike">
         insert into bookmark_board(member_id, board_id)
-            vales(#{memberId}, #{boardId})
+            values(#{memberId}, #{boardId})
     </insert>
 
     <!-- 게시글 좋아요 회원 삭제 -->
     <delete id="deleteBoardLike">
         delete from bookmark_board
-        where member_id = #{memberId} abd board_id=#{boardId}
+        where member_id = #{memberId} and board_id=#{boardId}
     </delete>
 
     <!-- 게시글 좋아요 회원수 확인 -->

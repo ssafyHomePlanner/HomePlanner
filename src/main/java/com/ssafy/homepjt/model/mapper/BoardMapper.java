@@ -20,7 +20,7 @@ public interface BoardMapper {
 
     public void updateReadCount(int boardId) throws SQLException; // 조회수 변경
 
-    public void updateLikeCount(@Param("boardId") int boardId, @Param("flag") int flag) throws SQLException; // 좋아요 수 변경
+    public void updateLikeCount(@Param("boardId") int boardId) throws SQLException; // 좋아요 수 변경
 
     // 게시글 회원 죻아요 여부 확인
     public int checkBoardLike(@Param("boardId") int boardId, @Param("memberId") String memberId) throws SQLException;

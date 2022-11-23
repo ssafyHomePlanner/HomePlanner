@@ -113,7 +113,7 @@ public class BoardController {
     @ApiResponses({@ApiResponse(code = 200, message = "게시판 글 좋아요 수 갱신 성공!!"),
             @ApiResponse(code = 404, message = "잘못된 접근!!"), @ApiResponse(code = 500, message = "서버에러!!")})
     @PutMapping("/update/{boardId}/{memberId}/{flag}")
-    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId, @PathVariable("flag") int flag) {
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("boardId") int boardId, @PathVariable("memberId") String memberId, @PathVariable("flag") boolean flag) {
         logger.info("board update like count controller");
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -137,12 +137,12 @@ public class BoardController {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            int check = boardService.checkBoardLike(boardId, memberId);
-            logger.debug("좋아요 클릭 여부 확인 : {}", check);
-            resultMap.put("likeCnt", check);
+            boolean check = boardService.checkBoardLike(boardId, memberId);
+            logger.info("좋아요 클릭 여부 확인 : {}", check);
+            resultMap.put("likeFlag", check);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
         }catch (Exception e){
-            logger.error("좋아요 여부 확인 실패 : {}", e.getMessage());
+            logger.info("좋아요 여부 확인 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }

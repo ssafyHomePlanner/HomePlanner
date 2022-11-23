@@ -57,18 +57,22 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateLikeCount(int boardId, String memberId, int flag) throws SQLException {
-        if(flag == 1){
+    public void updateLikeCount(int boardId, String memberId, boolean flag) throws SQLException {
+        if (!flag) {
             boardMapper.insertBoardLike(boardId, memberId);
-        }else{
+        } else {
             boardMapper.deleteBoardLike(boardId, memberId);
         }
-        boardMapper.updateLikeCount(boardId, flag);
+        boardMapper.updateLikeCount(boardId);
     }
 
     @Override
-    public int checkBoardLike(int boardId, String memberId) throws SQLException {
-        return boardMapper.checkBoardLike(boardId, memberId);
+    public boolean checkBoardLike(int boardId, String memberId) throws SQLException {
+        if (boardMapper.checkBoardLike(boardId, memberId) == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
