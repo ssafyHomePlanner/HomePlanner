@@ -328,9 +328,11 @@ export default {
       let linePath = [];
 
       // 만들어질 경로의 위도/경도를 넣는다.
-      this.sampleLikeLocationList.forEach((element) => {
-        linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
-      });
+      this.$store.state.bookmarkStore.timePathList[0].pathList.forEach(
+        (element) => {
+          linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
+        }
+      );
 
       linePath.forEach((element) => {
         // 클릭한 지점에 대한 정보를 지도에 표시합니다
@@ -356,8 +358,8 @@ export default {
 
       //맵에서 이동할 좌표
       let iwPosition = new kakao.maps.LatLng(
-        this.sampleLikeLocationList[0].lat,
-        this.sampleLikeLocationList[0].lon
+        this.$store.state.bookmarkStore.timePathList[0].pathList[0].lat,
+        this.$store.state.bookmarkStore.timePathList[0].pathList[0].lon
       );
 
       // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
