@@ -215,7 +215,6 @@ export default {
       this.getPathInfoList(requestList);
 
       this.movePathResultView();
-
     },
     movePathResultView() {
       this.$router.push({ name: "pathResult" }).catch(() => {});
@@ -276,12 +275,6 @@ export default {
                 _this.startLocation.lat = result[0].y;
                 _this.startLocation.lon = result[0].x;
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                let infowindow = new kakao.maps.InfoWindow({
-                  content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.startLocation.address}</div>`,
-                  removable: true,
-                });
-
                 let startSrc =
                     "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
                   startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
@@ -298,13 +291,11 @@ export default {
 
                 // 출발 마커를 생성합니다
                 // 결과값으로 받은 위치를 마커로 표시합니다
-                let startMarker = new kakao.maps.Marker({
+                new kakao.maps.Marker({
                   map: _this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
                   position: coords,
                   image: startImage, // 출발 마커이미지를 설정합니다
                 });
-
-                infowindow.open(_this.map, startMarker);
 
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 _this.map.setCenter(coords);
@@ -337,12 +328,6 @@ export default {
                 _this.endLocation.lat = result[0].y;
                 _this.endLocation.lon = result[0].x;
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                let infowindow = new kakao.maps.InfoWindow({
-                  content: `<div style="width:150px;text-align:center;padding:6px 0;">${_this.endLocation.address}</div>`,
-                  removable: true,
-                });
-
                 let arriveSrc =
                     "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
                   arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
@@ -359,13 +344,11 @@ export default {
 
                 // 도착 마커를 생성합니다
                 // 결과값으로 받은 위치를 마커로 표시합니다
-                let arriveMarker = new kakao.maps.Marker({
+                new kakao.maps.Marker({
                   map: _this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
                   position: coords,
                   image: arriveImage, // 도착 마커이미지를 설정합니다
                 });
-
-                infowindow.open(_this.map, arriveMarker);
 
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 _this.map.setCenter(coords);
