@@ -62,7 +62,7 @@
         </v-container>
       </v-col>
     </v-row>
-    <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
+    <v-container class="mt-7 mb-12 ml-1" style="width: 100%">
       <v-row>
         <v-col class="ma-5">
           <v-stepper
@@ -101,6 +101,7 @@ export default {
       "distPathList",
       "timeArr",
       "distArr",
+      "requestList",
     ]),
   },
   data() {
@@ -139,6 +140,7 @@ export default {
       console.log("distPathList", this.distPathList);
       console.log("timeArr", this.timeArr);
       console.log("distArr", this.distArr);
+      console.log("requestList", this.requestList);
     },
     showDistance(content, position) {
       if (this.distanceOverlay) {
