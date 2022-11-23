@@ -18,7 +18,7 @@ const boardStore = {
     board: {},
     boardComment: [],
 
-    likeFlag: 0,
+    likeFlag: false,
 
     startPage: 0,
     currPage: 0,
@@ -128,12 +128,15 @@ const boardStore = {
     addBoardLike({ commit }, payload) {
       addArticleLike(
         payload.boardId,
-        payload.flag,
+        payload.memberId,
+        payload.likeFlag,
         () => {
-          if (payload.flag) {
+          if (payload.likeFlag == 0) {
             commit("ADD_BOARD_LIKE");
+            commit("CHECK_BOARD_LIKE", 1);
           } else {
             commit("DELETE_BOARD_LIKE");
+            commit("CHECK_BOARD_LIKE", 0);
           }
         },
         (error) => {
@@ -146,7 +149,7 @@ const boardStore = {
         payload.boardId,
         payload.memberId,
         ({ data }) => {
-          commit("CHECK_BOARD_LIKE", data.likeCnt);
+          commit("CHECK_BOARD_LIKE", data.likeFlag);
         },
         (error) => {
           console.log(error);

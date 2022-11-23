@@ -36,9 +36,11 @@
         <v-sheet rounded="pill" color="white" elevation="3" height="50" width="90" class="ma-8">
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
-              <v-btn icon color="pink">
-                <v-icon large color="red darken-2" v-if="checkLike"> mdi-heart </v-icon>
-                <v-icon large color="red darken-2" v-else> mdi-heart-outline </v-icon>
+              <v-btn icon color="pink" v-if="checkLike">
+                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart </v-icon>
+              </v-btn>
+              <v-btn icon color="pink" v-else>
+                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart-outline </v-icon>
               </v-btn>
               <span class="ml-2">
                 {{ board.likeCnt }}
@@ -99,12 +101,21 @@ export default {
     ...mapState(memberStore, "userInfo"),
 
     checkLike() {
+      const payload = {
+        boardId: this.board.id,
+        memberId: this.$store.state.memberStore.userInfo.id,
+      };
+      this.checkBoardLike(payload);
+
+      console.log("check board like = ", payload);
+      console.log(this.likeFlag);
       console.log("check like methods => ", this.likeFlag);
 
-      if (this.likeFlag == 1) {
-        return true;
-      }
-      return false;
+      return this, this.likeFlag;
+      // if (!this.likeFlag) {
+      //   return true;
+      // }
+      // return false;
     },
   },
   created() {
@@ -143,9 +154,7 @@ export default {
     },
 
     checkId() {
-      if (
-        this.$store.state.memberStore.userInfo.id == this.$store.state.boardStore.board.memberId
-      ) {
+      if (this.$store.state.memberStore.userInfo.id == this.$store.state.boardStore.board.memberId) {
         return true;
       } else {
         return false;
@@ -153,11 +162,16 @@ export default {
     },
 
     updateLikeCnt() {
+      console.log("update Like Cnt");
+      console.log(this.board.id);
+      console.log(this.$store.state.memberStore.userInfo.id);
+      console.log(this.likeFlag);
       const payload = {
         boardId: this.board.id,
-        memberId: this.userInfo.id,
+        memberId: this.$store.state.memberStore.userInfo.id,
         likeFlag: this.likeFlag,
       };
+      console.log(payload.boardId + " " + payload.memberId + " " + payload.likeFlag);
       this.addBoardLike(payload);
     },
     ...mapActions(boardStore, [
