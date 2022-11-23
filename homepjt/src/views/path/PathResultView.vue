@@ -47,7 +47,8 @@
                   <v-container style="width: 100px; height: 50px">
                     <v-row justify="center">
                       <v-icon large>mdi-forward</v-icon>
-                      예상 시간: {{ item.startIndex }}, {{ item.endIndex }}
+                      예상 시간:
+                      {{ timeArr[item.startIndex][item.endIndex] }}
                     </v-row>
                   </v-container>
                 </v-list-item-content>
