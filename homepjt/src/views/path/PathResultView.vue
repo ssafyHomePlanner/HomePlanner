@@ -29,16 +29,17 @@
       </v-col>
       <v-col cols="auto" class="mr-5 mt-12">
         <v-container class="ml-0 mr-5 pr-1" style="width: 350px; height: 500px">
-          <v-virtual-scroll
+          <!-- <v-virtual-scroll
             bench="5"
-            :items="sampleLikeLocationList"
+            :items="eachPathTimeList"
             height="270"
             item-height="80"
             class="pa-1 mt-3"
           >
             <template v-slot:default="{ item }">
-              <v-list-item :key="item.name">
+              <v-list-item :key="item.index">
                 <v-list-item-content>
+
                   <v-breadcrumbs :items="items" class="pa-2">
                     <template v-slot:divider>
                       <v-container style="width: 100px; height: 50px">
@@ -53,7 +54,7 @@
               </v-list-item>
               <v-divider></v-divider>
             </template>
-          </v-virtual-scroll>
+          </v-virtual-scroll> -->
         </v-container>
         <v-container style="width: 350px; height: 100px">
           <h2>총 거리: {{ timePathList[0].dist }}</h2>
@@ -71,16 +72,12 @@
             :key="index"
           >
             <v-stepper-header>
-              <div
-                v-for="(element, index) in data.pathList"
-                :key="index"
-                style="display: inline"
-              >
-                <v-stepper-step :step="index + 1">
+              <template v-for="(element, i) in data.pathList">
+                <v-stepper-step :step="i + 1" :key="i">
                   {{ element.aptName }}
                 </v-stepper-step>
-                <v-divider></v-divider>
-              </div>
+                <v-divider :key="i"></v-divider>
+              </template>
             </v-stepper-header>
           </v-stepper>
         </v-col>
@@ -103,6 +100,28 @@ export default {
       "distArr",
       "requestList",
     ]),
+    eachPathTimeList() {
+      let timeList = [];
+
+      for (
+        let i = 0;
+        i < this.$store.state.bookmarkStore.timePathList[0].pathList.length - 1;
+        i++
+      ) {
+        let temp = {
+          startName:
+            this.$store.state.bookmarkStore.timePathList.pathList[i].aptName,
+          endName:
+            this.$store.state.bookmarkStore.timePathList.pathList[i + 1]
+              .aptName,
+          index: i,
+        };
+
+        timeList.push(temp);
+      }
+
+      return timeList;
+    },
   },
   data() {
     return {
@@ -118,20 +137,6 @@ export default {
       distanceOverlay: null,
       pathResultType: "time",
       dots: [],
-      sampleLikeLocationList: [
-        {
-          lon: "126.766986471789",
-          lat: "37.4918092437981",
-        },
-        {
-          lon: "126.769215401626",
-          lat: "37.4981077694787",
-        },
-        {
-          lon: "126.779310556166",
-          lat: "37.4953683630967",
-        },
-      ],
     };
   },
   methods: {
@@ -141,6 +146,32 @@ export default {
       console.log("timeArr", this.timeArr);
       console.log("distArr", this.distArr);
       console.log("requestList", this.requestList);
+
+      let timeList = [];
+
+      // console.log(
+      //   "pathList",
+      //   this.$store.state.bookmarkStore.timePathList[0].pathList
+      // );
+
+      for (
+        let i = 0;
+        i < this.$store.state.bookmarkStore.timePathList[0].pathList.length - 1;
+        i++
+      ) {
+        let temp = {
+          startName:
+            this.$store.state.bookmarkStore.timePathList[0].pathList[i].aptName,
+          endName:
+            this.$store.state.bookmarkStore.timePathList[0].pathList[i + 1]
+              .aptName,
+          index: i,
+        };
+
+        timeList.push(temp);
+      }
+
+      console.log("timeList", timeList);
     },
     showDistance(content, position) {
       if (this.distanceOverlay) {
