@@ -7,28 +7,30 @@
     </v-row>
     <v-row class="planner-result-item-middle-text">
       <strong>{{ resultDate }}</strong> 입니다.
-      <v-btn class="mt-4" color="primary" @click="savePlannerInfo"><v-icon>mdi-content-save</v-icon>플래너 저장</v-btn>
+      <v-btn class="mt-4" color="primary" @click="savePlannerInfo"
+        ><v-icon>mdi-content-save</v-icon>플래너 저장</v-btn
+      >
     </v-row>
     <v-row justify="start" class="mb-2">
       <v-divider></v-divider>
     </v-row>
 
-    <v-col>
+    <!-- <v-col>
       <LineChart :chart-data="charData" />
-    </v-col>
+    </v-col> -->
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import LineChart from "@/components/chart/LineChart.vue";
+// import LineChart from "@/components/chart/LineChart.vue";
 
 const plannerStore = "plannerStore";
 const memberStore = "memberStore";
 
 export default {
   components: {
-    LineChart,
+    // LineChart,
   },
   data() {
     return {

@@ -19,15 +19,26 @@
             <h3>현재 시세(최근 실거래가 기준)</h3>
           </v-row>
           <v-row>
-            <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal" readonly suffix="만원"></v-text-field>
+            <v-text-field
+              solo
+              style="max-width: 300px"
+              v-model="maxHouseDeal"
+              readonly
+              suffix="만원"
+            ></v-text-field>
           </v-row>
         </v-col>
         <v-col cols="auto">
-          <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" v-on:enterApartment="enterApartment" />
+          <AptSearchTab
+            v-on:clickLikeApartment="clickLikeApartment"
+            v-on:enterApartment="enterApartment"
+          />
         </v-col>
       </v-row>
 
-      <v-row class="planner-item-middle-text" justify="start"> 언제쯤 내 집 마련을 하고 싶나요? </v-row>
+      <v-row class="planner-item-middle-text" justify="start">
+        언제쯤 내 집 마련을 하고 싶나요?
+      </v-row>
       <v-row class="mb-5">
         <div>
           <v-menu
@@ -54,14 +65,20 @@
               v-model="hopedDate"
               :active-picker.sync="activePicker"
               :max="getEndDate"
-              :min="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)"
+              :min="
+                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                  .toISOString()
+                  .substr(0, 10)
+              "
               :allowed-dates="disablePastDates"
               @change="save"
             ></v-date-picker>
           </v-menu>
         </div>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start"> 현재 주택 구매 예산은 얼마나 있나요? </v-row>
+      <v-row class="planner-item-middle-text" justify="start">
+        현재 주택 구매 예산은 얼마나 있나요?
+      </v-row>
       <v-row>
         <v-text-field
           solo
@@ -116,13 +133,13 @@
       </v-row>
     </v-col>
 
-    <v-col> <PlannerResult /> </v-col>
+    <!-- <v-col> <PlannerResult /> </v-col> -->
   </v-container>
 </template>
 
 <script>
 import AptSearchTab from "@/components/apt/AptSearchTab.vue";
-import PlannerResult from "@/components/planner/PlannerResult.vue";
+// import PlannerResult from "@/components/planner/PlannerResult.vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 const houseInfoStore = "houseInfoStore";
@@ -131,7 +148,7 @@ const plannerStore = "plannerStore";
 export default {
   components: {
     AptSearchTab,
-    PlannerResult,
+    // PlannerResult,
   },
 
   data: () => ({
@@ -178,6 +195,7 @@ export default {
   mounted() {
     if (this.plannerInfo != null) {
       // this.getHouseInfoDeal(plannerInfo.aptCode);
+      console.log("mounted !! , plannerINfo = ", this.plannerInfo);
       this.aptCode = this.plannerInfo.aptCode;
       this.aptName = this.plannerInfo.aptName;
       this.aptAmount = this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
