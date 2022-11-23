@@ -140,17 +140,39 @@ const houseInfoStore = {
         }
       );
     },
+    searchCommentList({ commit }, payload) {
+      commit("SEARCH_COMMIT_LIST", payload);
+    },
 
-    writeComment(context, commentInfo) {
+    writeAptComment({ commit }, payload) {
+      let comment = {
+        memberId: payload.memberId,
+        content: payload.content,
+        aptCode: payload.aptCode,
+      };
+
+      console.log("comment = ", comment);
       writeHouseComment(
-        commentInfo,
+        comment,
         ({ data }) => {
+          console.log("아파트 댓글 등록 성공");
           console.log(data);
         },
         (error) => {
           console.log(error);
         }
-      );
+      ).then(() => {
+        selectHouseComment(
+          comment.aptCode,
+          ({ data }) => {
+            console.log("아파트 댓글 불러오기");
+            commit("SEARCH_COMMENT_LIST", data.houseCommentList);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      });
     },
 
     updateComment(context, commentInfo) {

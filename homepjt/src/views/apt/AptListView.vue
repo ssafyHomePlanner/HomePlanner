@@ -127,7 +127,10 @@ export default {
       this.search = this.$store.state.aptStore.searchedApartName;
     },
     clickRow(value) {
-      this.searchHouseInfo(value);
+      this.searchHouseInfo(value).then(() => {
+        console.log("value = ", value);
+        this.searchCommentList(value.aptCode);
+      });
       console.log("clicked row = ", value);
       this.getHouseInfoDeal(value.aptCode);
       this.moveResultPage();

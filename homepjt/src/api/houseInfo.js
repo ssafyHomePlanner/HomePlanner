@@ -19,7 +19,7 @@ function searchHouseInfoAuto(params, success, fail) {
 
 // 아파트 댓글 쓰기
 function writeHouseComment(commentInfo, success, fail) {
-  api.post(`/house/comment`, JSON.stringify(commentInfo)).then(success).catch(fail);
+  return api.post(`/house/comment`, JSON.stringify(commentInfo)).then(success).catch(fail);
 }
 
 // 아파트 댓글 수정
@@ -34,7 +34,7 @@ function selectHouseComment(aptCode, success, fail) {
 
 // 아파트 댓글 삭제
 function deleteHouseComment(houseCommentId, success, fail) {
-  api.delete(`/house/comment/${houseCommentId}`).then(success).catch(fail);
+  return api.delete(`/house/comment/${houseCommentId}`).then(success).catch(fail);
 }
 
 // 아파트 상세 검색(거래내역)

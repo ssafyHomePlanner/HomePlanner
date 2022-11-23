@@ -41,13 +41,22 @@
         <LineChart :chart-data="charData" />
       </v-col>
     </v-row>
+
+    <v-row class="mb-3">
+      <v-col cols="col-2">댓글 {{ commentList.length }}</v-col>
+    </v-row>
+
     <v-divider></v-divider>
     <v-row>
+      <apt-comment-item v-for="(comment, index) in commentList" :key="index" :comment="comment" />
+
       <v-col cols="auto">
         <v-container>
           <v-row>
             <v-col cols="col-8">
               <v-text-field
+                @keyup.enter="clickEnrollComment"
+                v-model="comment.content"
                 counter="25"
                 hint="댓글을 작성하세요"
                 label="댓글"
@@ -56,7 +65,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="col-4">
-              <v-btn color="primary" elevation="3" large>등록</v-btn>
+              <v-btn @click="clickEnrollComment" color="primary" elevation="3" large>등록</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -67,6 +76,7 @@
 
 <script>
 import LineChart from "@/components/chart/LineChart.vue";
+import AptCommentItem from "@/components/apt/AptCommentItem.vue";
 import { mapState, mapActions } from "vuex";
 const houseInfoStore = "houseInfoStore";
 const memberStore = "memberStore";
@@ -74,9 +84,10 @@ const memberStore = "memberStore";
 export default {
   components: {
     LineChart,
+    AptCommentItem,
   },
   computed: {
-    ...mapState(houseInfoStore, ["houseInfo", "houseDealList", "likeFlag"]),
+    ...mapState(houseInfoStore, ["houseInfo", "houseDealList", "likeFlag", "commentList"]),
     ...mapState(memberStore, ["userInfo"]),
 
     checkLike() {
@@ -84,6 +95,8 @@ export default {
         aptCode: this.houseInfo.aptCode,
         memberId: this.$store.state.memberStore.userInfo.id,
       };
+
+      console.log("here is commentLIst : ", this.commentList);
 
       this.checkAptLike(payload);
       return this.likeFlag;
@@ -130,6 +143,12 @@ export default {
         { text: "전용미터 (m2)", value: "area", width: "10%" },
         { text: "층", value: "floor", width: "10%" },
       ],
+
+      comment: {
+        memberId: "",
+        content: "",
+        aptCode: "",
+      },
     };
   },
   methods: {
@@ -175,8 +194,14 @@ export default {
       console.log(payload.aptCode + " " + payload.memberId + " " + payload.likeFlag);
       this.addLikeCnt(payload);
     },
+    clickEnrollComment() {
+      this.comment.aptCode = this.houseInfo.aptCode;
+      this.comment.memberId = this.userInfo.id;
+      this.writeAptComment(this.comment);
+      this.comment = {};
+    },
 
-    ...mapActions(houseInfoStore, ["addViewCnt", "addLikeCnt", "checkAptLike"]),
+    ...mapActions(houseInfoStore, ["addViewCnt", "addLikeCnt", "checkAptLike", "writeAptComment"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
