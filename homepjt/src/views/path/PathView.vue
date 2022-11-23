@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     ...mapActions(bookmarkStore, ["getPathInfoList"]),
-    searchOptimalPath() {
+    async searchOptimalPath() {
       let requestList = [];
 
       let startLocationName = this.startLocation.name
@@ -211,8 +211,8 @@ export default {
 
       requestList.push(end);
 
-      // console.log(requestList);
-      this.getPathInfoList(requestList);
+      console.log("requestList", requestList);
+      await this.getPathInfoList(requestList);
 
       this.movePathResultView();
     },

@@ -88,8 +88,8 @@ const bookmarkStore = {
     },
   },
   actions: {
-    getPathInfoList({ commit }, payload) {
-      searchPath(
+    async getPathInfoList({ commit }, payload) {
+      await searchPath(
         payload,
         ({ data }) => {
           console.log("data : {}", data);

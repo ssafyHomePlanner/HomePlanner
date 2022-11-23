@@ -311,6 +311,8 @@ export default {
         }
       );
 
+      console.log("linePath", linePath);
+
       let startSrc =
           "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
         startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
@@ -430,6 +432,8 @@ export default {
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
+
+      this.makeLine();
     },
   },
   mounted() {
@@ -446,8 +450,6 @@ export default {
       //   process.env.VUE_APP_APT_DEAL_API_KEY;
       document.head.appendChild(script);
     }
-
-    this.makeLine();
   },
 };
 </script>
