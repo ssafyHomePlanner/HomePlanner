@@ -151,6 +151,7 @@ export default {
       return timeList;
     },
   },
+
   data() {
     return {
       items: [
@@ -391,6 +392,8 @@ export default {
       //   process.env.VUE_APP_APT_DEAL_API_KEY;
       document.head.appendChild(script);
     }
+
+    this.makeLine();
   },
 };
 </script>
