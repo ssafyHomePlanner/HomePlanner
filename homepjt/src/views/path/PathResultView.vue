@@ -32,7 +32,7 @@
           <v-virtual-scroll
             bench="5"
             :items="eachPathTimeList"
-            height="270"
+            height="400"
             item-height="80"
             class="pa-1 mt-3"
           >
@@ -48,7 +48,7 @@
                     <v-row justify="center">
                       <v-icon large>mdi-forward</v-icon>
                       예상 시간:
-                      {{ timeArr[item.startIndex][item.endIndex] }}
+                      {{ timeArr[item.startIndex][item.endIndex] }}초
                     </v-row>
                   </v-container>
                 </v-list-item-content>
@@ -61,9 +61,9 @@
           </v-virtual-scroll>
         </v-container>
         <v-container style="width: 350px; height: 100px">
-          <h2>총 거리: {{ timePathList[0].dist }}</h2>
+          <h2>총 거리: {{ timePathList[0].dist }}미터</h2>
           <br />
-          <h3>총 예상 시간: {{ timePathList[0].time }}</h3>
+          <h3>총 예상 시간: {{ timePathList[0].time }}초</h3>
         </v-container>
       </v-col>
     </v-row>
