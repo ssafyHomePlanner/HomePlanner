@@ -2,9 +2,8 @@
   <v-container fill-height fluid class="ma-8">
     <v-row>
       <v-col cols="auto">
-        <v-container >
+        <v-container>
           <v-row justify="space-between">
-
             <v-col>
               <v-btn-toggle
                 v-model="pathResultType"
@@ -17,7 +16,9 @@
               </v-btn-toggle>
             </v-col>
             <v-col cols="auto">
-              <v-btn class="mt-4" color="primary"><v-icon>mdi-content-save</v-icon>경로 저장</v-btn>
+              <v-btn class="mt-4" color="primary"
+                ><v-icon>mdi-content-save</v-icon>경로 저장</v-btn
+              >
               <v-btn @click="makeLine">테스트 버튼</v-btn>
               <v-btn @click="printData">데이터 출력</v-btn>
             </v-col>
@@ -55,73 +56,52 @@
           </v-virtual-scroll>
         </v-container>
         <v-container style="width: 350px; height: 100px">
-          <h2>총 거리:</h2><br>
-          <h3>총 예상 시간:</h3>
+          <h2>총 거리: {{ timePathList[0].dist }}</h2>
+          <br />
+          <h3>총 예상 시간: {{ timePathList[0].time }}</h3>
         </v-container>
       </v-col>
     </v-row>
     <v-container class="mt-7 mb-12 ml-1" style="width: 100%; height: 280px">
-      <!-- <v-row class="path-item-middle-text mb-7" justify="start">
-        후보 경로 리스트
-      </v-row> -->
       <v-row>
-        <v-col>
-          <v-stepper alt-labels >
+        <v-col class="ma-5">
+          <v-stepper
+            alt-labels
+            v-for="(data, index) in timePathList"
+            :key="index"
+          >
             <v-stepper-header>
-              <v-stepper-step step="1" > 출발지 </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step step="2" > 펠리스카운티 </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step step="3" > 그린타운(삼성) </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step step="4" > 리첸시아중동 </v-stepper-step>
-              <v-divider></v-divider>
-              <v-stepper-step step="5" > 도착지 </v-stepper-step>
+              <div
+                v-for="(element, index) in data.pathList"
+                :key="index"
+                style="display: inline"
+              >
+                <v-stepper-step :step="index + 1">
+                  {{ element.aptName }}
+                </v-stepper-step>
+                <v-divider></v-divider>
+              </div>
             </v-stepper-header>
           </v-stepper>
         </v-col>
       </v-row>
-      <v-col>
-      </v-col>
-      <v-stepper non-linear>
-        <v-stepper-header>
-          <v-stepper-step step="1" > 출발지 </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="2" > 펠리스카운티 </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="3" > 그린타운(삼성) </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="4" > 리첸시아중동 </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="5" > 도착지 </v-stepper-step>
-        </v-stepper-header>
-      </v-stepper>
-      <v-stepper non-linear>
-        <v-stepper-header>
-          <v-stepper-step step="1" > 출발지 </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="2" > 그린타운(삼성) </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="3" > 리첸시아중동  </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="4" > 펠리스카운티 </v-stepper-step>
-          <v-divider></v-divider>
-          <v-stepper-step step="5" > 도착지 </v-stepper-step>
-        </v-stepper-header>
-      </v-stepper>
     </v-container>
   </v-container>
 </template>
 
 <script>
-
 import { mapState } from "vuex";
 
 const bookmarkStore = "bookmarkStore";
 
 export default {
   computed: {
-    ...mapState(bookmarkStore, ["timePathList", "distPathList", "timeArr", "distArr"]),
+    ...mapState(bookmarkStore, [
+      "timePathList",
+      "distPathList",
+      "timeArr",
+      "distArr",
+    ]),
   },
   data() {
     return {
@@ -154,7 +134,7 @@ export default {
     };
   },
   methods: {
-    printData(){
+    printData() {
       console.log("timePathList", this.timePathList);
       console.log("distPathList", this.distPathList);
       console.log("timeArr", this.timeArr);
