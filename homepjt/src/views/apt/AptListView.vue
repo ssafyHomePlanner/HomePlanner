@@ -4,11 +4,24 @@
       <h1>아파트 상세 검색</h1>
     </v-row>
     <v-row justify="center">
-      <v-sheet height="400" width="1000" elevation="4" rounded="xl" class="pt-8">
+      <v-sheet
+        height="400"
+        width="1000"
+        elevation="4"
+        rounded="xl"
+        class="pt-8"
+      >
         <v-row class="ma-1">
-          <v-col cols="auto" align-self="center" style="min-width: 100px"> 아파트 검색 </v-col>
+          <v-col cols="auto" align-self="center" style="min-width: 100px">
+            아파트 검색
+          </v-col>
           <v-col align-self="center">
-            <v-text-field @keyup.enter="clickSearchBtn" hide-details class="mt-0 pt-0" v-model="search"></v-text-field>
+            <v-text-field
+              @keyup.enter="clickSearchBtn"
+              hide-details
+              class="mt-0 pt-0"
+              v-model="search"
+            ></v-text-field>
           </v-col>
           <v-col cols="auto">
             <v-btn color="primary" @click="clickSearchBtn">검색</v-btn>
@@ -16,50 +29,92 @@
         </v-row>
         <v-divider></v-divider>
         <v-row class="ma-1">
-          <v-col cols="auto" align-self="center" style="min-width: 100px"> 지역 선택 </v-col>
+          <v-col cols="auto" align-self="center" style="min-width: 100px">
+            지역 선택
+          </v-col>
           <v-row justify="start" class="ml-3">
             <v-col cols="3">
-              <v-select v-model="sido" :items="sidoList" label="시도 선택" @change="makeGugunList"></v-select>
+              <v-select
+                v-model="sido"
+                :items="sidoList"
+                label="시도 선택"
+                @change="makeGugunList"
+              ></v-select>
             </v-col>
             <v-col cols="3">
-              <v-select v-model="gugun" :items="gugunList" label="시군구 선택" @change="makeDongList"></v-select>
+              <v-select
+                v-model="gugun"
+                :items="gugunList"
+                label="시군구 선택"
+                @change="makeDongList"
+              ></v-select>
             </v-col>
             <v-col cols="3">
-              <v-select v-model="dong" :items="dongList" label="읍면동 선택"></v-select>
+              <v-select
+                v-model="dong"
+                :items="dongList"
+                label="읍면동 선택"
+              ></v-select>
             </v-col>
           </v-row>
         </v-row>
         <v-divider></v-divider>
         <v-row class="ma-1">
-          <v-col cols="auto" align-self="center" style="min-width: 100px"> 가격 </v-col>
+          <v-col cols="auto" align-self="center" style="min-width: 100px">
+            가격
+          </v-col>
           <v-col align-self="center">
-            <v-range-slider v-model="priceRange" thumb-label="always" thumb-size="35" max="150" min="0" hide-details>
-              <template v-slot:thumb-label="item"> {{ item.value }}억 </template>
+            <v-range-slider
+              v-model="priceRange"
+              thumb-label="always"
+              thumb-size="35"
+              max="150"
+              min="0"
+              hide-details
+            >
+              <template v-slot:thumb-label="item">
+                {{ item.value }}억
+              </template>
             </v-range-slider>
           </v-col>
         </v-row>
         <v-divider></v-divider>
         <v-row class="ma-1">
-          <v-col cols="auto" align-self="center" style="min-width: 100px"> 전용 면적(평) </v-col>
+          <v-col cols="auto" align-self="center" style="min-width: 100px">
+            전용 면적(평)
+          </v-col>
           <v-col align-self="center">
-            <v-range-slider v-model="areaRange" thumb-label="always" thumb-size="35" max="130" min="0" hide-details>
-              <template v-slot:thumb-label="item"> {{ item.value }}평 </template>
+            <v-range-slider
+              v-model="areaRange"
+              thumb-label="always"
+              thumb-size="35"
+              max="130"
+              min="0"
+              hide-details
+            >
+              <template v-slot:thumb-label="item">
+                {{ item.value }}평
+              </template>
             </v-range-slider>
           </v-col>
         </v-row>
         <v-divider></v-divider>
         <v-row class="ma-1">
-          <v-col cols="auto" align-self="center" style="min-width: 100px"> 건축년도 </v-col>
+          <v-col cols="auto" align-self="center" style="min-width: 100px">
+            건축년도
+          </v-col>
           <v-col align-self="center">
             <v-range-slider
               v-model="buildYearRange"
               thumb-label="always"
               thumb-size="40"
               v-bind:max="currentYear"
-              min="2000"
+              min="1960"
               hide-details
             >
-              <template v-slot:thumb-label="item"> {{ item.value }}년 </template></v-range-slider
+              <template v-slot:thumb-label="item">
+                {{ item.value }}년
+              </template></v-range-slider
             >
           </v-col>
         </v-row>
@@ -151,7 +206,11 @@ export default {
       this.dong = "";
       if (this.gugun != "") this.searchDongList(this.gugun);
     },
-    ...mapActions(aptStore, ["searchSidoList", "searchGugunList", "searchDongList"]),
+    ...mapActions(aptStore, [
+      "searchSidoList",
+      "searchGugunList",
+      "searchDongList",
+    ]),
     ...mapActions(houseInfoStore, [
       "getHouseInfoList",
       "getHouseInfoListAuto",
@@ -159,7 +218,11 @@ export default {
       "getHouseInfoDetailInfo",
       "getHouseInfoDeal",
     ]),
-    ...mapMutations(aptStore, ["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST"]),
+    ...mapMutations(aptStore, [
+      "CLEAR_SIDO_LIST",
+      "CLEAR_GUGUN_LIST",
+      "CLEAR_DONG_LIST",
+    ]),
   },
   computed: {
     ...mapState(aptStore, [
