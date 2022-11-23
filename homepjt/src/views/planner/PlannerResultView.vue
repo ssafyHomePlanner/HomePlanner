@@ -2,12 +2,13 @@
   <v-container fill-height fluid class="ma-12">
     <v-row class="planner-result-item-header-text">
       {{ this.aptName }} 예상 구매 시기는 희망 구매 시기보다
-
+    </v-row>
+    <v-row class="planner-result-item-header-text">
       <h3>{{ calculatedDate }}</h3>
     </v-row>
     <v-row class="planner-result-item-middle-text">
-      <strong>{{ resultDate }}</strong> 입니다.
-      <v-btn class="mt-4" color="primary" @click="savePlannerInfo"
+      <strong>'{{ resultDate }}'</strong> 입니다.
+      <v-btn class="ma-4" color="primary" @click="savePlannerInfo"
         ><v-icon>mdi-content-save</v-icon>플래너 저장</v-btn
       >
     </v-row>

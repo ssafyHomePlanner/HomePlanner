@@ -134,14 +134,8 @@ const bookmarkStore = {
     },
 
     insertPathList(context, payload) {
-      const pathInfo = {
-        aptCode: payload.aptCode,
-        aptName: payload.aptName,
-        lat: payload.lat,
-        lon: payload.lon,
-      };
       insertPath(
-        pathInfo,
+        context.state.requestList,
         payload.memberId,
         payload.pathName,
         ({ data }) => {

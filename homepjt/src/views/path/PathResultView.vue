@@ -20,10 +20,9 @@
               </v-btn-toggle>
             </v-col>
             <v-col cols="auto">
-              <v-btn class="mt-4" color="primary"
+              <v-btn @click="savePath" class="mt-4" color="primary"
                 ><v-icon>mdi-content-save</v-icon>경로 저장</v-btn
               >
-              <!-- <v-btn @click="printData">데이터 출력</v-btn> -->
             </v-col>
           </v-row>
         </v-container>
@@ -109,7 +108,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const bookmarkStore = "bookmarkStore";
 
@@ -139,6 +138,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions(bookmarkStore, [
+      "insertPathList",
+    ]),
     changePath(element) {
       console.log("element", element);
       this.currentPath = element;
@@ -201,12 +203,20 @@ export default {
       console.log("현재 거리경로");
       this.eachPathTimeList();
     },
-    printData() {
-      console.log("timePathList", this.timePathList);
-      console.log("distPathList", this.distPathList);
-      console.log("timeArr", this.timeArr);
-      console.log("distArr", this.distArr);
-      console.log("requestList", this.requestList);
+    savePath() {
+      let tempObject = {
+        memberId: this.$store.state.memberStore.userInfo.id,
+        pathName: "test"
+      }
+
+      console.log("tempObject", tempObject);
+
+      this.insertPathList(tempObject);
+      // console.log("timePathList", this.timePathList);
+      // console.log("distPathList", this.distPathList);
+      // console.log("timeArr", this.timeArr);
+      // console.log("distArr", this.distArr);
+      // console.log("requestList", this.requestList);
     },
 
     // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
