@@ -20,6 +20,7 @@ const bookmarkStore = {
     distPathList: [],
     timeArr: [],
     distArr: [],
+    requestList: [],
 
     bookmarkAptList: [],
     bookmarkApt: {},
@@ -31,6 +32,9 @@ const bookmarkStore = {
   },
   getters: {},
   mutations: {
+    SET_REQUEST_LIST(state, payload) {
+      state.requestList = payload;
+    },
     SEARCH_PATH_INFO(state, payload) {
       state.pathInfo = payload;
     },
@@ -89,6 +93,7 @@ const bookmarkStore = {
         ({ data }) => {
           console.log("data : {}", data);
           commit("CLEAR_PATH_INFO_LIST");
+          commit("SET_REQUEST_LIST", payload);
           commit("SEARCH_PATH_INFO_LIST", data);
           console.log("pathList : {}", data);
         },
@@ -116,7 +121,10 @@ const bookmarkStore = {
         bookmarkPathId,
         ({ data }) => {
           commit("CLEAR_BOOKMARK_PATH_DETAIL_LIST");
-          commit("SEARCH_BOOKMARK_PATH_DETAIL_LIST", data.bookmarkPathDetailList);
+          commit(
+            "SEARCH_BOOKMARK_PATH_DETAIL_LIST",
+            data.bookmarkPathDetailList
+          );
         },
         (error) => {
           console.log(error);
