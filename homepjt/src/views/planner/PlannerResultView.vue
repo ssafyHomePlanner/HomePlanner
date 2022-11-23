@@ -52,22 +52,22 @@ export default {
       hopedDate: "",
       budget: "",
       savingPerMonth: "",
-      loan: "",
+      loanAmount: "",
 
       calculatedDate: "",
       resultDate: "",
     };
   },
   mounted() {
-    // console.log(this.plannerInfo);
+    console.log(this.plannerInfo);
     this.aptName = this.plannerInfo.aptName;
     this.aptAmount = parseFloat(this.plannerInfo.aptAmount) * 1000;
     this.hopedDate = this.plannerInfo.hopedDate;
     this.budget = parseFloat(this.plannerInfo.budget);
     this.savingPerMonth = parseFloat(this.plannerInfo.savingPerMonth);
-    this.loan = parseFloat(this.plannerInfo.loan);
+    this.loanAmount = parseFloat(this.plannerInfo.loanAmount);
 
-    let myMoney = this.budget + this.loan;
+    let myMoney = this.budget + this.loanAmount;
 
     if (myMoney >= this.aptAmount) {
       console.log("지금 구매 가능 : ", myMoney - this.aptAmount);
@@ -80,6 +80,7 @@ export default {
       let needTime = parseInt((this.aptAmount - myMoney) / this.savingPerMonth);
       // this.calculatedDate = needTime + "개월 뒤인";
 
+      console.log("need time = ", needTime);
       let todayYear = new Date().getFullYear();
       let todayMonth = new Date().getMonth() + 1;
       let todayMonths = todayYear * 12 + todayMonth;

@@ -17,6 +17,7 @@
                 v-for="(aptInfo, index) in bookmarkAptList"
                 :key="index"
                 :aptInfo="aptInfo"
+                @click="clickAptInfo(aptInfo)"
                 height="120"
                 width="200"
                 elevation="4"
@@ -44,6 +45,7 @@
                 v-for="(pathInfo, index) in bookmarkPathList"
                 :key="index"
                 :pathInfo="pathInfo"
+                @click="clickPathInfo(pathInfo)"
                 height="120"
                 width="200"
                 elevation="4"
@@ -71,6 +73,7 @@
                 v-for="(plannerInfo, index) in plannerInfoList"
                 :key="index"
                 :plannerInfo="plannerInfo"
+                @click="clickPlannerInfo(plannerInfo)"
                 height="120"
                 width="200"
                 elevation="4"
@@ -101,6 +104,7 @@ import { mapState, mapActions, mapMutations } from "vuex";
 const bookmarkStore = "bookmarkStore";
 const memberStore = "memberStore";
 const plannerStore = "plannerStore";
+const houseInfoStore = "houseInfoStore";
 
 export default {
   data() {
@@ -110,19 +114,41 @@ export default {
   },
   computed: {
     ...mapState(bookmarkStore, ["bookmarkAptList", "bookmarkPathList", "plannerInfoList"]),
-    ...mapState(plannerStore, ["plannerInfoList"]),
+    ...mapState(plannerStore, ["plannerInfoList", "plannerInfo"]),
     ...mapState(memberStore, ["userInfo"]),
   },
   mounted() {
     this.CLEAR_BOOKMARK_APT_LIST();
     this.selectBookmarkAptList(this.userInfo.id);
     this.searchBookmarkPathInfo(this.userInfo.id);
-    this.selectPlannerInfo(this.userInfo.id);
+    this.selectPlannerInfoList(this.userInfo.id);
   },
   methods: {
     ...mapMutations(bookmarkStore, ["CLEAR_BOOKMARK_APT_LIST"]),
     ...mapActions(bookmarkStore, ["selectBookmarkAptList", "searchBookmarkPathInfo"]),
-    ...mapActions(plannerStore, ["selectPlannerInfo"]),
+    ...mapActions(plannerStore, ["selectPlannerInfo", "selectPlannerInfoList"]),
+    ...mapActions(houseInfoStore, ["searchHouseInfo", "getHouseInfoDeal"]),
+
+    clickAptInfo(value) {
+      // console.log(value);
+      this.searchHouseInfo(value);
+      this.getHouseInfoDeal(value.aptCode);
+      this.$router.push({ name: "aptResultView" }).catch(() => {});
+    },
+    clickPathInfo(value) {
+      console.log("경로 즐겨찾기 item 클릭");
+
+      console.log(value);
+    },
+    clickPlannerInfo(value) {
+      console.log("플래너 즐겨찾기 item 클릭");
+      console.log(value);
+      this.selectPlannerInfo(value);
+      console.log("ASD");
+      this.getHouseInfoDeal(value.aptCode);
+      console.log("QWE");
+      this.$router.push({ name: "plannerView" }).catch(() => {});
+    },
   },
 };
 </script>

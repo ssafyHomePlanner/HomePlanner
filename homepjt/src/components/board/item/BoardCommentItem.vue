@@ -41,14 +41,7 @@ export default {
       this.deleteBoardComment(this.comment);
     },
     checkId() {
-      // console.log(this.userInfo.id);
-      // console.log(this.comment.memberId);
-
-      // console.log(this.userInfo.id == this.comment.memerId);
-      // console.log(this.userInfo.id.trim());
-      // console.log(this.comment.memberId.trim());
-
-      if (this.userInfo.id === this.comment.memerId) {
+      if (this.userInfo.id === this.comment.memberId) {
         return true;
       } else {
         return false;

@@ -111,7 +111,7 @@ export default {
       console.log(this.likeFlag);
       console.log("check like methods => ", this.likeFlag);
 
-      return this, this.likeFlag;
+      return this.likeFlag;
       // if (!this.likeFlag) {
       //   return true;
       // }

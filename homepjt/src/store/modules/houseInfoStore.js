@@ -8,6 +8,8 @@ import {
   searchHouseInfoDetail,
   searchHouseDeal,
   addHouseInfoViewCnt,
+  updateAptLikeInfo,
+  checkAptLikeInfo,
 } from "@/api/houseInfo.js";
 
 const houseInfoStore = {
@@ -17,6 +19,8 @@ const houseInfoStore = {
     houseInfoList: [],
     houseDeal: {},
     houseDealList: [],
+
+    likeFlag: false,
 
     comment: {},
     commentList: [],
@@ -53,6 +57,20 @@ const houseInfoStore = {
     },
     CLEAR_COMMENT_LIST(state) {
       state.commentList = [];
+    },
+
+    ADD_APT_VIEW(state) {
+      state.houseInfo.viewCnt += 1;
+    },
+
+    ADD_APT_LIKE(state) {
+      state.houseInfo.likeCnt += 1;
+    },
+    DELETE_APT_LIKE(state) {
+      state.houseInfo.likeCnt -= 1;
+    },
+    CHECK_APT_LIKE(state, payload) {
+      state.likeFlag = payload;
     },
   },
   actions: {
@@ -185,11 +203,46 @@ const houseInfoStore = {
       );
     },
 
-    addViewCnt(context, aptCode) {
+    addViewCnt({ commit }, aptCode) {
       addHouseInfoViewCnt(
         aptCode,
         ({ data }) => {
+          commit("ADD_APT_VIEW");
           console.log(data.message);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    addLikeCnt({ commit }, payload) {
+      updateAptLikeInfo(
+        payload.aptCode,
+        payload.memberId,
+        payload.likeFlag,
+        () => {
+          if (payload.likeFlag == 0) {
+            alert("즐겨찾기에 추가하였습니다.");
+            commit("ADD_APT_LIKE");
+            commit("CHECK_APT_LIKE", 1);
+          } else {
+            alert("즐겨찾기에서 제거하였습니다.");
+            commit("DELETE_APT_LIKE");
+            commit("CHECK_APT_LIKE", 0);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    checkAptLike({ commit }, payload) {
+      checkAptLikeInfo(
+        payload.aptCode,
+        payload.memberId,
+        ({ data }) => {
+          commit("CHECK_APT_LIKE", data.likeFlag);
+          console.log("check apt like data : ", data);
         },
         (error) => {
           console.log(error);

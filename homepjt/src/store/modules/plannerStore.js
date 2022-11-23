@@ -1,4 +1,4 @@
-import { createPlanner, updatePlanner, selectPlanner, deletePlanner } from "@/api/planner.js";
+import { createPlanner, updatePlanner, selectPlannerList, deletePlanner } from "@/api/planner.js";
 
 const plannerStore = {
   namespaced: true,
@@ -22,6 +22,9 @@ const plannerStore = {
     },
   },
   actions: {
+    selectPlannerInfo({ commit }, payload) {
+      commit("SEARCH_PLANNER_INFO", payload);
+    },
     createPlannerInfo(context, payload) {
       const plannerInfo = {
         aptAmount: payload.aptAmount,
@@ -70,14 +73,13 @@ const plannerStore = {
       );
     },
 
-    selectPlannerInfo({ commit }, memberId) {
-      selectPlanner(
+    selectPlannerInfoList({ commit }, memberId) {
+      selectPlannerList(
         memberId,
         ({ data }) => {
+          console.log(data.plannerList);
           commit("CLEAR_PLANNER_INFO");
           commit("SEARCH_PLANNER_INFO_LIST", data.plannerList);
-          console.log(data);
-          console.log(data.plannerList);
         },
         (error) => {
           console.log(error);

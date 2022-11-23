@@ -9,20 +9,17 @@
           label="아파트 검색"
           hint="아파트명을 검색해보세요."
           v-model="aptName"
+          readonly
         ></v-text-field>
       </v-row>
-      <v-row class="mb-1">
-        <h3>목표 아파트:</h3>
-      </v-row>
+
       <v-row>
         <h3>현재 시세(최근 실거래가 기준):</h3>
       </v-row>
       <v-row>
-        <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal"></v-text-field>
+        <v-text-field solo style="max-width: 300px" v-model="maxHouseDeal" readonly></v-text-field>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        언제쯤 내 집 마련을 하고 싶나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 언제쯤 내 집 마련을 하고 싶나요? </v-row>
       <v-row class="mb-5">
         <div>
           <v-menu
@@ -49,20 +46,14 @@
               v-model="hopedDate"
               :active-picker.sync="activePicker"
               :max="getEndDate"
-              :min="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                  .toISOString()
-                  .substr(0, 10)
-              "
+              :min="new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)"
               :allowed-dates="disablePastDates"
               @change="save"
             ></v-date-picker>
           </v-menu>
         </div>
       </v-row>
-      <v-row class="planner-item-middle-text" justify="start">
-        현재 주택 구매 예산은 얼마나 있나요?
-      </v-row>
+      <v-row class="planner-item-middle-text" justify="start"> 현재 주택 구매 예산은 얼마나 있나요? </v-row>
       <v-row>
         <v-text-field
           solo
@@ -91,7 +82,7 @@
           style="max-width: 300px"
           label="대출 가능금액"
           hint="없으면 0을 적어주세요 (단위, 만원)"
-          v-model="loan"
+          v-model="loanAmount"
         ></v-text-field>
       </v-row>
       <v-row style="max-width: 500px">
@@ -100,10 +91,7 @@
     </v-col>
 
     <v-col class="">
-      <AptSearchTab
-        v-on:clickLikeApartment="clickLikeApartment"
-        v-on:enterApartment="enterApartment"
-      />
+      <AptSearchTab v-on:clickLikeApartment="clickLikeApartment" v-on:enterApartment="enterApartment" />
     </v-col>
   </v-container>
 </template>
@@ -130,7 +118,7 @@ export default {
     hopedDate: "",
     budget: "",
     savingPerMonth: "",
-    loan: "",
+    loanAmount: "",
   }),
   computed: {
     ...mapState(houseInfoStore, ["houseInfoStore"]),
@@ -149,6 +137,18 @@ export default {
       var endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 100, 10);
       return endDate.toISOString().slice(0, 10);
     },
+  },
+  mounted() {
+    if (this.plannerInfo != null) {
+      // this.getHouseInfoDeal(plannerInfo.aptCode);
+      this.aptName = this.plannerInfo.aptName;
+      this.aptAmount = this.$store.state.houseInfoStore.houseDealList[0].dealAmount;
+      this.hopedDate = this.plannerInfo.hopedDate;
+      this.budget = this.plannerInfo.budget;
+      this.savingPerMonth = this.plannerInfo.savingPerMonth;
+      this.loanAmount = this.plannerInfo.loanAmount;
+      this.CLEAR_PLANNER_INFO();
+    }
   },
 
   watch: {
@@ -172,7 +172,7 @@ export default {
         hopedDate: this.hopedDate,
         budget: this.budget,
         savingPerMonth: this.savingPerMonth,
-        loan: this.loan,
+        loanAmount: this.loanAmount,
       };
 
       this.SEARCH_PLANNER_INFO(plannerInfo);

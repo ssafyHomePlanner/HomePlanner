@@ -47,6 +47,16 @@ function addHouseInfoViewCnt(aptCode, success, fail) {
   api.put(`/house/update/view/${aptCode}`).then(success).catch(fail);
 }
 
+// 아파트 좋아요 수 갱신
+function updateAptLikeInfo(aptCode, memberId, flag, success, fail) {
+  api.put(`/house/update/${aptCode}/${memberId}/${flag}`).then(success).catch(fail);
+}
+
+// 아파트 좋아요 여부 확인
+function checkAptLikeInfo(aptCode, memberId, success, fail) {
+  api.get(`/house/check/like/${aptCode}/${memberId}`).then(success).catch(fail);
+}
+
 export {
   searchHouseInfo,
   searchHouseInfoAuto,
@@ -57,4 +67,6 @@ export {
   searchHouseInfoDetail,
   addHouseInfoViewCnt,
   searchHouseDeal,
+  updateAptLikeInfo,
+  checkAptLikeInfo,
 };

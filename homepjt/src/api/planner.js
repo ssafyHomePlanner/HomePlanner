@@ -13,7 +13,7 @@ function updatePlanner(plannerInfo, success, fail) {
 }
 
 // 플래너 조회
-function selectPlanner(memberId, success, fail) {
+function selectPlannerList(memberId, success, fail) {
   api.get(`/planner/${memberId}`).then(success).catch(fail);
 }
 
@@ -22,4 +22,4 @@ function deletePlanner(plannerId, success, fail) {
   api.delete(`/plenner/${plannerId}`).then(success).catch(fail);
 }
 
-export { createPlanner, updatePlanner, selectPlanner, deletePlanner };
+export { createPlanner, updatePlanner, selectPlannerList, deletePlanner };

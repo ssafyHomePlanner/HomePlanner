@@ -2,31 +2,28 @@
   <v-container fill-height fluid class="ma-5">
     <v-row justify="center">
       <v-col cols="auto">
-        <v-container id="map" style="width: 925px; height: 625px">
-        </v-container>
+        <v-container id="map" style="width: 925px; height: 625px"> </v-container>
       </v-col>
       <v-col cols="auto">
         <v-container style="width: 500px; height: 625px">
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
-              <v-btn icon color="pink">
-                <v-icon large color="red darken-2"> mdi-heart </v-icon>
+              <v-btn icon color="pink" v-if="checkLike">
+                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart </v-icon>
               </v-btn>
+              <v-btn icon color="pink" v-else>
+                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart-outline </v-icon>
+              </v-btn>
+
               <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
               <v-icon large color="#999999"> mdi-eye </v-icon>
               <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
             </v-row>
           </v-container>
-          <div class="apt-item-middle-text">
-            아파트 명: {{ houseInfo.apartmentName }}
-          </div>
-          <div class="apt-item-middle-text">
-            건축년도: {{ houseInfo.buildYear }}년
-          </div>
+          <div class="apt-item-middle-text">아파트 명: {{ houseInfo.apartmentName }}</div>
+          <div class="apt-item-middle-text">건축년도: {{ houseInfo.buildYear }}년</div>
           <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
-          <div class="apt-item-middle-text">
-            도로명주소: {{ houseInfo.roadName }}
-          </div>
+          <div class="apt-item-middle-text">도로명주소: {{ houseInfo.roadName }}</div>
         </v-container>
       </v-col>
     </v-row>
@@ -70,33 +67,44 @@
 
 <script>
 import LineChart from "@/components/chart/LineChart.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 const houseInfoStore = "houseInfoStore";
+const memberStore = "memberStore";
 
 export default {
   components: {
     LineChart,
   },
   computed: {
-    ...mapState(houseInfoStore, ["houseInfo", "houseDealList"]),
+    ...mapState(houseInfoStore, ["houseInfo", "houseDealList", "likeFlag"]),
+    ...mapState(memberStore, ["userInfo"]),
+
+    checkLike() {
+      const payload = {
+        aptCode: this.houseInfo.aptCode,
+        memberId: this.$store.state.memberStore.userInfo.id,
+      };
+
+      this.checkAptLike(payload);
+      return this.likeFlag;
+    },
+
     charData() {
       let labelList = [];
       let dataList = [];
 
-      this.$store.state.houseInfoStore.houseDealList.forEach(
-        (houseDealData) => {
-          let dateTransfer =
-            houseDealData.dealYear.toString() +
-            "년 " +
-            houseDealData.dealMonth.toString().padStart(2, "0") +
-            "월 " +
-            houseDealData.dealDay.toString().padStart(2, "0") +
-            "일";
+      this.$store.state.houseInfoStore.houseDealList.forEach((houseDealData) => {
+        let dateTransfer =
+          houseDealData.dealYear.toString() +
+          "년 " +
+          houseDealData.dealMonth.toString().padStart(2, "0") +
+          "월 " +
+          houseDealData.dealDay.toString().padStart(2, "0") +
+          "일";
 
-          labelList.push(dateTransfer);
-          dataList.push(houseDealData.dealAmount.replace(",", ""));
-        }
-      );
+        labelList.push(dateTransfer);
+        dataList.push(houseDealData.dealAmount.replace(",", ""));
+      });
 
       let chartData = {
         labels: labelList,
@@ -157,6 +165,18 @@ export default {
       let zoomControl = new kakao.maps.ZoomControl();
       this.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
     },
+
+    updateLikeCnt() {
+      const payload = {
+        aptCode: this.houseInfo.aptCode,
+        memberId: this.$store.state.memberStore.userInfo.id,
+        likeFlag: this.likeFlag,
+      };
+      console.log(payload.aptCode + " " + payload.memberId + " " + payload.likeFlag);
+      this.addLikeCnt(payload);
+    },
+
+    ...mapActions(houseInfoStore, ["addViewCnt", "addLikeCnt", "checkAptLike"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -172,6 +192,15 @@ export default {
       //   process.env.VUE_APP_APT_DEAL_API_KEY;
       document.head.appendChild(script);
     }
+  },
+  created() {
+    this.addViewCnt(this.houseInfo.aptCode);
+
+    const payload = {
+      aptCode: this.houseInfo.aptCode,
+      memberId: this.$store.state.memberStore.userInfo.id,
+    };
+    this.checkAptLike(payload);
   },
 };
 </script>
