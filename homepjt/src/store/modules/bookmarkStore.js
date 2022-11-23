@@ -33,6 +33,7 @@ const bookmarkStore = {
   getters: {},
   mutations: {
     SET_REQUEST_LIST(state, payload) {
+      state.requestList = [];
       state.requestList = payload;
     },
     SEARCH_PATH_INFO(state, payload) {
