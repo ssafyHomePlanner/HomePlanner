@@ -1,32 +1,43 @@
 <template>
-  <v-container fill-height fluid class="ma-12">
+  <v-container fill-height fluid class="mt-3 ml-12 mb-8">
     <v-col>
-      <v-row class="planner-item-middle-text" justify="start">
-        목표 아파트를 설정하세요
-      </v-row>
-      <v-row>
-        <v-text-field
-          solo
-          style="max-width: 300px"
-          label="아파트 검색"
-          hint="아파트명을 검색해보세요."
-          v-model="aptName"
-          readonly
-        ></v-text-field>
+      <v-row class="mb-5">
+        <v-col cols="auto" class="mt-16 mr-8 pt-8">
+          <v-row class="planner-item-middle-text" justify="start">
+            목표 아파트를 설정하세요
+          </v-row>
+          <v-row>
+            <v-text-field
+              solo
+              style="max-width: 300px"
+              label="아파트 검색"
+              hint="아파트명을 검색해보세요."
+              v-model="aptName"
+              readonly
+            ></v-text-field>
+          </v-row>
+
+          <v-row class="mb-2">
+            <h3>현재 시세(최근 실거래가 기준)</h3>
+          </v-row>
+          <v-row>
+            <v-text-field
+              solo
+              style="max-width: 300px"
+              v-model="maxHouseDeal"
+              readonly
+              suffix="만원"
+            ></v-text-field>
+          </v-row>
+        </v-col>
+        <v-col cols="auto">
+          <AptSearchTab
+            v-on:clickLikeApartment="clickLikeApartment"
+            v-on:enterApartment="enterApartment"
+          />
+        </v-col>
       </v-row>
 
-      <v-row>
-        <h3>현재 시세(최근 실거래가 기준):</h3>
-      </v-row>
-      <v-row>
-        <v-text-field
-          solo
-          style="max-width: 300px"
-          v-model="maxHouseDeal"
-          readonly
-          suffix="만원"
-        ></v-text-field>
-      </v-row>
       <v-row class="planner-item-middle-text" justify="start">
         언제쯤 내 집 마련을 하고 싶나요?
       </v-row>
@@ -124,13 +135,6 @@
           >검색</v-btn
         >
       </v-row>
-    </v-col>
-
-    <v-col class="">
-      <AptSearchTab
-        v-on:clickLikeApartment="clickLikeApartment"
-        v-on:enterApartment="enterApartment"
-      />
     </v-col>
   </v-container>
 </template>
