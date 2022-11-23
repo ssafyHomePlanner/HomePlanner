@@ -78,6 +78,7 @@
           hint="없으면 0을 적어주세요 (단위, 만원)"
           v-model="budget"
           suffix="만원"
+          @keyup.enter="moveResult"
         ></v-text-field>
       </v-row>
       <v-row class="planner-item-middle-text" justify="start">
@@ -91,6 +92,7 @@
           hint="없으면 0을 적어주세요 (단위, 만원)"
           v-model="savingPerMonth"
           suffix="만원"
+          @keyup.enter="moveResult"
         ></v-text-field>
       </v-row>
       <v-row class="planner-item-middle-text" justify="start">
@@ -104,10 +106,23 @@
           hint="없으면 0을 적어주세요 (단위, 만원)"
           v-model="loanAmount"
           suffix="만원"
+          @keyup.enter="moveResult"
         ></v-text-field>
       </v-row>
       <v-row style="max-width: 500px">
-        <v-btn color="primary" block @click="moveResult">검색</v-btn>
+        <v-btn
+          color="primary"
+          block
+          @click="moveResult"
+          :disabled="
+            loanAmount.length < 1 ||
+            savingPerMonth.length < 1 ||
+            maxHouseDeal.length < 1 ||
+            hopedDate.length < 1 ||
+            budget.length < 1
+          "
+          >검색</v-btn
+        >
       </v-row>
     </v-col>
 
