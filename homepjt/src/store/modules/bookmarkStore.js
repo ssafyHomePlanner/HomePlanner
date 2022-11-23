@@ -122,10 +122,7 @@ const bookmarkStore = {
         bookmarkPathId,
         ({ data }) => {
           commit("CLEAR_BOOKMARK_PATH_DETAIL_LIST");
-          commit(
-            "SEARCH_BOOKMARK_PATH_DETAIL_LIST",
-            data.bookmarkPathDetailList
-          );
+          commit("SEARCH_BOOKMARK_PATH_DETAIL_LIST", data.bookmarkPathDetailList);
         },
         (error) => {
           console.log(error);

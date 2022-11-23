@@ -132,7 +132,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(bookmarkStore, ["bookmarkAptList", "bookmarkPathList", "plannerInfoList"]),
+    ...mapState(bookmarkStore, [
+      "bookmarkAptList",
+      "bookmarkPathList",
+      "plannerInfoList",
+      "bookmarkPathDetailList",
+    ]),
     ...mapState(plannerStore, ["plannerInfoList", "plannerInfo"]),
     ...mapState(memberStore, ["userInfo"]),
   },
@@ -144,7 +149,12 @@ export default {
   },
   methods: {
     ...mapMutations(bookmarkStore, ["CLEAR_BOOKMARK_APT_LIST"]),
-    ...mapActions(bookmarkStore, ["selectBookmarkAptList", "searchBookmarkPathInfo"]),
+    ...mapActions(bookmarkStore, [
+      "selectBookmarkAptList",
+      "searchBookmarkPathInfo",
+      "searchBookmarkPathDetailInfo",
+      "getPathInfoList",
+    ]),
     ...mapActions(plannerStore, ["selectPlannerInfo", "selectPlannerInfoList"]),
     ...mapActions(houseInfoStore, ["searchHouseInfo", "getHouseInfoDeal"]),
 
@@ -154,10 +164,49 @@ export default {
       this.getHouseInfoDeal(value.aptCode);
       this.$router.push({ name: "aptResultView" }).catch(() => {});
     },
-    clickPathInfo(value) {
+    async clickPathInfo(value) {
       console.log("경로 즐겨찾기 item 클릭");
 
       console.log(value);
+      // 경유지 목록 가져오기
+      this.searchBookmarkPathDetailInfo(value.id);
+
+      console.log(this.bookmarkPathDetailList);
+
+      let requestList = [];
+
+      let start = {
+        aptCode: value.startAptCode,
+        aptName: value.startAptName,
+        lat: value.startLat,
+        lon: value.startLon,
+      };
+
+      let end = {
+        aptCode: value.endAptCode,
+        aptName: value.endAptName,
+        lat: value.endLat,
+        lon: value.endLon,
+      };
+
+      requestList.push(start);
+
+      this.bookmarkPathDetailList.forEach((element) => {
+        let temp = {
+          aptCode: element.aptCode,
+          aptName: element.aptName,
+          lat: element.lat,
+          lon: element.lon,
+        };
+        requestList.push(temp);
+      });
+
+      requestList.push(end);
+      // 경로 탐색하기
+      await this.getPathInfoList(requestList);
+
+      // 이동하기
+      this.$router.push({ name: "pathResult" }).catch(() => {});
     },
     clickPlannerInfo(value) {
       console.log(value);
