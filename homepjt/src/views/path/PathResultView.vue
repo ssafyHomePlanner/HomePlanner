@@ -11,8 +11,12 @@
                 color="deep-purple accent-3"
                 group
               >
-                <v-btn value="time"> 시간순 </v-btn>
-                <v-btn value="distance"> 거리순 </v-btn>
+                <v-btn value="time" @click="changeCandidateTimePath">
+                  시간순
+                </v-btn>
+                <v-btn value="distance" @click="changeCandidateDistancePath">
+                  거리순
+                </v-btn>
               </v-btn-toggle>
             </v-col>
             <v-col cols="auto">
@@ -30,7 +34,7 @@
         <v-container class="ml-0 mr-5 pr-1" style="width: 450px; height: 500px">
           <v-virtual-scroll
             bench="5"
-            :items="eachPathTimeList"
+            :items="timeList"
             height="400"
             item-height="80"
             class="pa-1 mt-3"
@@ -104,119 +108,82 @@ export default {
       "distArr",
       "requestList",
     ]),
-    eachPathTimeList() {
-      let timeList = [];
+  },
 
-      for (
-        let i = 0;
-        i < this.$store.state.bookmarkStore.timePathList[0].pathList.length - 1;
-        i++
-      ) {
+  data() {
+    return {
+      clickLine: {},
+      distanceOverlay: {},
+      pathResultType: "time",
+      dots: [],
+      currentCandidatePathList: [],
+      currentPath: [],
+      timeList: [],
+    };
+  },
+  methods: {
+    eachPathTimeList() {
+      console.log("this.currentPath.pathList", this.currentPath.pathList);
+      this.timeList = [];
+
+      for (let i = 0; i < this.currentPath.pathList.length - 1; i++) {
         let startIndex = -1;
         let endIndex = -1;
 
         // 거리 계산을 위해 요청리스트의 순서 찾기
         for (let j = 0; j < this.requestList.length; j++) {
           if (
-            this.requestList[j].aptName ==
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i].aptName
+            this.requestList[j].aptName == this.currentPath.pathList[i].aptName
           ) {
             startIndex = j;
           }
 
           if (
             this.requestList[j].aptName ==
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i + 1]
-              .aptName
+            this.currentPath.pathList[i + 1].aptName
           ) {
             endIndex = j;
           }
         }
 
         let temp = {
-          startName:
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i].aptName,
-          endName:
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i + 1]
-              .aptName,
+          startName: this.currentPath.pathList[i].aptName,
+          endName: this.currentPath.pathList[i + 1].aptName,
           startIndex: startIndex,
           endIndex: endIndex,
         };
 
-        timeList.push(temp);
+        this.timeList.push(temp);
       }
 
-      console.log("timeList", timeList);
-      return timeList;
+      console.log("timeList", this.timeList);
     },
-  },
-
-  data() {
-    return {
-      items: [
-        {
-          text: "출발지",
-        },
-        {
-          text: "도착지",
-        },
-      ],
-      clickLine: {},
-      distanceOverlay: null,
-      pathResultType: "time",
-      dots: [],
-    };
-  },
-  methods: {
+    changeCandidateTimePath() {
+      //현재 후보리스트 TimePathList로 초기화
+      this.currentCandidatePathList =
+        this.$store.state.bookmarkStore.timePathList;
+      this.currentPath = this.$store.state.bookmarkStore.timePathList[0];
+      console.log("currentCandidatePathList", this.currentCandidatePathList);
+      console.log("currentPath", this.currentPath);
+      console.log("현재 타임경로");
+      this.eachPathTimeList();
+    },
+    changeCandidateDistancePath() {
+      //현재 후보리스트 DistPathList 초기화
+      this.currentCandidatePathList =
+        this.$store.state.bookmarkStore.distPathList;
+      this.currentPath = this.$store.state.bookmarkStore.distPathList[0];
+      console.log("currentCandidatePathList", this.currentCandidatePathList);
+      console.log("currentPath", this.currentPath);
+      console.log("현재 거리경로");
+      this.eachPathTimeList();
+    },
     printData() {
       console.log("timePathList", this.timePathList);
       console.log("distPathList", this.distPathList);
       console.log("timeArr", this.timeArr);
       console.log("distArr", this.distArr);
       console.log("requestList", this.requestList);
-
-      let timeList = [];
-
-      for (
-        let i = 0;
-        i < this.$store.state.bookmarkStore.timePathList[0].pathList.length - 1;
-        i++
-      ) {
-        let startIndex = -1;
-        let endIndex = -1;
-
-        // 거리 계산을 위해 요청리스트의 순서 찾기
-        for (let j = 0; j < this.requestList.length; j++) {
-          if (
-            this.requestList[j].aptName ==
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i].aptName
-          ) {
-            startIndex = j;
-          }
-
-          if (
-            this.requestList[j].aptName ==
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i + 1]
-              .aptName
-          ) {
-            endIndex = j;
-          }
-        }
-
-        let temp = {
-          startName:
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i].aptName,
-          endName:
-            this.$store.state.bookmarkStore.timePathList[0].pathList[i + 1]
-              .aptName,
-          startIndex: startIndex,
-          endIndex: endIndex,
-        };
-
-        timeList.push(temp);
-      }
-
-      console.log("timeList", timeList);
     },
 
     // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
@@ -305,11 +272,9 @@ export default {
 
       let linePath = [];
       // 만들어질 경로의 위도/경도를 넣는다.
-      this.$store.state.bookmarkStore.timePathList[0].pathList.forEach(
-        (element) => {
-          linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
-        }
-      );
+      this.currentPath.pathList.forEach((element) => {
+        linePath.push(new kakao.maps.LatLng(element.lat, element.lon));
+      });
 
       console.log("linePath", linePath);
 
@@ -415,8 +380,8 @@ export default {
 
       //맵에서 이동할 좌표
       let iwPosition = new kakao.maps.LatLng(
-        this.$store.state.bookmarkStore.timePathList[0].pathList[0].lat,
-        this.$store.state.bookmarkStore.timePathList[0].pathList[0].lon
+        this.currentPath.pathList[0].lat,
+        this.currentPath.pathList[0].lon
       );
 
       // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
@@ -437,6 +402,8 @@ export default {
     },
   },
   mounted() {
+    this.changeCandidateTimePath();
+
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {
