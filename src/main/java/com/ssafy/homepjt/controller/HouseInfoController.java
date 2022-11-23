@@ -123,6 +123,44 @@ public class HouseInfoController {
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    // 좋아요 수 증가
+    @ApiOperation(value = "아파트 좋아요 수 갱신")
+    @PutMapping("/update/{aptCode}/{memberId}/{flag}")
+    public ResponseEntity<Map<String, Object>> updateLikeCount(@PathVariable("aptCode") long aptCode, @PathVariable("memberId") String memberId, @PathVariable("flag") boolean flag){
+        logger.info("apt update like count controller");
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        try {
+            houseInfoService.updateLikeCount(aptCode, memberId, flag);
+            logger.info("아파트 좋아요 수 갱신 성공");
+            resultMap.put("message", SUCCESS);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.error("좋아요 수 갱신 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    // 좋아요 확인
+    @ApiOperation(value = "아파트 좋아요 여부 확인")
+    @GetMapping("/check/like/{aptCode}/{memberId}")
+    public ResponseEntity<Map<String, Object>>checkLikeApt(@PathVariable("aptCode") long aptCode, @PathVariable("memberId") String memberId){
+        logger.info("apt check like controller");
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            boolean check = houseInfoService.checkAptLike(aptCode, memberId);
+            logger.info("좋아요 클릭 여부 확인 : {}", check);
+            resultMap.put("likeFlag", check);
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            logger.info("좋아요 여부 확인 실페 : {}",  e.getMessage());
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     //아파트 검색(자동완성)
     @ApiOperation(value = "아파트 검색 자동완성")

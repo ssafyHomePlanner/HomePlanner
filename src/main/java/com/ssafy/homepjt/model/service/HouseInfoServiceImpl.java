@@ -56,16 +56,16 @@ public class HouseInfoServiceImpl implements HouseInfoService {
 
     @Override
     public Map<String, Object> selectHouseInfoDetail(AptSearchDetailRequestDto aptSearchDetailRequestDto, int page) {
-        if(aptSearchDetailRequestDto.getSidoName() == null){
+        if (aptSearchDetailRequestDto.getSidoName() == null) {
             aptSearchDetailRequestDto.setSidoName("");
         }
-        if(aptSearchDetailRequestDto.getGugunName()== null){
+        if (aptSearchDetailRequestDto.getGugunName() == null) {
             aptSearchDetailRequestDto.setGugunName("");
         }
-        if(aptSearchDetailRequestDto.getDongName() == null){
+        if (aptSearchDetailRequestDto.getDongName() == null) {
             aptSearchDetailRequestDto.setDongName("");
         }
-        if(aptSearchDetailRequestDto.getAptName() == null){
+        if (aptSearchDetailRequestDto.getAptName() == null) {
             aptSearchDetailRequestDto.setAptName("");
         }
 
@@ -99,12 +99,30 @@ public class HouseInfoServiceImpl implements HouseInfoService {
     }
 
     @Override
-    public List<HouseInfoDto> selectHouseInfoAuto(String aptName) throws SQLException{
+    public void updateLikeCount(long aptCode, String memberId, boolean flag) throws SQLException {
+        if (!flag) {
+            houseInfoMapper.insertAptLike(aptCode, memberId);
+        } else {
+            houseInfoMapper.deleteAptLike(aptCode, memberId);
+        }
+        houseInfoMapper.updateLikeCount(aptCode);
+    }
+
+    @Override
+    public boolean checkAptLike(long aptCode, String memberId) throws SQLException {
+        if (houseInfoMapper.checkAptLike(aptCode, memberId) == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<HouseInfoDto> selectHouseInfoAuto(String aptName) throws SQLException {
         return houseInfoMapper.selectHouseInfoAuto(aptName);
     }
 
     @Override
-    public List<HouseDealDto> selectHouseDeal(long aptCode) throws SQLException{
+    public List<HouseDealDto> selectHouseDeal(long aptCode) throws SQLException {
         return houseInfoMapper.selectHouseDeal(aptCode);
     }
 
@@ -114,7 +132,7 @@ public class HouseInfoServiceImpl implements HouseInfoService {
     }
 
     @Override
-    public void writeHouseComment(HouseCommentDto houseCommentDto) throws SQLException{
+    public void writeHouseComment(HouseCommentDto houseCommentDto) throws SQLException {
         houseInfoMapper.writeHouseComment(houseCommentDto);
     }
 

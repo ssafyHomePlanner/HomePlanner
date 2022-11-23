@@ -18,6 +18,12 @@ public interface HouseInfoService {
     // 아파트 조회수 증가
     void updateReadCount(long aptCode) throws SQLException;
 
+    // 아파트 좋아요 수 수정
+    void updateLikeCount(long aptCode, String memberId, boolean flag) throws SQLException;
+
+    // 아파트 좋아요 확인
+    boolean checkAptLike(long aptCode, String memberId) throws SQLException;
+
     // 아파트 검색(자동완성용)
     List<HouseInfoDto> selectHouseInfoAuto(String aptName) throws SQLException;
 

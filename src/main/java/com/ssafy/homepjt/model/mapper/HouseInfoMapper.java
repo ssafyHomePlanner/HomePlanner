@@ -21,13 +21,26 @@ public interface HouseInfoMapper {
                                        @Param("dongName") String dongName, @Param("aptName") String aptName,
                                         @Param("start") int startRow, @Param("cnt") int count);
 
-    void updateReadCount(long aptCode) throws SQLException;
-
     // 아파트 검색(자동완성용)
     List<HouseInfoDto> selectHouseInfoAuto(String aptName);
 
     // 아파트 상세 정보 검색
     List<HouseDealDto> selectHouseDeal(long aptCode);
+
+    // 아파트 조회수 수정
+    void updateReadCount(long aptCode) throws SQLException;
+
+    // 아파트 좋아요 수 변경
+    void updateLikeCount(long aptCode) throws SQLException;
+
+    // 아파트 좋아요 여부 확인
+    int checkAptLike(@Param("aptCode") long aptCode, @Param("memberId") String memberId) throws SQLException;
+
+    // 아파트 좋아요 회원 추가
+    void insertAptLike(@Param("aptCode") long aptCode, @Param("memberId") String memberId) throws SQLException;
+
+    // 아파트 좋아요 회원 삭제
+    void deleteAptLike(@Param("aptCode") long aptCode, @Param("memberId") String memberId) throws SQLException;
 
     // 아파트 댓글 조회
     List<HouseCommentDto> selectHouseComment(long aptCode);

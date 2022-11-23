@@ -90,13 +90,6 @@
         limit #{start}, #{cnt}
     </select>
 
-    <!-- 아파트 조회수 증가 -->
-    <update id="updateReadCount" parameterType="long">
-        update houseinfo
-        set view_cnt = view_cnt + 1
-        where apt_code = #{aptCode}
-    </update>
-
     <!-- 아파트 검색 자동완성 -->
     <select id="selectHouseInfoAuto" parameterType="String" resultMap="HouseInfoAll">
         select
@@ -113,6 +106,42 @@
         from housedeal
         where apt_code = #{aptCode}
     </select>
+
+    <!-- 아파트 조회수 증가 -->
+    <update id="updateReadCount" parameterType="long">
+        update houseinfo
+        set view_cnt = view_cnt + 1
+        where apt_code = #{aptCode}
+    </update>
+
+    <!-- 아파트 좋아요수 수정 -->
+    <update id="updateLikeCount" parameterType="long">
+        update houseinfo
+        set like_cnt = (select count(*)
+                        from bookmark_apt
+                        where apt_code = #{aptCode})
+        where apt_code = #{aptCode}
+    </update>
+
+    <!-- 아파트 좋아요 회원 추가 -->
+    <insert id="insertAptLike">
+        insert into bookmark_apt(member_id, apt_code)
+        values (#{memberId}, #{aptCode})
+    </insert>
+
+    <!-- 아파트 좋아요 회원 삭제 -->
+    <delete id="deleteAptLike">
+        delete from bookmark_apt
+        where member_id = #{memberId} and apt_code = #{aptCode}
+    </delete>
+
+    <!-- 아파트 좋아요 여부 확인 -->
+    <select id="checkAptLike" resultType="int">
+        select count(id) from bookmark_apt
+        where member_id = #{memberId}
+          and apt_code = #{aptCode}
+    </select>
+
 
     <!-- 아파트 댓글 조회 -->
     <select id="selectHouseComment" parameterType="long" resultMap="HouseCommentAll">
