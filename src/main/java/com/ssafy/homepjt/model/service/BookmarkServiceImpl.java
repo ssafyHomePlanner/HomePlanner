@@ -61,6 +61,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         used = new boolean[size];
         timeArr = new int[size][size];
         distArr = new double[size][size];
+        list = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             cards[i] = i;
@@ -90,6 +91,8 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
+
+        System.out.println("list size = " + list.size());
         for (int i = 0; i < list.size(); i++) {
             int t = 0;
             double d = 0;
@@ -103,6 +106,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 start = end;
             }
 
+            System.out.println("list.get = " + list.get(i).toString());
             for (int j = 0; j < list.get(i).length; j++) {
                 int idx = list.get(i)[j];
                 long aptCode = bookmarkPathRequestDtoList.get(idx).getAptCode();
@@ -121,6 +125,11 @@ public class BookmarkServiceImpl implements BookmarkService {
         List<Point> distPointList = Arrays.asList(distPointArr);
         timePointList.sort(Comparator.comparing(Point::getTime).thenComparing(Point::getDist));
         distPointList.sort(Comparator.comparing(Point::getDist).thenComparing(Point::getTime));
+
+        System.out.println("@@@@@@");
+        System.out.println("time point list size = " + timePointList.size());
+        System.out.println("dist point list size = " + distPointList.size());
+        System.out.println("@@@@@");
 
         resultMap.put("timeArr", timeArr);
         resultMap.put("distArr", distArr);
@@ -186,7 +195,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     static Point[] pointArr;
     static int[][] timeArr;
     static double[][] distArr;
-    static ArrayList<int[]> list = new ArrayList<>();
+    static ArrayList<int[]> list;
 
     static void perm(int idx) {
         if (idx == result.length) {
