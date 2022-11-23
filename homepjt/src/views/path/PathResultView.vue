@@ -23,7 +23,7 @@
               <v-btn class="mt-4" color="primary"
                 ><v-icon>mdi-content-save</v-icon>경로 저장</v-btn
               >
-              <v-btn @click="printData">데이터 출력</v-btn>
+              <!-- <v-btn @click="printData">데이터 출력</v-btn> -->
             </v-col>
           </v-row>
         </v-container>
@@ -65,8 +65,8 @@
         </v-container>
         <v-container style="width: 100%; height: 100px">
           <h2>
-            거리: {{ timePathList[0].dist }}미터 | 예상 시간:
-            {{ timePathList[0].time }}초
+            거리: {{ this.currentPath.dist }}미터 | 예상 시간:
+            {{ this.currentPath.time }}초
           </h2>
         </v-container>
       </v-col>
@@ -76,17 +76,31 @@
         <v-col class="ma-5">
           <v-stepper
             alt-labels
-            v-for="(data, index) in timePathList"
+            v-for="(data, index) in currentCandidatePathList"
             :key="index"
+            value="0"
           >
-            <v-stepper-header>
-              <template v-for="(element, i) in data.pathList">
-                <v-stepper-step :step="i + 1" :key="element.aptName">
-                  {{ element.aptName }}
-                </v-stepper-step>
-                <v-divider :key="i"></v-divider>
-              </template>
-            </v-stepper-header>
+            <v-row>
+              <v-col class="pr-0">
+                <v-stepper-header>
+                  <template v-for="(element, i) in data.pathList">
+                    <v-stepper-step :step="i + 1" :key="element.aptName">
+                      {{ element.aptName }}
+                    </v-stepper-step>
+                    <v-divider :key="i"></v-divider>
+                  </template>
+                </v-stepper-header>
+              </v-col>
+              <v-col cols="auto" align-self="center" class="pl-0">
+                <v-btn
+                  color="primary"
+                  style="height: 60px"
+                  x-large
+                  @click="changePath(data)"
+                  >선택</v-btn
+                >
+              </v-col>
+            </v-row>
           </v-stepper>
         </v-col>
       </v-row>
@@ -112,8 +126,11 @@ export default {
 
   data() {
     return {
-      clickLine: {},
-      distanceOverlay: {},
+      // polyline null이어야 함!!!!!!!!!!
+      polyline: null,
+      startMarker: null,
+      endMarker: null,
+      // distanceOverlay: {},
       pathResultType: "time",
       dots: [],
       currentCandidatePathList: [],
@@ -122,6 +139,12 @@ export default {
     };
   },
   methods: {
+    changePath(element) {
+      console.log("element", element);
+      this.currentPath = element;
+      this.eachPathTimeList();
+      this.makeLine();
+    },
     eachPathTimeList() {
       console.log("this.currentPath.pathList", this.currentPath.pathList);
       this.timeList = [];
@@ -188,7 +211,7 @@ export default {
 
     // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
     // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
-    displayCircleDot(position, distance) {
+    displayCircleDot(position) {
       // 클릭 지점을 표시할 빨간 동그라미 커스텀오버레이를 생성합니다
       let circleOverlay = new kakao.maps.CustomOverlay({
         content: '<span class="dot"></span>',
@@ -198,25 +221,8 @@ export default {
 
       // 지도에 표시합니다
       circleOverlay.setMap(this.map);
-
-      if (distance > 0) {
-        // 클릭한 지점까지의 그려진 선의 총 거리를 표시할 커스텀 오버레이를 생성합니다
-        let distanceOverlay = new kakao.maps.CustomOverlay({
-          content:
-            '<div class="dotOverlay">거리 <span class="number">' +
-            distance +
-            "</span>m</div>",
-          position: position,
-          yAnchor: 1,
-          zIndex: 2,
-        });
-
-        // 지도에 표시합니다
-        distanceOverlay.setMap(this.map);
-      }
-
       // 배열에 추가합니다
-      this.dots.push({ circle: circleOverlay, distance: this.distanceOverlay });
+      this.dots.push({ circle: circleOverlay });
     },
     makeLine() {
       let firstIconSrc = require("@/assets/number-one.png"),
@@ -309,9 +315,14 @@ export default {
       for (let i = 0; i < linePath.length; i++) {
         //출발 좌표 표시
         if (i == 0) {
+          if(this.startMarker){
+            this.startMarker.setMap(null);
+            this.startMarker = null;
+          }
+
           // 출발 마커를 생성합니다
           // 결과값으로 받은 위치를 마커로 표시합니다
-          new kakao.maps.Marker({
+          this.startMarker = new kakao.maps.Marker({
             map: this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
             position: linePath[i],
             image: startImage, // 출발 마커이미지를 설정합니다
@@ -348,26 +359,36 @@ export default {
         }
         if (i == 5 && 5 != linePath.length - 1) {
           new kakao.maps.Marker({
-            map: this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
+            map: this.map,
             position: linePath[i],
             image: fiveIconImage,
           });
         }
 
         if (i == linePath.length - 1) {
+          if(this.endMarker){
+            this.endMarker.setMap(null);
+            this.endMarker = null;
+          }
+
           // 도착 마커를 생성합니다
           // 결과값으로 받은 위치를 마커로 표시합니다
-          new kakao.maps.Marker({
+          this.endMarker = new kakao.maps.Marker({
             map: this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
             position: linePath[i],
             image: arriveImage, // 도착 마커이미지를 설정합니다
           });
         }
 
-        this.displayCircleDot(linePath[i], 0);
+        this.displayCircleDot(linePath[i]);
       }
 
-      let polyline = new kakao.maps.Polyline({
+      if (this.polyline) {
+        this.polyline.setMap(null);
+        this.polyline = null;
+      }
+
+      this.polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
         strokeWeight: 3, // 선의 두께입니다
         strokeColor: "#db4040", // 선의 색깔입니다
@@ -376,7 +397,7 @@ export default {
       });
 
       // 선 화면에 그리기
-      polyline.setMap(this.map);
+      this.polyline.setMap(this.map);
 
       //맵에서 이동할 좌표
       let iwPosition = new kakao.maps.LatLng(
