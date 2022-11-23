@@ -61,7 +61,7 @@ export default {
   mounted() {
     console.log(this.plannerInfo);
     this.aptName = this.plannerInfo.aptName;
-    this.aptAmount = parseFloat(this.plannerInfo.aptAmount) * 1000;
+    this.aptAmount = parseFloat(this.plannerInfo.aptAmount.replace(",", ""));
     this.hopedDate = this.plannerInfo.hopedDate;
     this.budget = parseFloat(this.plannerInfo.budget);
     this.savingPerMonth = parseFloat(this.plannerInfo.savingPerMonth);
@@ -102,8 +102,11 @@ export default {
       }
 
       let resultYear = parseInt(calcMonths / 12);
+      console.log(Math.floor(calcMonths / 12));
+      console.log(parseFloat(calcMonths / 12));
       let resultMonth = parseInt(calcMonths % 12);
       if (resultMonth == 0) {
+        resultYear -= 1;
         resultMonth = 12;
       }
 
