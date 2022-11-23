@@ -246,52 +246,52 @@ export default {
         this.distanceOverlay.setMap(this.map);
       }
     },
-    getTimeHTML(distance) {
-      // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
-      let walkkTime = (distance / 67) | 0;
-      let walkHour = "",
-        walkMin = "";
+    // getTimeHTML(distance) {
+    //   // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
+    //   let walkkTime = (distance / 67) | 0;
+    //   let walkHour = "",
+    //     walkMin = "";
 
-      // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
-      if (walkkTime > 60) {
-        walkHour =
-          '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
-      }
-      walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
+    //   // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
+    //   if (walkkTime > 60) {
+    //     walkHour =
+    //       '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
+    //   }
+    //   walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
 
-      // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
-      let bycicleTime = (distance / 227) | 0;
-      let bycicleHour = "",
-        bycicleMin = "";
+    //   // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
+    //   let bycicleTime = (distance / 227) | 0;
+    //   let bycicleHour = "",
+    //     bycicleMin = "";
 
-      // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
-      if (bycicleTime > 60) {
-        bycicleHour =
-          '<span class="number">' +
-          Math.floor(bycicleTime / 60) +
-          "</span>시간 ";
-      }
-      bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
+    //   // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
+    //   if (bycicleTime > 60) {
+    //     bycicleHour =
+    //       '<span class="number">' +
+    //       Math.floor(bycicleTime / 60) +
+    //       "</span>시간 ";
+    //   }
+    //   bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
 
-      // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
-      let content = '<ul class="dotOverlay distanceInfo">';
-      content += "    <li>";
-      content +=
-        '        <span class="label">총거리</span><span class="number">' +
-        distance +
-        "</span>m";
-      content += "    </li>";
-      content += "    <li>";
-      content += '        <span class="label">도보</span>' + walkHour + walkMin;
-      content += "    </li>";
-      content += "    <li>";
-      content +=
-        '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
-      content += "    </li>";
-      content += "</ul>";
+    //   // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
+    //   let content = '<ul class="dotOverlay distanceInfo">';
+    //   content += "    <li>";
+    //   content +=
+    //     '        <span class="label">총거리</span><span class="number">' +
+    //     distance +
+    //     "</span>m";
+    //   content += "    </li>";
+    //   content += "    <li>";
+    //   content += '        <span class="label">도보</span>' + walkHour + walkMin;
+    //   content += "    </li>";
+    //   content += "    <li>";
+    //   content +=
+    //     '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+    //   content += "    </li>";
+    //   content += "</ul>";
 
-      return content;
-    },
+    //   return content;
+    // },
     // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
     // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
     displayCircleDot(position, distance) {
@@ -350,11 +350,11 @@ export default {
       // 선 화면에 그리기
       polyline.setMap(this.map);
 
-      let distance = Math.round(polyline.getLength()), // 선의 총 거리를 계산합니다
-        content = this.getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
+      // let distance = Math.round(polyline.getLength()),
+      //   content = this.getTimeHTML(distance); // 선의 총 거리를 계산합니다
 
-      // 그려진 선의 거리정보를 지도에 표시합니다
-      this.showDistance(content, linePath[linePath.length - 1]);
+      // // 그려진 선의 거리정보를 지도에 표시합니다
+      // this.showDistance(content, linePath[linePath.length - 1]);
 
       //맵에서 이동할 좌표
       let iwPosition = new kakao.maps.LatLng(
