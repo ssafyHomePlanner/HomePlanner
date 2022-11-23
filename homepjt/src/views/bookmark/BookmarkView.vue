@@ -24,15 +24,22 @@
                 class="pl-0 pt-0 ma-10"
                 rounded="xl"
               >
-                <v-row class="mt-8" justify="center">
+                <v-row class="mt-1" justify="center">
                   <v-col cols="auto">
-                    <v-row justify="end"> </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4">{{ aptInfo.apartmentName }} </v-row>
+                    <v-row justify="end">
+                      <v-btn icon>
+                        <v-icon @click="deleteApartment(aptInfo.aptCode)">mdi-close</v-icon>
+                      </v-btn>
+                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4"
+                      >{{ aptInfo.apartmentName }}
+                    </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ aptInfo.dong }} ({{ aptInfo.roadName }})
                     </v-row>
                   </v-col>
                 </v-row>
+                <v-row> </v-row>
               </v-sheet>
             </v-row>
           </v-container>
@@ -52,10 +59,16 @@
                 class="pl-0 pt-0 ma-10"
                 rounded="xl"
               >
-                <v-row class="mt-8" justify="center">
+                <v-row class="mt-0" justify="center">
                   <v-col cols="auto">
-                    <v-row justify="end"> </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4">{{ pathInfo.pathName }} </v-row>
+                    <v-row justify="end">
+                      <v-btn icon>
+                        <v-icon @click="deletePath(pathInfo.id)">mdi-close</v-icon>
+                      </v-btn>
+                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4"
+                      >{{ pathInfo.pathName }}
+                    </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ pathInfo.startAptName }} -> {{ pathInfo.endAptName }}
                     </v-row>
@@ -80,10 +93,16 @@
                 class="pl-0 pt-0 ma-10"
                 rounded="xl"
               >
-                <v-row class="mt-8" justify="center">
+                <v-row class="mt-1" justify="center">
                   <v-col cols="auto">
-                    <v-row justify="end"> </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4">{{ plannerInfo.aptName }} </v-row>
+                    <v-row justify="end">
+                      <v-btn icon>
+                        <v-icon @click="deletePlanner(plannerInfo.id)">mdi-close</v-icon>
+                      </v-btn>
+                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4"
+                      >{{ plannerInfo.aptName }}
+                    </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ plannerInfo.writeDate }}
                     </v-row>
@@ -145,6 +164,28 @@ export default {
       this.selectPlannerInfo(value);
       this.getHouseInfoDeal(value.aptCode);
       this.$router.push({ name: "plannerView" }).catch(() => {});
+    },
+
+    deleteApartment(aptCode) {
+      this.bookmarkAptList.forEach((item, index) => {
+        if (item.aptCode === aptCode) {
+          this.bookmarkAptList.splice(index, 1);
+        }
+      });
+    },
+    deletePath(id) {
+      this.bookmarkPathList.forEach((item, index) => {
+        if (item.id === id) {
+          this.bookmarkPathList.splice(index, 1);
+        }
+      });
+    },
+    deletePlanner(id) {
+      this.plannerInfoList.forEach((item, index) => {
+        if (item.id === id) {
+          this.plannerInfoList.splice(index, 1);
+        }
+      });
     },
   },
 };
