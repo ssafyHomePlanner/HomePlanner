@@ -19,7 +19,6 @@
               <v-btn class="mt-4" color="primary"
                 ><v-icon>mdi-content-save</v-icon>경로 저장</v-btn
               >
-              <v-btn @click="makeLine">테스트 버튼</v-btn>
               <v-btn @click="printData">데이터 출력</v-btn>
             </v-col>
           </v-row>
@@ -224,29 +223,29 @@ export default {
 
       console.log("timeList", timeList);
     },
-    showDistance(content, position) {
-      if (this.distanceOverlay) {
-        // 커스텀오버레이가 생성된 상태이면
+    // showDistance(content, position) {
+    //   if (this.distanceOverlay) {
+    //     // 커스텀오버레이가 생성된 상태이면
 
-        // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
-        this.distanceOverlay.setPosition(position);
-        this.distanceOverlay.setContent(content);
-      } else {
-        // 커스텀 오버레이가 생성되지 않은 상태이면
+    //     // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
+    //     this.distanceOverlay.setPosition(position);
+    //     this.distanceOverlay.setContent(content);
+    //   } else {
+    //     // 커스텀 오버레이가 생성되지 않은 상태이면
 
-        // 커스텀 오버레이를 생성하고 지도에 표시합니다
-        this.distanceOverlay = new kakao.maps.CustomOverlay({
-          content: content, // 커스텀오버레이에 표시할 내용입니다
-          position: position, // 커스텀오버레이를 표시할 위치입니다.
-          xAnchor: 0,
-          yAnchor: 0,
-          zIndex: 3,
-        });
+    //     // 커스텀 오버레이를 생성하고 지도에 표시합니다
+    //     this.distanceOverlay = new kakao.maps.CustomOverlay({
+    //       content: content, // 커스텀오버레이에 표시할 내용입니다
+    //       position: position, // 커스텀오버레이를 표시할 위치입니다.
+    //       xAnchor: 0,
+    //       yAnchor: 0,
+    //       zIndex: 3,
+    //     });
 
-        // 지도에 표시합니다
-        this.distanceOverlay.setMap(this.map);
-      }
-    },
+    //     // 지도에 표시합니다
+    //     this.distanceOverlay.setMap(this.map);
+    //   }
+    // },
     // getTimeHTML(distance) {
     //   // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
     //   let walkkTime = (distance / 67) | 0;
@@ -335,10 +334,58 @@ export default {
         }
       );
 
-      linePath.forEach((element) => {
-        // 클릭한 지점에 대한 정보를 지도에 표시합니다
-        this.displayCircleDot(element, 0);
-      });
+      let startSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
+        startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
+        startOption = {
+          offset: new kakao.maps.Point(15, 43), // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+        };
+
+      // 출발 마커 이미지를 생성합니다
+      let startImage = new kakao.maps.MarkerImage(
+        startSrc,
+        startSize,
+        startOption
+      );
+
+      let arriveSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
+        arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
+        arriveOption = {
+          offset: new kakao.maps.Point(15, 43), // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
+        };
+
+      // 도착 마커 이미지를 생성합니다
+      let arriveImage = new kakao.maps.MarkerImage(
+        arriveSrc,
+        arriveSize,
+        arriveOption
+      );
+
+      for (let i = 0; i < linePath.length; i++) {
+        //출발 좌표 표시
+        if (i == 0) {
+          // 출발 마커를 생성합니다
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          new kakao.maps.Marker({
+            map: this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
+            position: linePath[i],
+            image: startImage, // 출발 마커이미지를 설정합니다
+          });
+        }
+
+        if (i == linePath.length - 1) {
+          // 도착 마커를 생성합니다
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          new kakao.maps.Marker({
+            map: this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
+            position: linePath[i],
+            image: arriveImage, // 도착 마커이미지를 설정합니다
+          });
+        }
+
+        this.displayCircleDot(linePath[i], 0);
+      }
 
       let polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
@@ -350,12 +397,6 @@ export default {
 
       // 선 화면에 그리기
       polyline.setMap(this.map);
-
-      // let distance = Math.round(polyline.getLength()),
-      //   content = this.getTimeHTML(distance); // 선의 총 거리를 계산합니다
-
-      // // 그려진 선의 거리정보를 지도에 표시합니다
-      // this.showDistance(content, linePath[linePath.length - 1]);
 
       //맵에서 이동할 좌표
       let iwPosition = new kakao.maps.LatLng(
