@@ -60,10 +60,11 @@
             </template>
           </v-virtual-scroll>
         </v-container>
-        <v-container style="width: 350px; height: 100px">
-          <h2>총 거리: {{ timePathList[0].dist }}미터</h2>
-          <br />
-          <h3>총 예상 시간: {{ timePathList[0].time }}초</h3>
+        <v-container style="width: 100%; height: 100px">
+          <h2>
+            거리: {{ timePathList[0].dist }}미터 | 예상 시간:
+            {{ timePathList[0].time }}초
+          </h2>
         </v-container>
       </v-col>
     </v-row>
