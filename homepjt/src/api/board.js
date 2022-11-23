@@ -33,8 +33,8 @@ function addArticleView(boardId, success, fail) {
 }
 
 // 게시글 좋아요 수 갱신
-function addArticleLike(boardId, flag, success, fail) {
-  api.put(`/board/update/${boardId}/${flag}`).then(success).catch(fail);
+function addArticleLike(boardId, memberId, flag, success, fail) {
+  api.put(`/board/update/${boardId}/${memberId}/${flag}`).then(success).catch(fail);
 }
 
 // 게시글 좋아요 여부 확인
