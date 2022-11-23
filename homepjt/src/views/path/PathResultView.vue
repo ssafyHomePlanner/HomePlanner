@@ -177,11 +177,6 @@ export default {
 
       let timeList = [];
 
-      // console.log(
-      //   "pathList",
-      //   this.$store.state.bookmarkStore.timePathList[0].pathList
-      // );
-
       for (
         let i = 0;
         i < this.$store.state.bookmarkStore.timePathList[0].pathList.length - 1;
@@ -223,75 +218,7 @@ export default {
 
       console.log("timeList", timeList);
     },
-    // showDistance(content, position) {
-    //   if (this.distanceOverlay) {
-    //     // 커스텀오버레이가 생성된 상태이면
 
-    //     // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
-    //     this.distanceOverlay.setPosition(position);
-    //     this.distanceOverlay.setContent(content);
-    //   } else {
-    //     // 커스텀 오버레이가 생성되지 않은 상태이면
-
-    //     // 커스텀 오버레이를 생성하고 지도에 표시합니다
-    //     this.distanceOverlay = new kakao.maps.CustomOverlay({
-    //       content: content, // 커스텀오버레이에 표시할 내용입니다
-    //       position: position, // 커스텀오버레이를 표시할 위치입니다.
-    //       xAnchor: 0,
-    //       yAnchor: 0,
-    //       zIndex: 3,
-    //     });
-
-    //     // 지도에 표시합니다
-    //     this.distanceOverlay.setMap(this.map);
-    //   }
-    // },
-    // getTimeHTML(distance) {
-    //   // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
-    //   let walkkTime = (distance / 67) | 0;
-    //   let walkHour = "",
-    //     walkMin = "";
-
-    //   // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
-    //   if (walkkTime > 60) {
-    //     walkHour =
-    //       '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
-    //   }
-    //   walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
-
-    //   // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
-    //   let bycicleTime = (distance / 227) | 0;
-    //   let bycicleHour = "",
-    //     bycicleMin = "";
-
-    //   // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
-    //   if (bycicleTime > 60) {
-    //     bycicleHour =
-    //       '<span class="number">' +
-    //       Math.floor(bycicleTime / 60) +
-    //       "</span>시간 ";
-    //   }
-    //   bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
-
-    //   // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
-    //   let content = '<ul class="dotOverlay distanceInfo">';
-    //   content += "    <li>";
-    //   content +=
-    //     '        <span class="label">총거리</span><span class="number">' +
-    //     distance +
-    //     "</span>m";
-    //   content += "    </li>";
-    //   content += "    <li>";
-    //   content += '        <span class="label">도보</span>' + walkHour + walkMin;
-    //   content += "    </li>";
-    //   content += "    <li>";
-    //   content +=
-    //     '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
-    //   content += "    </li>";
-    //   content += "</ul>";
-
-    //   return content;
-    // },
     // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
     // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
     displayCircleDot(position, distance) {
@@ -325,8 +252,58 @@ export default {
       this.dots.push({ circle: circleOverlay, distance: this.distanceOverlay });
     },
     makeLine() {
-      let linePath = [];
+      let firstIconSrc = require("@/assets/number-one.png"),
+        firstSize = new kakao.maps.Size(50, 45),
+        firstOption = {
+          offset: new kakao.maps.Point(15, 43),
+        };
+      let firstIconImage = new kakao.maps.MarkerImage(
+        firstIconSrc,
+        firstSize,
+        firstOption
+      );
+      let secondIconSrc = require("@/assets/number-two.png"),
+        secondSize = new kakao.maps.Size(50, 45),
+        secondOption = {
+          offset: new kakao.maps.Point(15, 43),
+        };
+      let secondIconImage = new kakao.maps.MarkerImage(
+        secondIconSrc,
+        secondSize,
+        secondOption
+      );
+      let thirdIconSrc = require("@/assets/number-three.png"),
+        thirdSize = new kakao.maps.Size(50, 45),
+        thirdOption = {
+          offset: new kakao.maps.Point(15, 43),
+        };
+      let thirdIconImage = new kakao.maps.MarkerImage(
+        thirdIconSrc,
+        thirdSize,
+        thirdOption
+      );
+      let fourIconSrc = require("@/assets/number-four.png"),
+        fourSize = new kakao.maps.Size(50, 45),
+        fourOption = {
+          offset: new kakao.maps.Point(15, 43),
+        };
+      let fourIconImage = new kakao.maps.MarkerImage(
+        fourIconSrc,
+        fourSize,
+        fourOption
+      );
+      let fiveIconSrc = require("@/assets/number-five.png"),
+        fiveSize = new kakao.maps.Size(50, 45),
+        fiveOption = {
+          offset: new kakao.maps.Point(15, 43),
+        };
+      let fiveIconImage = new kakao.maps.MarkerImage(
+        fiveIconSrc,
+        fiveSize,
+        fiveOption
+      );
 
+      let linePath = [];
       // 만들어질 경로의 위도/경도를 넣는다.
       this.$store.state.bookmarkStore.timePathList[0].pathList.forEach(
         (element) => {
@@ -371,6 +348,42 @@ export default {
             map: this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
             position: linePath[i],
             image: startImage, // 출발 마커이미지를 설정합니다
+          });
+        }
+
+        if (i == 1 && 1 != linePath.length - 1) {
+          new kakao.maps.Marker({
+            map: this.map,
+            position: linePath[i],
+            image: firstIconImage,
+          });
+        }
+        if (i == 2 && 2 != linePath.length - 1) {
+          new kakao.maps.Marker({
+            map: this.map,
+            position: linePath[i],
+            image: secondIconImage,
+          });
+        }
+        if (i == 3 && 3 != linePath.length - 1) {
+          new kakao.maps.Marker({
+            map: this.map,
+            position: linePath[i],
+            image: thirdIconImage,
+          });
+        }
+        if (i == 4 && 4 != linePath.length - 1) {
+          new kakao.maps.Marker({
+            map: this.map,
+            position: linePath[i],
+            image: fourIconImage,
+          });
+        }
+        if (i == 5 && 5 != linePath.length - 1) {
+          new kakao.maps.Marker({
+            map: this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
+            position: linePath[i],
+            image: fiveIconImage,
           });
         }
 
