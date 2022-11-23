@@ -30,9 +30,11 @@
             ></v-text-field>
             <v-text-field
               v-model="member.pw"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
               :rules="memberPasswordRules"
               label="비밀번호"
-              type="password"
+              @click:append="show1 = !show1"
               @keyup.enter="confirm"
               required
             ></v-text-field>
@@ -73,6 +75,7 @@ export default {
         id: "",
         pw: "",
       },
+      show1: false,
       saveId: false,
       memberIdRules: [(v) => !!v || "아이디는 필수입니다."],
       memberPasswordRules: [(v) => !!v || "비밀번호는 필수입니다."],
@@ -94,7 +97,7 @@ export default {
 
         console.log("user info id = ", this.userInfo);
 
-        this.$router.push({ name: "home" }).catch(()=>{});
+        this.$router.push({ name: "home" }).catch(() => {});
       }
     },
   },
