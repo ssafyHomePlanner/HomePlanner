@@ -246,9 +246,9 @@ export default {
       dong: "",
       search: "",
       currentYear: "2022",
-      priceRange: [10, 50],
-      areaRange: [10, 50],
-      buildYearRange: [2010, 2020],
+      priceRange: [1, 150],
+      areaRange: [1, 130],
+      buildYearRange: [1960, 2022],
       headers: [
         { text: "건축년도", value: "buildYear" },
         { text: "아파트 이름", value: "apartmentName" },
