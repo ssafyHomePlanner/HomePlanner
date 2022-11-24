@@ -2,17 +2,22 @@
   <v-container fill-height fluid class="ma-5">
     <v-row justify="center">
       <v-col cols="auto">
-        <v-container id="map" style="width: 925px; height: 625px"> </v-container>
+        <v-container id="map" style="width: 925px; height: 625px">
+        </v-container>
       </v-col>
       <v-col cols="auto">
         <v-container style="width: 500px; height: 625px">
           <v-container class="heart-shape">
             <v-row justify="center" class="align-center">
               <v-btn icon color="pink" v-if="checkLike">
-                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart </v-icon>
+                <v-icon large color="red darken-2" @click="updateLikeCnt">
+                  mdi-heart
+                </v-icon>
               </v-btn>
               <v-btn icon color="pink" v-else>
-                <v-icon large color="red darken-2" @click="updateLikeCnt"> mdi-heart-outline </v-icon>
+                <v-icon large color="red darken-2" @click="updateLikeCnt">
+                  mdi-heart-outline
+                </v-icon>
               </v-btn>
 
               <span class="ml-2 mr-3"> {{ houseInfo.likeCnt }} 회 </span>
@@ -20,10 +25,16 @@
               <span class="ml-2 mr-3"> {{ houseInfo.viewCnt }} 회 </span>
             </v-row>
           </v-container>
-          <div class="apt-item-middle-text">아파트 명: {{ houseInfo.apartmentName }}</div>
-          <div class="apt-item-middle-text">건축년도: {{ houseInfo.buildYear }}년</div>
+          <div class="apt-item-middle-text">
+            아파트 명: {{ houseInfo.apartmentName }}
+          </div>
+          <div class="apt-item-middle-text">
+            건축년도: {{ houseInfo.buildYear }}년
+          </div>
           <div class="apt-item-middle-text">동이름: {{ houseInfo.dong }}</div>
-          <div class="apt-item-middle-text">도로명주소: {{ houseInfo.roadName }}</div>
+          <div class="apt-item-middle-text">
+            도로명주소: {{ houseInfo.roadName }}
+          </div>
         </v-container>
       </v-col>
     </v-row>
@@ -48,7 +59,11 @@
 
     <v-divider></v-divider>
     <v-row>
-      <apt-comment-item v-for="(comment, index) in commentList" :key="index" :comment="comment" />
+      <apt-comment-item
+        v-for="(comment, index) in commentList"
+        :key="index"
+        :comment="comment"
+      />
 
       <v-col cols="auto">
         <v-container>
@@ -65,7 +80,13 @@
               ></v-text-field>
             </v-col>
             <v-col cols="col-4">
-              <v-btn @click="clickEnrollComment" color="primary" elevation="3" large>등록</v-btn>
+              <v-btn
+                @click="clickEnrollComment"
+                color="primary"
+                elevation="3"
+                large
+                >등록</v-btn
+              >
             </v-col>
           </v-row>
         </v-container>
@@ -87,7 +108,12 @@ export default {
     AptCommentItem,
   },
   computed: {
-    ...mapState(houseInfoStore, ["houseInfo", "houseDealList", "likeFlag", "commentList"]),
+    ...mapState(houseInfoStore, [
+      "houseInfo",
+      "houseDealList",
+      "likeFlag",
+      "commentList",
+    ]),
     ...mapState(memberStore, ["userInfo"]),
 
     checkLike() {
@@ -106,18 +132,27 @@ export default {
       let labelList = [];
       let dataList = [];
 
-      this.$store.state.houseInfoStore.houseDealList.forEach((houseDealData) => {
-        let dateTransfer =
-          houseDealData.dealYear.toString() +
-          "년 " +
-          houseDealData.dealMonth.toString().padStart(2, "0") +
-          "월 " +
-          houseDealData.dealDay.toString().padStart(2, "0") +
-          "일";
+      this.$store.state.houseInfoStore.houseDealList.forEach(
+        (houseDealData) => {
+          let dateTransfer =
+            houseDealData.dealYear.toString() +
+            "년 " +
+            houseDealData.dealMonth.toString().padStart(2, "0") +
+            "월 " +
+            houseDealData.dealDay.toString().padStart(2, "0") +
+            "일";
 
-        labelList.push(dateTransfer);
-        dataList.push(houseDealData.dealAmount.replace(",", ""));
-      });
+          labelList.push(dateTransfer);
+          dataList.push(houseDealData.dealAmount.replace(",", ""));
+        }
+      );
+
+      if (labelList.length > 0) {
+        labelList.reverse();
+      }
+      if (dataList.length > 0) {
+        dataList.reverse();
+      }
 
       let chartData = {
         labels: labelList,
@@ -191,7 +226,9 @@ export default {
         memberId: this.$store.state.memberStore.userInfo.id,
         likeFlag: this.likeFlag,
       };
-      console.log(payload.aptCode + " " + payload.memberId + " " + payload.likeFlag);
+      console.log(
+        payload.aptCode + " " + payload.memberId + " " + payload.likeFlag
+      );
       this.addLikeCnt(payload);
     },
     clickEnrollComment() {
@@ -201,7 +238,12 @@ export default {
       this.comment = {};
     },
 
-    ...mapActions(houseInfoStore, ["addViewCnt", "addLikeCnt", "checkAptLike", "writeAptComment"]),
+    ...mapActions(houseInfoStore, [
+      "addViewCnt",
+      "addLikeCnt",
+      "checkAptLike",
+      "writeAptComment",
+    ]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
