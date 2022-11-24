@@ -165,6 +165,8 @@ export default {
       markerPositions: [],
       markers: [],
       infowindow: null,
+      startMarker: null,
+      endMarker: null,
     };
   },
   methods: {
@@ -289,9 +291,14 @@ export default {
                   startOption
                 );
 
+                if (_this.startMarker) {
+                  _this.startMarker.setMap(null);
+                  _this.startMarker = null;
+                }
+
                 // 출발 마커를 생성합니다
                 // 결과값으로 받은 위치를 마커로 표시합니다
-                new kakao.maps.Marker({
+                _this.startMarker = new kakao.maps.Marker({
                   map: _this.map, // 출발 마커가 지도 위에 표시되도록 설정합니다
                   position: coords,
                   image: startImage, // 출발 마커이미지를 설정합니다
@@ -342,9 +349,14 @@ export default {
                   arriveOption
                 );
 
+                if (_this.endMarker) {
+                  _this.endMarker.setMap(null);
+                  _this.endMarker = null;
+                }
+
                 // 도착 마커를 생성합니다
                 // 결과값으로 받은 위치를 마커로 표시합니다
-                new kakao.maps.Marker({
+                _this.endMarker = new kakao.maps.Marker({
                   map: _this.map, // 도착 마커가 지도 위에 표시되도록 설정합니다
                   position: coords,
                   image: arriveImage, // 도착 마커이미지를 설정합니다
