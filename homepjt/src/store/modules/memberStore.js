@@ -163,7 +163,9 @@ const memberStore = {
                 } else {
                   console.log("리프레시 토큰 제거 실패");
                 }
-                alert("refresh token 기간이 만료되었습니다! 다시 로그인해 주세요.");
+                alert(
+                  "refresh token 기간이 만료되었습니다! 다시 로그인해 주세요."
+                );
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", {
                   id: "",
@@ -345,6 +347,7 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "success") {
             console.log("회원가입 성공");
+            alert("회원가입 성공!!");
             router.push({ name: "logInView" });
           } else {
             alert("회원가입 실패!!");
