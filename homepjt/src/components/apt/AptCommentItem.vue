@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container class="ma-5">
     <v-row justify="end">
       <v-btn text @click="deleteComment" v-if="checkId()"> 삭제 </v-btn>
     </v-row>
     <v-row class="mt-3 mb-3">
-      <v-col cols="col-4">
+      <v-col cols="auto">
         <v-container>
           <span class="mr-4">
             {{ comment.memberId }}

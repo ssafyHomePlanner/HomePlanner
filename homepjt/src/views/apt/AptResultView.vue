@@ -53,45 +53,47 @@
       </v-col>
     </v-row>
 
-    <v-row class="mb-3">
-      <v-col cols="col-2">댓글 {{ commentList.length }}</v-col>
+    <v-row class="mb-1" justify="center">
+      <v-col cols="col-2" style="max-width: 1200px"
+        >댓글 {{ commentList.length }}</v-col
+      >
     </v-row>
-
-    <v-divider></v-divider>
-    <v-row>
-      <apt-comment-item
-        v-for="(comment, index) in commentList"
-        :key="index"
-        :comment="comment"
-      />
-
-      <v-col cols="auto">
-        <v-container>
-          <v-row>
-            <v-col cols="col-8">
-              <v-text-field
-                @keyup.enter="clickEnrollComment"
-                v-model="comment.content"
-                counter="25"
-                hint="댓글을 작성하세요"
-                label="댓글"
-                solo
-                style="min-width: 550px"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="col-4">
-              <v-btn
-                @click="clickEnrollComment"
-                color="primary"
-                elevation="3"
-                large
-                >등록</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-container>
+    <v-row justify="center">
+      <v-col style="max-width: 1300px">
+        <v-divider></v-divider>
       </v-col>
     </v-row>
+
+    <v-row justify="center" class="mb-1">
+      <v-col style="max-width: 1000px">
+        <apt-comment-item
+          v-for="(comment, index) in commentList"
+          :key="index"
+          :comment="comment"
+        />
+      </v-col>
+    </v-row>
+
+    <v-container style="max-width: 1200px" class="mt-2 mb-6">
+      <v-row justify="center">
+        <v-col cols="col-8" style="max-width: 600px">
+          <v-text-field
+            @keyup.enter="clickEnrollComment"
+            v-model="comment.content"
+            counter="25"
+            hint="댓글을 작성하세요"
+            label="댓글"
+            solo
+            style="min-width: 550px"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn @click="clickEnrollComment" color="primary" elevation="3" large
+            >등록</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-container>
   </v-container>
 </template>
 
