@@ -13,7 +13,7 @@
                 v-model="memberId"
                 :rules="memberIdRules"
                 label="아이디를 입력하세요."
-                @keyup.enter="joinMember"
+                @keyup.enter="checkIdDuplicated"
                 required
               ></v-text-field
             ></v-col>
