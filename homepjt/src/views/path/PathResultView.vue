@@ -5,9 +5,18 @@
         <v-container>
           <v-row justify="space-between">
             <v-col>
-              <v-btn-toggle v-model="pathResultType" tile color="deep-purple accent-3" group>
-                <v-btn value="time" @click="changeCandidateTimePath"> 시간순 </v-btn>
-                <v-btn value="distance" @click="changeCandidateDistancePath"> 거리순 </v-btn>
+              <v-btn-toggle
+                v-model="pathResultType"
+                tile
+                color="deep-purple accent-3"
+                group
+              >
+                <v-btn value="time" @click="changeCandidateTimePath">
+                  시간순
+                </v-btn>
+                <v-btn value="distance" @click="changeCandidateDistancePath">
+                  거리순
+                </v-btn>
               </v-btn-toggle>
             </v-col>
             <v-col cols="auto">
@@ -17,7 +26,8 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-container id="map" style="width: 925px; height: 625px"> </v-container>
+        <v-container id="map" style="width: 925px; height: 625px">
+        </v-container>
       </v-col>
       <v-col cols="auto" class="mr-5 mt-12">
         <v-container class="ml-0 mr-5 pr-1" style="width: 450px; height: 500px">
@@ -31,7 +41,9 @@
             <template v-slot:default="{ item }">
               <v-list-item :key="item.index">
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.startName"></v-list-item-title>
+                  <v-list-item-title
+                    v-text="item.startName"
+                  ></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content>
                   <v-container style="width: 100px; height: 50px">
@@ -51,7 +63,10 @@
           </v-virtual-scroll>
         </v-container>
         <v-container style="width: 100%; height: 100px">
-          <h2>거리: {{ this.currentPath.dist }}미터 | 예상 시간: {{ this.currentPath.time }}초</h2>
+          <h2>
+            거리: {{ this.currentPath.dist }}미터 | 예상 시간:
+            {{ this.currentPath.time }}초
+          </h2>
         </v-container>
       </v-col>
     </v-row>
@@ -76,7 +91,11 @@
                 </v-stepper-header>
               </v-col>
               <v-col cols="auto" align-self="center" class="pl-0">
-                <v-btn color="primary" style="height: 60px" x-large @click="changePath(data)"
+                <v-btn
+                  color="primary"
+                  style="height: 60px"
+                  x-large
+                  @click="changePath(data)"
                   >선택</v-btn
                 >
               </v-col>
@@ -116,6 +135,7 @@ export default {
       currentCandidatePathList: [],
       currentPath: [],
       timeList: [],
+      firstLoading: true,
     };
   },
   methods: {
@@ -136,11 +156,16 @@ export default {
 
         // 거리 계산을 위해 요청리스트의 순서 찾기
         for (let j = 0; j < this.requestList.length; j++) {
-          if (this.requestList[j].aptName == this.currentPath.pathList[i].aptName) {
+          if (
+            this.requestList[j].aptName == this.currentPath.pathList[i].aptName
+          ) {
             startIndex = j;
           }
 
-          if (this.requestList[j].aptName == this.currentPath.pathList[i + 1].aptName) {
+          if (
+            this.requestList[j].aptName ==
+            this.currentPath.pathList[i + 1].aptName
+          ) {
             endIndex = j;
           }
         }
@@ -159,21 +184,27 @@ export default {
     },
     changeCandidateTimePath() {
       //현재 후보리스트 TimePathList로 초기화
-      this.currentCandidatePathList = this.$store.state.bookmarkStore.timePathList;
+      this.currentCandidatePathList =
+        this.$store.state.bookmarkStore.timePathList;
       this.currentPath = this.$store.state.bookmarkStore.timePathList[0];
       console.log("currentCandidatePathList", this.currentCandidatePathList);
       console.log("currentPath", this.currentPath);
       console.log("현재 타임경로");
       this.eachPathTimeList();
+      if (!this.firstLoading) {
+        this.makeLine();
+      }
     },
     changeCandidateDistancePath() {
       //현재 후보리스트 DistPathList 초기화
-      this.currentCandidatePathList = this.$store.state.bookmarkStore.distPathList;
+      this.currentCandidatePathList =
+        this.$store.state.bookmarkStore.distPathList;
       this.currentPath = this.$store.state.bookmarkStore.distPathList[0];
       console.log("currentCandidatePathList", this.currentCandidatePathList);
       console.log("currentPath", this.currentPath);
       console.log("현재 거리경로");
       this.eachPathTimeList();
+      this.makeLine();
     },
     savePath() {
       let name = prompt("저장될 경로의 이름을 입력해주세요");
@@ -218,31 +249,51 @@ export default {
         firstOption = {
           offset: new kakao.maps.Point(15, 43),
         };
-      let firstIconImage = new kakao.maps.MarkerImage(firstIconSrc, firstSize, firstOption);
+      let firstIconImage = new kakao.maps.MarkerImage(
+        firstIconSrc,
+        firstSize,
+        firstOption
+      );
       let secondIconSrc = require("@/assets/number-two.png"),
         secondSize = new kakao.maps.Size(50, 45),
         secondOption = {
           offset: new kakao.maps.Point(15, 43),
         };
-      let secondIconImage = new kakao.maps.MarkerImage(secondIconSrc, secondSize, secondOption);
+      let secondIconImage = new kakao.maps.MarkerImage(
+        secondIconSrc,
+        secondSize,
+        secondOption
+      );
       let thirdIconSrc = require("@/assets/number-three.png"),
         thirdSize = new kakao.maps.Size(50, 45),
         thirdOption = {
           offset: new kakao.maps.Point(15, 43),
         };
-      let thirdIconImage = new kakao.maps.MarkerImage(thirdIconSrc, thirdSize, thirdOption);
+      let thirdIconImage = new kakao.maps.MarkerImage(
+        thirdIconSrc,
+        thirdSize,
+        thirdOption
+      );
       let fourIconSrc = require("@/assets/number-four.png"),
         fourSize = new kakao.maps.Size(50, 45),
         fourOption = {
           offset: new kakao.maps.Point(15, 43),
         };
-      let fourIconImage = new kakao.maps.MarkerImage(fourIconSrc, fourSize, fourOption);
+      let fourIconImage = new kakao.maps.MarkerImage(
+        fourIconSrc,
+        fourSize,
+        fourOption
+      );
       let fiveIconSrc = require("@/assets/number-five.png"),
         fiveSize = new kakao.maps.Size(50, 45),
         fiveOption = {
           offset: new kakao.maps.Point(15, 43),
         };
-      let fiveIconImage = new kakao.maps.MarkerImage(fiveIconSrc, fiveSize, fiveOption);
+      let fiveIconImage = new kakao.maps.MarkerImage(
+        fiveIconSrc,
+        fiveSize,
+        fiveOption
+      );
 
       let linePath = [];
       // 만들어질 경로의 위도/경도를 넣는다.
@@ -252,23 +303,33 @@ export default {
 
       console.log("linePath", linePath);
 
-      let startSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
+      let startSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png", // 출발 마커이미지의 주소입니다
         startSize = new kakao.maps.Size(50, 45), // 출발 마커이미지의 크기입니다
         startOption = {
           offset: new kakao.maps.Point(15, 43), // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
         };
 
       // 출발 마커 이미지를 생성합니다
-      let startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
+      let startImage = new kakao.maps.MarkerImage(
+        startSrc,
+        startSize,
+        startOption
+      );
 
-      let arriveSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
+      let arriveSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", // 도착 마커이미지 주소입니다
         arriveSize = new kakao.maps.Size(50, 45), // 도착 마커이미지의 크기입니다
         arriveOption = {
           offset: new kakao.maps.Point(15, 43), // 도착 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정합니다 (기본값은 이미지의 가운데 아래입니다)
         };
 
       // 도착 마커 이미지를 생성합니다
-      let arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
+      let arriveImage = new kakao.maps.MarkerImage(
+        arriveSrc,
+        arriveSize,
+        arriveOption
+      );
 
       for (let i = 0; i < linePath.length; i++) {
         //출발 좌표 표시
@@ -382,6 +443,7 @@ export default {
   },
   mounted() {
     this.changeCandidateTimePath();
+    this.firstLoading = false;
 
     if (window.kakao && window.kakao.maps) {
       this.initMap();
