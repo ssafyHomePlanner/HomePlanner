@@ -28,12 +28,10 @@
                   <v-col cols="auto">
                     <v-row justify="end">
                       <v-btn icon>
-                        <v-icon @click="deleteApartment(aptInfo.aptCode)">mdi-close</v-icon>
+                        <v-icon @click.stop="deleteApartment(aptInfo)">mdi-close</v-icon>
                       </v-btn>
                     </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4"
-                      >{{ aptInfo.apartmentName }}
-                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4">{{ aptInfo.apartmentName }} </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ aptInfo.dong }} ({{ aptInfo.roadName }})
                     </v-row>
@@ -63,12 +61,10 @@
                   <v-col cols="auto">
                     <v-row justify="end">
                       <v-btn icon>
-                        <v-icon @click="deletePath(pathInfo.id)">mdi-close</v-icon>
+                        <v-icon @click.stop="deletePath(pathInfo)">mdi-close</v-icon>
                       </v-btn>
                     </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4"
-                      >{{ pathInfo.pathName }}
-                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4">{{ pathInfo.pathName }} </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ pathInfo.startAptName }} -> {{ pathInfo.endAptName }}
                     </v-row>
@@ -97,12 +93,10 @@
                   <v-col cols="auto">
                     <v-row justify="end">
                       <v-btn icon>
-                        <v-icon @click="deletePlanner(plannerInfo.id)">mdi-close</v-icon>
+                        <v-icon @click.stop="deletePlanner(plannerInfo)">mdi-close</v-icon>
                       </v-btn>
                     </v-row>
-                    <v-row justify="center" class="item-middle-box-text mt-4"
-                      >{{ plannerInfo.aptName }}
-                    </v-row>
+                    <v-row justify="center" class="item-middle-box-text mt-4">{{ plannerInfo.aptName }} </v-row>
                     <v-row justify="center" class="item-middle-box-subtext mt-3">
                       {{ plannerInfo.writeDate }}
                     </v-row>
@@ -132,12 +126,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(bookmarkStore, [
-      "bookmarkAptList",
-      "bookmarkPathList",
-      "plannerInfoList",
-      "bookmarkPathDetailList",
-    ]),
+    ...mapState(bookmarkStore, ["bookmarkAptList", "bookmarkPathList", "plannerInfoList", "bookmarkPathDetailList"]),
     ...mapState(plannerStore, ["plannerInfoList", "plannerInfo"]),
     ...mapState(memberStore, ["userInfo"]),
   },
@@ -154,8 +143,10 @@ export default {
       "searchBookmarkPathInfo",
       "searchBookmarkPathDetailInfo",
       "getPathInfoList",
+      "deletePathList",
+      "deleteBookmarkAptInfo",
     ]),
-    ...mapActions(plannerStore, ["selectPlannerInfo", "selectPlannerInfoList"]),
+    ...mapActions(plannerStore, ["selectPlannerInfo", "selectPlannerInfoList", "deletePlannerInfo"]),
     ...mapActions(houseInfoStore, ["searchHouseInfo", "getHouseInfoDeal"]),
 
     clickAptInfo(value) {
@@ -215,26 +206,48 @@ export default {
       this.$router.push({ name: "plannerView" }).catch(() => {});
     },
 
-    deleteApartment(aptCode) {
-      this.bookmarkAptList.forEach((item, index) => {
-        if (item.aptCode === aptCode) {
-          this.bookmarkAptList.splice(index, 1);
-        }
-      });
+    deleteApartment(aptInfo) {
+      console.log("userInfo id = ", this.userInfo.id);
+      console.log("aptList = ", this.bookmarkAptList);
+      console.log("aptInfo = ", aptInfo);
+
+      const payload = {
+        memberId: this.userInfo.id,
+        aptCode: aptInfo.aptCode,
+      };
+
+      console.log(payload);
+      if (confirm("정말로 삭제하시겠습니까?")) {
+        this.bookmarkAptList.forEach((item, index) => {
+          if (item.aptCode === aptInfo.aptCode) {
+            this.bookmarkAptList.splice(index, 1);
+          }
+        });
+        console.log("삭제 ㄱㄱ");
+        this.deleteBookmarkAptInfo(payload);
+      }
     },
-    deletePath(id) {
-      this.bookmarkPathList.forEach((item, index) => {
-        if (item.id === id) {
-          this.bookmarkPathList.splice(index, 1);
-        }
-      });
+    deletePath(pathInfo) {
+      console.log("pathInfo = ", pathInfo);
+      if (confirm("정말로 삭제하시겠습니까?")) {
+        this.bookmarkPathList.forEach((item, index) => {
+          if (item.id === pathInfo.id) {
+            this.bookmarkPathList.splice(index, 1);
+          }
+        });
+        this.deletePathList(pathInfo.id);
+      }
     },
-    deletePlanner(id) {
-      this.plannerInfoList.forEach((item, index) => {
-        if (item.id === id) {
-          this.plannerInfoList.splice(index, 1);
-        }
-      });
+    deletePlanner(plannerInfo) {
+      console.log("plannerInfo = ", plannerInfo);
+      if (confirm("정말로 삭제하시겠습니까?")) {
+        this.plannerInfoList.forEach((item, index) => {
+          if (item.id === plannerInfo.id) {
+            this.plannerInfoList.splice(index, 1);
+          }
+        });
+        this.deletePlannerInfo(plannerInfo.id);
+      }
     },
   },
 };

@@ -19,7 +19,7 @@ function selectPlannerList(memberId, success, fail) {
 
 // 플래너 삭제
 function deletePlanner(plannerId, success, fail) {
-  api.delete(`/plenner/${plannerId}`).then(success).catch(fail);
+  api.delete(`/planner/${plannerId}`).then(success).catch(fail);
 }
 
 export { createPlanner, updatePlanner, selectPlannerList, deletePlanner };

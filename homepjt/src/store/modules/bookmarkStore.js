@@ -156,9 +156,10 @@ const bookmarkStore = {
     },
 
     // 관심 상품 삭제
-    deleteBookmarkAptInfo(context, bookmarkAptId) {
+    deleteBookmarkAptInfo(context, payload) {
       deleteBookmarkApt(
-        bookmarkAptId,
+        payload.memberId,
+        payload.aptCode,
         ({ data }) => {
           if (data.message === "success") {
             console.log("관심 상품 삭제 성공");

@@ -4,10 +4,7 @@ const api = apiInstance();
 
 // 경로 리스트 출력
 async function searchPath(pahtInfo, success, fail) {
-  await api
-    .post(`/bookmark/path/search`, JSON.stringify(pahtInfo))
-    .then(success)
-    .catch(fail);
+  await api.post(`/bookmark/path/search`, JSON.stringify(pahtInfo)).then(success).catch(fail);
 }
 
 // 관심 경로 리스트 불러오기(출발지, 도착지)
@@ -22,10 +19,7 @@ function searchBookmarkPathDetail(bookmarkPathId, success, fail) {
 
 // 관심 경로 등록
 function insertPath(pathInfo, memberId, pathName, success, fail) {
-  api
-    .post(`/bookmark/path/${memberId}/${pathName}`, JSON.stringify(pathInfo))
-    .then(success)
-    .catch(fail);
+  api.post(`/bookmark/path/${memberId}/${pathName}`, JSON.stringify(pathInfo)).then(success).catch(fail);
 }
 
 // 관심 경로 삭제
@@ -34,8 +28,8 @@ function deletePath(bookmarkPathId, success, fail) {
 }
 
 // 관심 상품 삭제
-function deleteBookmarkApt(bookmarkAptId, success, fail) {
-  api.delete(`/bookmark/${bookmarkAptId}`).then(success).catch(fail);
+function deleteBookmarkApt(memberId, aptCode, success, fail) {
+  api.delete(`/bookmark/${memberId}/${aptCode}`).then(success).catch(fail);
 }
 
 // 관심 상품 조회
