@@ -1,6 +1,11 @@
 package com.ssafy.homepjt.model.service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +29,47 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void join(MemberDto memberDto) throws SQLException {
+    public void join(MemberDto memberDto) throws SQLException, NoSuchAlgorithmException {
+        String raw = memberDto.getPw();
+        String hex = "";
+
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        byte[]bytes = new byte[16];
+        random.nextBytes(bytes);
+
+        //SALT 생성
+        String salt = new String(Base64.getEncoder().encode(bytes));
+        String rawAndSalt = raw + salt;
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+//        md.update(raw.getBytes());
+//        hex = String.format("%064x", new BigInteger(1, md.digest()));
+
+        md.update(rawAndSalt.getBytes());
+        hex = String.format("%064x", new BigInteger(1, md.digest()));
+
+        memberDto.setPw(hex.toString());
+        System.out.println("hex = " + hex.toString());
+        memberDto.setSalt(salt);
+        System.out.println("memberDto = " + memberDto.toString());
         memberMapper.join(memberDto);
     }
 
     @Override
-    public MemberDto login(String memberId, String memberPw) throws SQLException {
-        return memberMapper.login(memberId, memberPw);
+    public MemberDto login(String memberId, String memberPw) throws SQLException, NoSuchAlgorithmException {
+        String salt = memberMapper.findSalt(memberId);
+        if(salt == null){
+            return null;
+        }
+
+        String raw = memberPw;
+        String hex = "";
+        String rawAndSalt = raw + salt;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(rawAndSalt.getBytes());
+        hex = String.format("%064x", new BigInteger(1, md.digest()));
+
+        return memberMapper.login(memberId, hex);
     }
 
     @Override

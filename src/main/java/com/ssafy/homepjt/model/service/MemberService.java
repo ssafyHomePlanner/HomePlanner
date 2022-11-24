@@ -1,5 +1,6 @@
 package com.ssafy.homepjt.model.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,10 +12,10 @@ import com.ssafy.homepjt.model.dto.MemberDto;
 public interface MemberService {
     public int idCheck(String id) throws SQLException; // 아이디 중복 확인
 
-    public void join(MemberDto memberDto) throws SQLException; // 회원가입
+    public void join(MemberDto memberDto) throws SQLException, NoSuchAlgorithmException; // 회원가입
 
     public MemberDto login(@Param("memberId") String memberId, @Param("memberPw") String memberPw)
-            throws SQLException; // 로그인
+            throws SQLException, NoSuchAlgorithmException; // 로그인
 
     public void saveRefreshToken(String memberId, String refreshToken) throws Exception;
 

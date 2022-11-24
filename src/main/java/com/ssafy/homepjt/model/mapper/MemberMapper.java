@@ -16,6 +16,8 @@ public interface MemberMapper {
 
 	public void join(MemberDto memberDto) throws SQLException; // 회원가입
 
+	public String findSalt(String memberId) throws SQLException; // 해당 회원의 salt값 가져오기
+	
 	public MemberDto login(@Param("memberId") String memberId, @Param("memberPw") String memberPw)
 			throws SQLException; // 로그인
 
