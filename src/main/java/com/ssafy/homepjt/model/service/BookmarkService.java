@@ -18,7 +18,7 @@ public interface BookmarkService {
     public List<HouseInfoDto> selectBookmarkApt(String memberId) throws SQLException;
 
     // 관심 상품 목록 보기
-    public void deleteBookmarkApt(int bookmarkAptId) throws SQLException;
+    public void deleteBookmarkApt(String memberId, long aptCode) throws SQLException;
 
     // 게시글 좋아요 회원 등록
     public void insertBookmarkMember(@Param("boardId") int boardId, @Param("memberId") String memberId);

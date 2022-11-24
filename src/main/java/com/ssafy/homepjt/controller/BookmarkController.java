@@ -21,7 +21,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/bookmark")
 @Api("장바구니 컨트롤러 API V1")
-@CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class BookmarkController {
 
     public static final Logger logger = LoggerFactory.getLogger(BookmarkController.class);
@@ -72,18 +71,18 @@ public class BookmarkController {
 
     // 관심 상품 삭제
     @ApiOperation(value = "관심 상품 삭제")
-    @DeleteMapping("/{bookmarkAptId}")
-    public ResponseEntity<Map<String, Object>> deleteBookmarkApt(@PathVariable("bookmarkAptId") int bookmarkAptId) {
-        logger.debug("bookmark delete apt controller, bookmarkAptId : {}", bookmarkAptId);
+    @DeleteMapping("/{memberId}/{aptCode}")
+    public ResponseEntity<Map<String, Object>> deleteBookmarkApt(@PathVariable("memberId") String memberId, @PathVariable("aptCode") long aptCode) {
+        logger.info("bookmark delete apt controller, memberId: {}, aptCode : {}", memberId, aptCode);
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            bookmarkService.deleteBookmarkApt(bookmarkAptId);
+            bookmarkService.deleteBookmarkApt(memberId, aptCode);
             logger.debug("관심상품 삭제 성공");
             resultMap.put("message", SUCCESS);
             return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            logger.error("관심상품 삭제 실패");
+            logger.error("관심상품 삭제 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -158,7 +157,7 @@ public class BookmarkController {
     @ApiOperation(value="관심 경로 리스트(출발지, 도착지)")
     @GetMapping("/path/{memberId}")
     public ResponseEntity<Map<String, Object>> searchBookmarkPath(@PathVariable("memberId") String memberId){
-        logger.info("bookmark controller - memberId : {]", memberId);
+        logger.info("bookmark controller - memberId : {}", memberId);
         Map<String, Object> resultMap = new HashMap<>();
 
         try {

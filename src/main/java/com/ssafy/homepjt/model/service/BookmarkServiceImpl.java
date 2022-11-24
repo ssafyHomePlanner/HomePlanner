@@ -37,8 +37,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public void deleteBookmarkApt(int bookmarkAptId) throws SQLException {
-        bookmarkMapper.deleteBookmarkApt(bookmarkAptId);
+    public void deleteBookmarkApt(String memberId, long aptCode) throws SQLException {
+        bookmarkMapper.deleteBookmarkApt(memberId, aptCode);
     }
 
     @Override

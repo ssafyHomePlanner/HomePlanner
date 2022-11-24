@@ -19,7 +19,7 @@ public interface BookmarkMapper {
     public List<HouseInfoDto> selectBookmarkApt(String memberId);
 
     // 관심 상품 삭제
-    public void deleteBookmarkApt(int bookmarkId);
+    public void deleteBookmarkApt(@Param("memberId") String memberId, @Param("aptCode") long aptCode);
 
     // 게시글 좋아요 회원 등록
     public void insertBookmarkMember(@Param("boardId") int boardId, @Param("memberId") String memberId);
