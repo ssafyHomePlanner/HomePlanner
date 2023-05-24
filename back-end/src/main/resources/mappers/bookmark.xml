@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.BookmarkMapper">
+
+    <resultMap id="HouseInfoAll" type="HouseInfoDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="build_year" property="buildYear"/>
+        <result column="road_name" property="roadName"/>
+        <result column="road_name_bonbun" property="roadNameBonbun"/>
+        <result column="road_name_bubun" property="roadNameBubun"/>
+        <result column="road_name_seq" property="roadNameSeq"/>
+        <result column="road_name_basement_code" property="roadNameBasementCode"/>
+        <result column="road_name_code" property="roadNameCode"/>
+        <!--        <result column="dong" property="dong"/>-->
+        <!--        <result column="bonbun" property="bonbun"/>-->
+        <!--        <result column="bubun" property="bubun"/>-->
+        <result column="sigungu_code" property="sigunguCode"/>
+        <result column="eubmyundong_code" property="eubmyundongCode"/>
+        <result column="dong_code" property="dongCode"/>
+        <result column="land_code" property="landCode"/>
+        <result column="apartment_name" property="apartmentName"/>
+        <!--        <result column="jibun" property="jibun"/>-->
+        <!--        <result column="lon" property="lon"/>-->
+        <!--        <result column="lat" property="lat"/>-->
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="like_cnt" property="likeCnt"/>
+    </resultMap>
+
+    <resultMap id="bookmarkPathDto" type="bookmarkPathDto">
+        <result column="start_lat" property="startLat"/>
+        <result column="start_lon" property="startLon"/>
+        <result column="start_apt_name" property="startAptName"/>
+        <result column="end_lat" property="endLat"/>
+        <result column="end_lon" property="endLon"/>
+        <result column="end_apt_name" property="endAptName"/>
+        <result column="member_id" property="memberId"/>
+        <result column="path_name" property="pathName"/>
+        <result column="start_apt_code" property="startAptCode"/>
+        <result column="end_apt_code" property="endAptCode"/>
+    </resultMap>
+
+    <resultMap id="bookmarkPathResponseDto" type="bookmarkPathResponseDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="apt_name" property="aptName"/>
+    </resultMap>
+
+    <sql id="houseInfoColumns">
+        ${alias}.apt_code, ${alias}.build_year, ${alias}.road_name, ${alias}.road_name_bonbun, ${alias}.road_name_bubun, ${alias}.road_name_seq, ${alias}.road_name_basement_code,
+        ${alias}.road_name_code, ${alias}.dong, ${alias}.bonbun, ${alias}.bubun, ${alias}.sigungu_code, ${alias}.eubmyundong_code, ${alias}.dong_code, ${alias}.land_code, ${alias}.apartment_name, ${alias}.jibun,
+        ${alias}.lon, ${alias}.lat, ${alias}.view_cnt, ${alias}.like_cnt
+    </sql>
+
+    <!-- 관심 상품 등록 -->
+    <insert id="insertBookmarkApt">
+        insert into bookmark_apt(member_id, apt_code)
+        values (#{memberId}, #{aptCode})
+    </insert>
+
+    <!-- 관심 상품 목록 보기 -->
+    <select id="selectBookmarkApt" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns">
+            <property name="alias" value="h"/>
+        </include>
+        from houseinfo h join bookmark_apt ba on h.apt_code = ba.apt_code
+        where ba.member_id = #{memberId}
+    </select>
+
+    <!-- 관심 상품 삭제 -->
+    <delete id="deleteBookmarkApt">
+        delete
+        from bookmark_apt
+        where member_id = #{memberId} and apt_code = #{aptCode}
+    </delete>
+
+    <!-- 게시글 좋아요 회원 등록 -->
+    <insert id="insertBookmarkMember">
+        insert into bookmark_board(board_id, member_id)
+        values (#{boardId}, #{memberId})
+    </insert>
+
+    <!-- 게시글 좋아요 클릭 여부 확인 -->
+    <select id="checkBoardMemberLike" resultType="int">
+        select count(*)
+        from bookmark_board
+        where member_id = #{memberId} and board_id = #{boardId}
+    </select>
+
+    <!-- 관심 경로 불러오기(출발지, 도착지) -->
+    <select id="searchBookmarkPath" resultMap="bookmarkPathDto">
+        select *
+        from bookmark_path
+        where member_id = #{memberId}
+    </select>
+
+    <!-- 관심 경로 불러오기(경유지) -->
+    <select id="searchBookmarkPathDetail" resultMap="bookmarkPathResponseDto">
+        select *
+        from bookmark_path_detail
+        where bookmark_path_id = #{bookmarkPathId}
+    </select>
+
+    <!-- 관심 경로 등록(출발지, 도착지) -->
+    <insert id="insertBookmarkPath" useGeneratedKeys="true" keyProperty="id">
+        insert into bookmark_path(start_apt_code, start_apt_name, start_lat, start_lon,
+                                  end_apt_code, end_apt_name, end_lat, end_lon, member_id, path_name)
+        values (#{startAptCode}, #{startAptName}, #{startLat}, #{startLon},
+                #{endAptCode}, #{endAptName}, #{endLat}, #{endLon},
+                #{memberId}, #{pathName})
+    </insert>
+
+    <!-- 관심 경로 등록(경유지) -->
+    <insert id="insertBookmarkPathDetail">
+        insert into bookmark_path_detail(bookmark_path_id, apt_code, apt_name, lat, lon)
+        values (#{bookmarkPathId}, #{aptCode}, #{aptName}, #{lat}, #{lon})
+    </insert>
+
+    <delete id="deleteBookmarkPath">
+        delete
+        from bookmark_path
+        where id = #{bookmarkPathId}
+    </delete>
+
+</mapper>

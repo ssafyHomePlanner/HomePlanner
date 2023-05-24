@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.MemberMapper">
+
+    <resultMap type="memberDto" id="memberDto">
+        <result column="join_date" property="joinDate"/>
+    </resultMap>
+
+    <resultMap type="recentDto" id="recentDto">
+        <result column="member_id" property="memberId"/>
+        <result column="searched_name" property="searchedName"/>
+        <result column="searched_date" property="searchedDate"/>
+    </resultMap>
+
+    <sql id="memberColumns">
+        id
+        ,pw,name,email,age,phone,gender,join_date,salt
+    </sql>
+
+    <!-- 아이디 중복 여부 확인 -->
+    <select id="idCheck" parameterType="String" resultType="int">
+        select count(id)
+        from member
+        where id = #{memberId}
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="join" parameterType="memberDto">
+        insert into member(id, pw, name,
+                           email, age, phone, gender, join_date, salt)
+        values (#{id},
+                #{pw},
+                #{name}, #{email}, #{age}, #{phone}, #{gender},
+                NOW(), #{salt})
+    </insert>
+
+    <!-- salt값 가져오기 -->
+    <select id="findSalt" parameterType="String" resultType="String">
+        select salt
+        from member
+        where id = #{memberId}
+    </select>
+
+    <!-- 로그인 -->
+    <select id="login" resultMap="memberDto">
+        select
+        <include refid="memberColumns"/>
+        from member
+        where id = #{memberId}
+        and pw
+        = #{memberPw}
+    </select>
+
+    <!-- 토큰 생성 및 저장  -->
+    <update id="saveRefreshToken" parameterType="map">
+        update member
+        set token = #{token}
+        where id = #{memberId}
+    </update>
+
+    <!-- 토근 발급 -->
+    <select id="getRefreshToken" parameterType="String" resultType="String">
+        select token
+        from member
+        where id = #{memberId}
+    </select>
+    <!-- 토큰 삭제 -->
+    <update id="deleteRefreshToken" parameterType="map">
+        update member
+        set token = #{token, jdbcType=VARCHAR}
+        where id = #{memberId}
+    </update>
+
+    <!-- 회원 상세 정보 -->
+    <select id="detail" resultMap="memberDto">
+        select
+        <include refid="memberColumns"/>
+        from member
+        where id = #{memberId}
+    </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="update">
+        update member
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pw != null">pw = #{pw},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="salt != null">salt = #{salt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 회원 탈퇴 -->
+    <delete id="delete" parameterType="String">
+        delete
+        from member
+        where id =
+              #{memberId}
+    </delete>
+
+    <!-- 아이디 찾기 -->
+    <select id="findId" resultType="String">
+        select id
+        from member
+        where name =
+              #{memberName}
+          and phone = #{memberPhone}
+    </select>
+
+    <!-- 비밀번호 찾기 -->
+    <select id="findPw" resultType="String">
+        select pw
+        from member
+        where id =
+              #{memberId}
+          and phone
+            = #{memberPhone}
+    </select>
+
+    <!-- 입력 데이터 등록 여부 확인 -->
+    <select id="checkRecentData" resultType="int">
+        select count(*)
+        from recent_search
+        where member_id = #{memberId}
+          and searched_name = #{data}
+    </select>
+
+    <!-- 최근 검색 등록 -->
+    <insert id="insertRecentData">
+        insert into recent_search(member_id, searched_name, searched_date)
+        values (#{memberId}, #{data}, NOW())
+    </insert>
+
+    <!-- 최근 검색 -->
+    <select id="searchRecentData" parameterType="String" resultMap="recentDto">
+        select id, member_id, searched_name, searched_date
+        from recent_search
+        where member_id = #{memberId}
+        order by searched_date desc;
+    </select>
+
+    <!-- 최근 검색 삭제 -->
+    <delete id="deleteRecentData">
+        delete
+        from recent_search
+        where member_id = #{memberId}
+          and id = #{recentId}
+    </delete>
+
+    <!-- 최근 검색 전체 삭제 -->
+    <delete id="deleteRecentDataAll" parameterType="String">
+        delete
+        from recent_search
+        where member_id = #{memberId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.HouseInfoMapper">
+
+    <resultMap id="HouseInfoAll" type="HouseInfoDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="build_year" property="buildYear"/>
+        <result column="road_name" property="roadName"/>
+        <result column="road_name_bonbun" property="roadNameBonbun"/>
+        <result column="road_name_bubun" property="roadNameBubun"/>
+        <result column="road_name_seq" property="roadNameSeq"/>
+        <result column="road_name_basement_code" property="roadNameBasementCode"/>
+        <result column="road_name_code" property="roadNameCode"/>
+<!--        <result column="dong" property="dong"/>-->
+<!--        <result column="bonbun" property="bonbun"/>-->
+<!--        <result column="bubun" property="bubun"/>-->
+        <result column="sigungu_code" property="sigunguCode"/>
+        <result column="eubmyundong_code" property="eubmyundongCode"/>
+        <result column="dong_code" property="dongCode"/>
+        <result column="land_code" property="landCode"/>
+        <result column="apartment_name" property="apartmentName"/>
+<!--        <result column="jibun" property="jibun"/>-->
+<!--        <result column="lon" property="lon"/>-->
+<!--        <result column="lat" property="lat"/>-->
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="like_cnt" property="likeCnt"/>
+    </resultMap>
+
+    <resultMap id="HouseDealAll" type="HouseDealDto">
+        <result column="deal_amount" property="dealAmount"/>
+        <result column="deal_year" property="dealYear"/>
+        <result column="deal_month" property="dealMonth"/>
+        <result column="deal_day" property="dealDay"/>
+        <result column="cancel_deal_type" property="cancelDealType"/>
+        <result column="apt_code" property="aptCode"/>
+    </resultMap>
+
+    <resultMap id="HouseCommentAll" type="HouseCommentDto">
+        <result column="apt_code" property="aptCode"/>
+        <result column="member_id" property="memberId"/>
+        <result column="write_date" property="writeDate"/>
+    </resultMap>
+
+    <resultMap id="AptSearchDetailRequestDto" type="AptSearchDetailRequestDto">
+        <result column="apt_name" property="aptName"/>
+        <result column="sido_name" property="sidoName"/>
+        <result column="gugun_name" property="gugunName"/>
+        <result column="dong_name" property="dongName"/>
+
+    </resultMap>
+
+
+    <sql id="houseInfoColumns">
+        distinct ${alias}.apt_code, ${alias}.build_year, ${alias}.road_name, ${alias}.road_name_bonbun, ${alias}.road_name_bubun, ${alias}.road_name_seq, ${alias}.road_name_basement_code,
+        ${alias}.road_name_code, ${alias}.dong, ${alias}.bonbun, ${alias}.bubun, ${alias}.sigungu_code, ${alias}.eubmyundong_code, ${alias}.dong_code, ${alias}.land_code, ${alias}.apartment_name, ${alias}.jibun,
+        ${alias}.lon, ${alias}.lat, ${alias}.view_cnt, ${alias}.like_cnt
+    </sql>
+
+    <sql id="houseDealColumns">
+        id, deal_amount, deal_year, deal_month, deal_day, area, floor, cancel_deal_type, apt_code
+    </sql>
+
+    <sql id="houseCommentColumns">
+        id, apt_code, member_id, content, write_date
+    </sql>
+
+    <!-- 검색된 아파트 개수 -->
+    <select id="selectTotalCount" resultType="int">
+        select count(*)
+        from houseinfo h
+                 join dongcode d on h.dong_code = d.dong_code
+        where d.sido_name like concat('%', #{sidoName}, '%')
+          and d.gugun_name like concat('%', #{gugunName}, '%')
+          and d.dong_name like concat('%', #{dongName}, '%')
+          and h.apartment_name like concat('%', #{aptName}, '%')
+    </select>
+
+    <!-- 아파트 검색 -->
+    <select id="selectHouseInfo" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns">
+            <property name="alias" value="h"/>
+        </include>
+        from houseinfo h
+        join dongcode d on h.dong_code = d.dong_code
+        where d.sido_name like concat('%', #{sidoName}, '%')
+        and d.gugun_name like concat('%', #{gugunName}, '%')
+        and d.dong_name like concat('%', #{dongName}, '%')
+        and h.apartment_name like concat('%', #{aptName}, '%')
+        limit #{start}, #{cnt}
+    </select>
+
+    <!-- 아파트 검색 자동완성 -->
+    <select id="selectHouseInfoAuto" parameterType="String" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns"><property name="alias" value="h"/></include>
+        from houseinfo h
+        where apartment_name like concat('%', #{aptName}, '%')
+        limit 0, 10
+    </select>
+
+    <!-- 아파트 상세 검색(거래내역) -->
+    <select id="selectHouseDeal" parameterType="long" resultMap="HouseDealAll">
+        select
+        <include refid="houseDealColumns"/>
+        from housedeal
+        where apt_code = #{aptCode}
+        order by deal_year desc, deal_month desc, deal_day desc
+    </select>
+
+    <!-- 아파트 조회수 증가 -->
+    <update id="updateReadCount" parameterType="long">
+        update houseinfo
+        set view_cnt = view_cnt + 1
+        where apt_code = #{aptCode}
+    </update>
+
+    <!-- 아파트 좋아요수 수정 -->
+    <update id="updateLikeCount" parameterType="long">
+        update houseinfo
+        set like_cnt = (select count(*)
+                        from bookmark_apt
+                        where apt_code = #{aptCode})
+        where apt_code = #{aptCode}
+    </update>
+
+    <!-- 아파트 좋아요 회원 추가 -->
+    <insert id="insertAptLike">
+        insert into bookmark_apt(member_id, apt_code)
+        values (#{memberId}, #{aptCode})
+    </insert>
+
+    <!-- 아파트 좋아요 회원 삭제 -->
+    <delete id="deleteAptLike">
+        delete from bookmark_apt
+        where member_id = #{memberId} and apt_code = #{aptCode}
+    </delete>
+
+    <!-- 아파트 좋아요 여부 확인 -->
+    <select id="checkAptLike" resultType="int">
+        select count(id) from bookmark_apt
+        where member_id = #{memberId}
+          and apt_code = #{aptCode}
+    </select>
+
+
+    <!-- 아파트 댓글 조회 -->
+    <select id="selectHouseComment" parameterType="long" resultMap="HouseCommentAll">
+        select <include refid="houseCommentColumns"/>
+        from house_comment
+        where apt_code = #{aptCode}
+        order by write_date
+    </select>
+
+    <!-- 아파트 댓글 쓰기 -->
+    <insert id="writeHouseComment" parameterType="houseCommentDto">
+        insert into house_comment(apt_code, member_id, content, write_date)
+        values (#{aptCode}, #{memberId}, #{content}, NOW())
+    </insert>
+
+    <!-- 아파트 댓글 수정 -->
+    <update id="updateHouseComment" parameterType="houseCommentDto">
+        update house_comment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="content != null">content = #{content},</if>
+            write_date = NOW(),
+        </trim>
+        where id=#{id}
+    </update>
+
+    <!-- 아파트 댓글 삭제 -->
+    <delete id="deleteHouseComment" parameterType="int">
+        delete
+        from house_comment
+        where id = #{houseCommentId}
+    </delete>
+
+
+    <!-- 아파트 상세 검색 -->
+    <select id="selectHouseInfoDetail" parameterType="AptSearchDetailRequestDto" resultMap="HouseInfoAll">
+        select
+        <include refid="houseInfoColumns">
+            <property name="alias" value="hi"/>
+        </include>
+--         select distinct hi.*
+        from houseinfo hi inner join housedeal hd on hi.apt_code = hd.apt_code
+        inner join dongcode dc on hi.dong_code = dc.dong_code
+        where hi.apartment_name like concat('%', #{dto.aptName}, '%')
+        and dc.sido_name like concat('%', #{dto.sidoName}, '%')
+        and dc.gugun_name like concat('%', #{dto.gugunName}, '%')
+        and dc.dong_name like concat('%', #{dto.dongName}, '%')
+        and cast(replace(hd.deal_amount, ',', '') as unsigned) between #{dto.minDealAmount} and #{dto.maxDealAmount}
+        and cast(replace(hd.area, ',', '') as unsigned) between #{dto.minArea} and #{dto.maxArea}
+        and hi.build_year between #{dto.minBuildYear} and #{dto.maxBuildYear}
+        limit #{start}, #{cnt}
+    </select>
+
+    <!-- 아파트 상세 검색 개수 -->
+    <select id="selectHouseInfoDetailTotalCount" parameterType="AptSearchDetailRequestDto" resultType="int">
+        select count(distinct hi.apt_code)
+        from houseinfo hi inner join housedeal hd on hi.apt_code = hd.apt_code
+        inner join dongcode dc on hi.dong_code = dc.dong_code
+        where hi.apartment_name like concat('%', #{aptName}, '%')
+        and dc.sido_name like concat('%', #{sidoName}, '%')
+        and dc.gugun_name like concat('%', #{gugunName}, '%')
+        and dc.dong_name like concat('%', #{dongName}, '%')
+        and cast(replace(hd.deal_amount, ',', '') as unsigned) between #{minDealAmount} and #{maxDealAmount}
+        and cast(replace(hd.area, ',', '') as unsigned) between #{minArea} and #{maxArea}
+        and hi.build_year between #{minBuildYear} and #{maxBuildYear}
+    </select>
+
+
+</mapper>

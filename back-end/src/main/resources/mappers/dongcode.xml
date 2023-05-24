@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homepjt.model.mapper.DongCodeMapper">
+
+    <resultMap type="dongCodeDto" id="dongCodeInfo">
+        <result column="dong_code" property="dongCode"/>
+        <result column="sido_name" property="sidoName"/>
+        <result column="gugun_name" property="gugunName"/>
+        <result column="dong_name" property="dongName"/>
+    </resultMap>
+
+    <select id="selectSidoName" resultType="String">
+        select distinct sido_name
+        from dongcode;
+    </select>
+
+    <select id="selectGugunName" resultType="String">
+        select distinct gugun_name
+        from dongcode
+        where sido_name = #{sidoName}
+    </select>
+
+    <select id="selectDongName" resultType="String">
+        select distinct dong_name
+        from dongcode
+        where gugun_name = #{gugunName}
+    </select>
+
+    <select id="selectDongCodeInfo" resultMap="dongCodeInfo">
+        select dong_code, sido_name, gugun_name, dong_name
+        from dongcode
+        where dong_code = #{dongCode}
+    </select>
+
+
+</mapper>
