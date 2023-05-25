@@ -143,7 +143,7 @@ kakao Maps, kakao mobility, kakao 우편번호
 
 <img src="./img/class_diagram.png">
 
-## 비밀번호 암호화
+## 비밀번호 암호화(hash256 + Salt)
 
 <img src="./img/salt.png">
 
@@ -361,4 +361,9 @@ kakao Maps, kakao mobility, kakao 우편번호
 
 # 🏠 소감
 
-<img src="./img/review.png">
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 4a4031e0bd925fccc6c73341b4666216bf1bcc2c
+> > > > > > > <img src="./img/review.png">
