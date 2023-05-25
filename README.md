@@ -55,25 +55,42 @@ kakao Maps, kakao mobility, kakao 우편번호
 # 🏠 HomePlanner 기능
 
 ## 검색 편의성 제공
-- 다양한 필터, 검색어 자동완성, 최근 검색어
+### 검색어 자동완성, 최근 검색어
+<img src="./img/search_one.png">
 
-## 유저 간의 정보 공유 
-- 게시판, 아파트 댓글
+### 다양한 필터
+<img src="./img/search_two.png">
 
-## 경로 찾기
-- 거리순, 시간순, 경로 리스트 소요 시간, 거리
-
-## 구매 계획 세우기
-- 구매 희망 아파트 매물, 구매 가능 시기 계산
-
-## 즐겨찾기
-- 아파트 매물, 경로, 구매 계획 즐겨찾기
+### 검색 결과
+<img src="./img/search_result.png">
 
 <br/>
 
-# 🏠 화면 구성
+## 유저 간의 정보 공유 
+### 게시판, 아파트 댓글
+<img src="./img/board.png">
 
-### 메인 페이지
+<br/>
+
+## 경로 찾기
+### 거리순, 시간순, 경로 리스트 소요 시간, 거리
+<img src="./img/path.png">
+
+<img src="./img/path_two.png">
+
+<br/>
+
+## 구매 계획 세우기
+### 구매 희망 아파트 매물, 구매 가능 시기 계산
+
+<img src="./img/plan.png">
+
+<br/>
+
+## 즐겨찾기
+### 아파트 매물, 경로, 구매 계획 즐겨찾기
+
+<img src="./img/like.png">
 
 <br/>
 
@@ -94,16 +111,37 @@ kakao Maps, kakao mobility, kakao 우편번호
 <br/>
 
 # 🏠 산출물
+## 화면구조도
+<img src="./img/menu.png">
+
 ## 아키텍처
+<img src="./img/architecture.png">
 
 ## ERD
+![erd-diagram](https://user-images.githubusercontent.com/79705809/202342174-3fbe7d58-fb6f-44d6-86d4-201f25d4ccf9.png)
 
+
+## UseCase Diagram
+<img src="./img/usecase_diagram.png">
+
+## Class Diagram
+<img src="./img/class_diagram.png">
+
+## 비밀번호 암호화
+<img src="./img/salt.png">
+
+## Git Convention
+<img src="./img/convention.png">
 
 ## 기능명세서
-
+<img src="./img/requirement.png">
 
 ## API명세서
-
+<img src="./img/api_one.png">
+<img src="./img/api_two.png">
+<img src="./img/api_three.png">
+<img src="./img/api_four.png">
+<img src="./img/api_five.png">
 
 
 # 📁 프로젝트 구조
@@ -118,7 +156,97 @@ kakao Maps, kakao mobility, kakao 우편번호
 ## 🏠 Frontend
 
 ```java
-
+homepjt
+ ┣ public
+ ┃ ┣ favicon.ico
+ ┃ ┗ index.html
+ ┣ src
+ ┃ ┣ api
+ ┃ ┃ ┣ apt.js
+ ┃ ┃ ┣ board.js
+ ┃ ┃ ┣ bookmark.js
+ ┃ ┃ ┣ houseInfo.js
+ ┃ ┃ ┣ http.js
+ ┃ ┃ ┣ index.js
+ ┃ ┃ ┣ member.js
+ ┃ ┃ ┗ planner.js
+ ┃ ┣ assets
+ ┃ ┃ ┣ backgroundImage.jpg
+ ┃ ┃ ┣ logo.png
+ ┃ ┃ ┣ logo.svg
+ ┃ ┃ ┣ logo123.png
+ ┃ ┃ ┣ number-five.png
+ ┃ ┃ ┣ number-four.png
+ ┃ ┃ ┣ number-one.png
+ ┃ ┃ ┣ number-three.png
+ ┃ ┃ ┣ number-two.png
+ ┃ ┃ ┗ ssafy_logo.png
+ ┃ ┣ components
+ ┃ ┃ ┣ apt
+ ┃ ┃ ┃ ┣ AptCommentItem.vue
+ ┃ ┃ ┃ ┗ AptSearchTab.vue
+ ┃ ┃ ┣ board
+ ┃ ┃ ┃ ┣ item
+ ┃ ┃ ┃ ┃ ┣ BoardCommentItem.vue
+ ┃ ┃ ┃ ┃ ┣ BoardInputItem.vue
+ ┃ ┃ ┃ ┃ ┗ BoardUpdateItem.vue
+ ┃ ┃ ┃ ┣ BoardDetail.vue
+ ┃ ┃ ┃ ┣ BoardList.vue
+ ┃ ┃ ┃ ┣ BoardUpdate.vue
+ ┃ ┃ ┃ ┗ BoardWrite.vue
+ ┃ ┃ ┣ chart
+ ┃ ┃ ┃ ┗ LineChart.vue
+ ┃ ┃ ┣ planner
+ ┃ ┃ ┃ ┗ PlannerResult.vue
+ ┃ ┃ ┣ FooterNav.vue
+ ┃ ┃ ┗ HeaderNav.vue
+ ┃ ┣ plugins
+ ┃ ┃ ┗ vuetify.js
+ ┃ ┣ router
+ ┃ ┃ ┗ index.js
+ ┃ ┣ store
+ ┃ ┃ ┣ modules
+ ┃ ┃ ┃ ┣ aptStore.js
+ ┃ ┃ ┃ ┣ boardStore.js
+ ┃ ┃ ┃ ┣ bookmarkStore.js
+ ┃ ┃ ┃ ┣ houseInfoStore.js
+ ┃ ┃ ┃ ┣ memberStore.js
+ ┃ ┃ ┃ ┗ plannerStore.js
+ ┃ ┃ ┗ index.js
+ ┃ ┣ views
+ ┃ ┃ ┣ apt
+ ┃ ┃ ┃ ┣ AptListView.vue
+ ┃ ┃ ┃ ┗ AptResultView.vue
+ ┃ ┃ ┣ board
+ ┃ ┃ ┃ ┗ BoardView.vue
+ ┃ ┃ ┣ bookmark
+ ┃ ┃ ┃ ┗ BookmarkView.vue
+ ┃ ┃ ┣ member
+ ┃ ┃ ┃ ┣ IdSearchView.vue
+ ┃ ┃ ┃ ┣ LogInView.vue
+ ┃ ┃ ┃ ┣ MyPageView.vue
+ ┃ ┃ ┃ ┣ PasswordSearchView.vue
+ ┃ ┃ ┃ ┣ SignUpView.vue
+ ┃ ┃ ┃ ┗ UpdateMemberInfoView.vue
+ ┃ ┃ ┣ path
+ ┃ ┃ ┃ ┣ PathResultView.vue
+ ┃ ┃ ┃ ┗ PathView.vue
+ ┃ ┃ ┣ planner
+ ┃ ┃ ┃ ┣ PlannerResultView.vue
+ ┃ ┃ ┃ ┗ PlannerView.vue
+ ┃ ┃ ┗ HomeView.vue
+ ┃ ┣ App.vue
+ ┃ ┗ main.js
+ ┣ .browserslistrc
+ ┣ .eslintrc.js
+ ┣ .gitignore
+ ┣ babel.config.js
+ ┣ jsconfig.json
+ ┣ package-lock.json
+ ┣ package.json
+ ┣ README.md
+ ┗ vue.config.js
 ```
 
 # 🏠 소감
+<img src="./img/review.png">
