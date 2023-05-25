@@ -127,7 +127,7 @@ kakao Maps, kakao mobility, kakao 우편번호
 ## Class Diagram
 <img src="./img/class_diagram.png">
 
-## 비밀번호 암호화
+## 비밀번호 암호화(hash256 + Salt)
 <img src="./img/salt.png">
 
 ## Git Convention
